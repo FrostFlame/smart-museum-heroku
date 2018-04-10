@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="100420181117_1" author="korgutlova">
+        <createTable tableName="positions">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(45)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="100420181117_2" author="korgutlova">
+        <createTable tableName="roles">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="100420181117_3" author="korgutlova">
+        <createTable tableName="users">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="login" type="varchar(30)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="password" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="surname" type="varchar(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="third_name" type="varchar(40)"/>
+            <column name="photo" type="varchar(40)"/>
+            <column name="status" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rolesid" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="positionsid" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="block_date" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="100420181117_4" author="korgutlova">
+        <addForeignKeyConstraint baseTableName="users"
+                                 baseColumnNames="rolesid"
+                                 constraintName="users_roles_fk"
+                                 onDelete="CASCADE"
+                                 referencedTableName="roles"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="users"
+                                 baseColumnNames="positionsid"
+                                 constraintName="users_positions_fk"
+                                 onDelete="CASCADE"
+                                 referencedTableName="positions"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="100420181117_5" author="korgutlova">
+        <createTable tableName="actions">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="100420181117_6" author="korgutlova">
+        <createTable tableName="users_statistics">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="usersid" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="actionsid" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="datetime" type="datetime" defaultValueDate="current_datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="100420181117_7" author="korgutlova">
+        <addForeignKeyConstraint baseTableName="users_statistics"
+                                 baseColumnNames="usersid"
+                                 constraintName="users_statistics_users_fk"
+                                 onDelete="CASCADE"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="users_statistics"
+                                 baseColumnNames="actionsid"
+                                 constraintName="users_statistics_actions_fk"
+                                 onDelete="CASCADE"
+                                 referencedTableName="actions"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="100420181117_8" author="korgutlova">
+        <createTable tableName="expositions">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(40)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="100420181117_9" author="korgutlova">
+        <createTable tableName="videos">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="100420181117_10" author="korgutlova">
+        <createTable tableName="projectors">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sum_time" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="current_video" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <sql>
+            ALTER TABLE projectors ADD CONSTRAINT status_border CHECK (status&gt;=0 AND status &lt;=3)
+        </sql>
+    </changeSet>
+    <changeSet id="100420181117_11" author="korgutlova">
+        <addForeignKeyConstraint baseTableName="projectors"
+                                 baseColumnNames="current_video"
+                                 constraintName="projectors_video_fk"
+                                 onDelete="CASCADE"
+                                 referencedTableName="videos"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="100420181117_12" author="korgutlova">
+        <createTable tableName="projectors_statistics">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="projectorsid" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="begin_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_date" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="100420181117_13" author="korgutlova">
+        <addForeignKeyConstraint baseTableName="projectors_statistics"
+                                 baseColumnNames="projectorsid"
+                                 constraintName="projectors_statistics_projectorsid_fk"
+                                 onDelete="CASCADE"
+                                 referencedTableName="projectors"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="100420181117_14" author="korgutlova">
+        <createTable tableName="expositions_projectors">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="projectorsid" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expositionsid" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="100420181117_15" author="korgutlova">
+        <addForeignKeyConstraint baseTableName="expositions_projectors"
+                                 baseColumnNames="projectorsid"
+                                 constraintName="expositions_projectors_projectorsid_fk"
+                                 onDelete="CASCADE"
+                                 referencedTableName="projectors"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="expositions_projectors"
+                                 baseColumnNames="expositionsid"
+                                 constraintName="expositions_projectors_expositionsid_fk"
+                                 onDelete="CASCADE"
+                                 referencedTableName="expositions"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="100420181117_16" author="korgutlova">
+        <createTable tableName="playing_schedule">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="begin_time" type="time(7)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_time" type="time(7)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="week_day" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="projectorsid" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="videosid" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <sql>
+            ALTER TABLE playing_schedule ADD CONSTRAINT week_day_count CHECK (week_day&gt;0 AND week_day &lt;8)
+        </sql>
+    </changeSet>
+    <changeSet id="100420181117_17" author="korgutlova">
+        <addForeignKeyConstraint baseTableName="playing_schedule"
+                                 baseColumnNames="projectorsid"
+                                 constraintName="playing_schedule_projectorsid_fk"
+                                 onDelete="CASCADE"
+                                 referencedTableName="projectors"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="playing_schedule"
+                                 baseColumnNames="videosid"
+                                 constraintName="playing_schedule_videosid_fk"
+                                 onDelete="CASCADE"
+                                 referencedTableName="videos"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>
