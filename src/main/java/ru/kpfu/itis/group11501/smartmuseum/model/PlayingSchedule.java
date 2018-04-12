@@ -10,21 +10,21 @@ import java.util.Date;
 
 @Entity
 @Table(name = "playing_schedule")
-public class PlayingShedule {
+public class PlayingSchedule {
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public PlayingShedule(Date begin_time, Date end_time, WeekDay week_day, Video video, Projector projector) {
+    public PlayingSchedule(Date begin_time, Date end_time, WeekDay week_day, Video video, Projector projector) {
         this.begin_time = begin_time;
         this.end_time = end_time;
         this.week_day = week_day;
         this.video = video;
         this.projector = projector;
     }
-    public PlayingShedule() {
+    public PlayingSchedule() {
     }
 
     @Column( nullable = false)

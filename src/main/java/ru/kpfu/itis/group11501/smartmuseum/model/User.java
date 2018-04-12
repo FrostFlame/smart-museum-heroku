@@ -34,21 +34,24 @@ public class User {
 
     @JsonIgnore
     private String password;
-
+    @Column( nullable = false)
     private String login;
-
+    @Column( nullable = false)
     public String name;
-
+    @Column( nullable = false)
     public String surname;
 
     public String third_name;
 
     public String photo;
 
+    @Column( nullable = false)
     public boolean status;
 
+    @ManyToOne(optional = false)
     public Role role;
 
+    @ManyToOne(optional = false)
     public Position position;
 
     public Date block_date;
