@@ -16,7 +16,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public User(String password, String login, String name, String surname, String third_name, String photo, boolean status, Long rolesid, Long positionsid, Date block_date) {
+    public User(String password, String login, String name, String surname, String third_name, String photo, boolean status, Role role, Position position, Date block_date) {
         this.password = password;
         this.login = login;
         this.name = name;
@@ -24,8 +24,8 @@ public class User {
         this.third_name = third_name;
         this.photo = photo;
         this.status = status;
-        this.rolesid = rolesid;
-        this.positionsid = positionsid;
+        this.role = role;
+        this.position = position;
         this.block_date = block_date;
     }
 
@@ -47,9 +47,9 @@ public class User {
 
     public boolean status;
 
-    public long rolesid;
+    public Role role;
 
-    public long positionsid;
+    public Position position;
 
     public Date block_date;
 
@@ -118,20 +118,20 @@ public class User {
         this.status = status;
     }
 
-    public Long getRolesid() {
-        return rolesid;
+    public Role getRolesid() {
+        return role;
     }
 
-    public void setRolesid(Long rolesid) {
-        this.rolesid = rolesid;
+    public void setRolesid(Role role) {
+        this.role = role;
     }
 
-    public Long getPositionsid() {
-        return positionsid;
+    public Position getPositionsid() {
+        return position;
     }
 
-    public void setPositionsid(Long positionsid) {
-        this.positionsid = positionsid;
+    public void setPositionsid(Position position) {
+        this.position = position;
     }
 
     public Date getBlock_date() {
