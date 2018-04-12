@@ -7,6 +7,7 @@
         <@sf.errors path="login" cssClass="help-block"/>
         <@sf.input path="password" type="password" placeholder="Введите пароль"/>
         <@sf.errors path="password" cssClass="help-block"/>
+        Remember Me: <input type="checkbox" name="remember-me" />
     <input type="submit" value="Войти">
     </@sf.form>
 </#macro>

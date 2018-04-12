@@ -6,12 +6,18 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import ru.kpfu.itis.group11501.smartmuseum.model.Role;
 import ru.kpfu.itis.group11501.smartmuseum.model.User;
 import ru.kpfu.itis.group11501.smartmuseum.service.UserService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Bogdan Popov on 09.11.2017.
@@ -39,7 +45,11 @@ public class AuthProviderImpl implements AuthenticationProvider {
         if (!encoder.matches(password, user.getPassword())) {
             throw new BadCredentialsException("Неверный пароль");
         }
-        return new UsernamePasswordAuthenticationToken(user, null, null);
+
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        Role role = user.role;
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
+        return new UsernamePasswordAuthenticationToken(user, null, authorities);
     }
 
     @Override
