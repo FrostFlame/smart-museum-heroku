@@ -16,7 +16,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public User(String password, String login, String name, String surname, String third_name, String photo, boolean status, Role role, Long positionsid, Date block_date) {
+
+    public User(String password, String login, String name, String surname, String third_name, String photo, boolean status, Role role, Position position, Date block_date) {
         this.password = password;
         this.login = login;
         this.name = name;
@@ -25,7 +26,7 @@ public class User {
         this.photo = photo;
         this.status = status;
         this.role = role;
-        this.positionsid = positionsid;
+        this.position = position;
         this.block_date = block_date;
     }
 
@@ -34,24 +35,27 @@ public class User {
 
     @JsonIgnore
     private String password;
-
+    @Column( nullable = false)
     private String login;
-
+    @Column( nullable = false)
     public String name;
-
+    @Column( nullable = false)
     public String surname;
 
     public String third_name;
 
     public String photo;
 
+    @Column( nullable = false)
     public boolean status;
 
     @ManyToOne(targetEntity = Role.class)
     @JoinColumn(name = "rolesid", referencedColumnName = "id")
+//    @ManyToOne(optional = false)
     public Role role;
 
-    public long positionsid;
+    @ManyToOne(optional = false)
+    public Position position;
 
     public Date block_date;
 
@@ -128,12 +132,12 @@ public class User {
         this.role = role;
     }
 
-    public Long getPositionsid() {
-        return positionsid;
+    public Position getPositionsid() {
+        return position;
     }
 
-    public void setPositionsid(Long positionsid) {
-        this.positionsid = positionsid;
+    public void setPositionsid(Position position) {
+        this.position = position;
     }
 
     public Date getBlock_date() {

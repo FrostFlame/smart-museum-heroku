@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="110420182109_1" author="korgutlova">
+        <dropTable tableName="users_statistics"/>
+        <dropTable tableName="actions"/>
+        <dropColumn tableName="projectors" columnName="status"/>
+        <addColumn tableName="projectors">
+            <column name="status" type="varchar(1)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <sql>
+            ALTER TABLE projectors ADD CONSTRAINT status_border CHECK (status='E' OR status='D' OR status='F')
+        </sql>
+        <dropColumn tableName="playing_schedule" columnName="week_day"/>
+    </changeSet>
+    <changeSet id="110420182109_2" author="korgutlova">
+        <createTable tableName="week_days">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(15)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="110420182109_3" author="korgutlova">
+        <addColumn tableName="playing_schedule">
+            <column name="week_daysid" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="playing_schedule"
+                                 baseColumnNames="week_daysid"
+                                 constraintName="playing_schedule_week_daysid_fk"
+                                 onDelete="CASCADE"
+                                 referencedTableName="week_days"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="110420182109_4" author="korgutlova">
+        <createTable tableName="action_types">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="110420182109_5" author="korgutlova">
+        <createTable tableName="tablenames">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(80)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="110420182109_6" author="korgutlova">
+        <createTable tableName="users_statistics">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="usersid" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="datetime" type="datetime" defaultValueDate="current_datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tableid" type="bigint"/>
+            <column name="action_typesid" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tablenamesid" type="bigint"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="110420182109_7" author="korgutlova">
+        <addForeignKeyConstraint baseTableName="users_statistics"
+                                 baseColumnNames="usersid"
+                                 constraintName="users_statistics_usersid_fk"
+                                 onDelete="CASCADE"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="users_statistics"
+                                 baseColumnNames="action_typesid"
+                                 constraintName="users_statistics_action_typesid_fk"
+                                 onDelete="CASCADE"
+                                 referencedTableName="action_types"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="users_statistics"
+                                 baseColumnNames="tablenamesid"
+                                 constraintName="users_statistics_tablenamesid_fk"
+                                 onDelete="CASCADE"
+                                 referencedTableName="tablenames"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>

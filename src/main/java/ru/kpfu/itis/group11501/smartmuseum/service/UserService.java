@@ -7,4 +7,6 @@ import ru.kpfu.itis.group11501.smartmuseum.model.User;
  */
 public interface UserService {
     User getUser(String login);
+
+    User addUser(User user);
 }
