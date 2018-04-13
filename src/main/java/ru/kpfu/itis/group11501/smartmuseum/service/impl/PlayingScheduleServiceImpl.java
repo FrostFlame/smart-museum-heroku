@@ -31,7 +31,12 @@ public class PlayingScheduleServiceImpl implements PlayingScheduleService {
     }
 
     @Override
-    public List<PlayingSchedule> getPlayingScheduleByExposition(Exposition exposition) {
-        return playingScheduleRepository.getPlayingScheduleByProjectors(exposition.getProjectors());
+    public List<PlayingSchedule> getPlayingScheduleByProjectors(List<Long> projectors_id) {
+        return playingScheduleRepository.getPlayingScheduleByExposition(projectors_id);
+    }
+
+    @Override
+    public List<PlayingSchedule> getPlayingScheduleByProjectorsByWeekDays(List<Long> projectors_id, List<Long> weekDays_id) {
+        return playingScheduleRepository.getPlayingScheduleByProjectorsByWeekDay(projectors_id,weekDays_id);
     }
 }

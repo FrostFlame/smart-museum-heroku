@@ -12,6 +12,10 @@ import java.util.List;
  * Created by volkov on 12.04.2018.
  */
 public interface PlayingScheduleRepository  extends JpaRepository<PlayingSchedule, Long> {
-    @Query("select x from PlayingSchedule as x where x.projector in ?1 ")
-    List<PlayingSchedule> getPlayingScheduleByProjectors( List<Projector> projectors);
+    @Query("select x from PlayingSchedule as x where x.projector.id in ?1 ")
+    List<PlayingSchedule> getPlayingScheduleByExposition( List<Long> projectors_id);
+
+    @Query("select x from PlayingSchedule as x where x.projector.id in ?1 and x.week_day in ?2 ")
+    List<PlayingSchedule> getPlayingScheduleByProjectorsByWeekDay( List<Long> projectors_id, List<Long> weekDays_id);
+
 }

@@ -14,5 +14,7 @@ public interface PlayingScheduleService {
 
     PlayingSchedule addPlayingSchedule(PlayingSchedule playingSchedule);
 
-    List<PlayingSchedule> getPlayingScheduleByExposition(Exposition exposition);
+    List<PlayingSchedule> getPlayingScheduleByProjectors(List<Long> projectors);
+
+    List<PlayingSchedule> getPlayingScheduleByProjectorsByWeekDays(List<Long> projectors, List<Long> weekDays);
 }
