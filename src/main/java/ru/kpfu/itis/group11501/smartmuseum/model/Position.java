@@ -30,4 +30,11 @@ public class Position {
     public void setName(String name) {
         this.name = name;
     }
+
+    public Position() {
+    }
+
+    public Position(String name) {
+        this.name = name;
+    }
 }

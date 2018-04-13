@@ -1,6 +1,7 @@
 package ru.kpfu.itis.group11501.smartmuseum.service.impl;
 
 import org.springframework.stereotype.Service;
+import ru.kpfu.itis.group11501.smartmuseum.model.Exposition;
 import ru.kpfu.itis.group11501.smartmuseum.model.PlayingSchedule;
 import ru.kpfu.itis.group11501.smartmuseum.repository.PlayingScheduleRepository;
 import ru.kpfu.itis.group11501.smartmuseum.service.PlayingScheduleService;
@@ -27,5 +28,10 @@ public class PlayingScheduleServiceImpl implements PlayingScheduleService {
     @Override
     public PlayingSchedule addPlayingSchedule(PlayingSchedule playingSchedule) {
         return playingScheduleRepository.save(playingSchedule);
+    }
+
+    @Override
+    public List<PlayingSchedule> getPlayingScheduleByExposition(Exposition exposition) {
+        return playingScheduleRepository.getPlayingScheduleByProjectors(exposition.getProjectors());
     }
 }

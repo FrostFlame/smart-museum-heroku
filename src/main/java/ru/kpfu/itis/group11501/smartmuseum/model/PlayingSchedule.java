@@ -32,14 +32,14 @@ public class PlayingSchedule {
 
     @Column( nullable = false)
     @Temporal(TemporalType.TIME)
-    public Date end_time;
+    private Date end_time;
 
     @ManyToOne(optional = false)
-    public WeekDay week_day;
+    private WeekDay week_day;
 
 
     @ManyToOne(optional = false)
-    public Projector projector;
+    private Projector projector;
 
     public Long getId() {
         return id;

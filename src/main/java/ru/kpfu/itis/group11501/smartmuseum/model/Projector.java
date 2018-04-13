@@ -35,26 +35,26 @@ public class Projector {
     private String name;
 
     @Column(nullable = false)
-    public char status;
+    private char status;
 
     @ManyToOne(optional = false)
-    public Video current_video;
+    private Video current_video;
 
 
 
     @Column(nullable = false)
-    public Long sum_time;
+    private Long sum_time;
 
     @Column( nullable = false)
     @Temporal(TemporalType.TIME)
-    public Date video_time;
+    private Date video_time;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable( name = "projector_videos",
             joinColumns = {@JoinColumn(name = "projectorsid")},
             inverseJoinColumns = {@JoinColumn(name = "videosid")}
     )
-    public List<Video> videos;
+    private List<Video> videos;
 
     public Long getId() {
         return id;

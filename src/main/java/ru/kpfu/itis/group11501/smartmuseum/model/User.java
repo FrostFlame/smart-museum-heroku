@@ -37,24 +37,24 @@ public class User {
     @Column( nullable = false)
     private String login;
     @Column( nullable = false)
-    public String name;
+    private String name;
     @Column( nullable = false)
-    public String surname;
+    private String surname;
 
-    public String third_name;
+    private String third_name;
 
-    public String photo;
+    private String photo;
 
     @Column( nullable = false)
-    public boolean status;
+    private boolean status;
 
     @ManyToOne(optional = false)
-    public Role role;
+    private Role role;
 
     @ManyToOne(optional = false)
-    public Position position;
+    private Position position;
 
-    public Date block_date;
+    private Date block_date;
 
 
     public Long getId() {
