@@ -40,7 +40,7 @@
     </changeSet>
     <changeSet id="130420181042_4" author="korgutlova">
         <addColumn tableName="projectors">
-            <column name="video_time" type="timestamp"/>
+            <column name="videoTime" type="timestamp"/>
         </addColumn>
     </changeSet>
 </databaseChangeLog>

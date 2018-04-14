@@ -141,10 +141,10 @@
             <column name="status" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="sum_time" type="bigint">
+            <column name="sumTime" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="current_video" type="bigint">
+            <column name="currentVideo" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -154,7 +154,7 @@
     </changeSet>
     <changeSet id="100420181117_11" author="korgutlova">
         <addForeignKeyConstraint baseTableName="projectors"
-                                 baseColumnNames="current_video"
+                                 baseColumnNames="currentVideo"
                                  constraintName="projectors_video_fk"
                                  onDelete="CASCADE"
                                  referencedTableName="videos"
@@ -214,10 +214,10 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="begin_time" type="time(7)">
+            <column name="beginTime" type="time(7)">
                 <constraints nullable="false"/>
             </column>
-            <column name="end_time" type="time(7)">
+            <column name="endTime" type="time(7)">
                 <constraints nullable="false"/>
             </column>
             <column name="week_day" type="bigint">
