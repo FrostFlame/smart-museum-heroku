@@ -47,7 +47,10 @@ public class PlayingScheduleServiceImpl implements PlayingScheduleService {
 
     @Override
     public void deleteAllBetween(PlayingSchedule playingSchedule){
-        playingScheduleRepository.deleteAllBetween(playingSchedule);
+        playingScheduleRepository.deleteAllBetween(playingSchedule.getProjector().getId(),
+                playingSchedule.getWeekDay().getId(),
+                playingSchedule.getBeginTime(),
+                playingSchedule.getEndTime());
     }
 
     @Override
@@ -57,12 +60,16 @@ public class PlayingScheduleServiceImpl implements PlayingScheduleService {
 
     @Override
     public PlayingSchedule getOneWhereBeginTimeBefore(PlayingSchedule playingSchedule){
-        return playingScheduleRepository.getOneWhereBeginTimeBefore(playingSchedule);
+        return playingScheduleRepository.getOneWhereBeginTimeBefore(playingSchedule.getProjector().getId(),
+                playingSchedule.getWeekDay().getId(),
+                playingSchedule.getBeginTime());
     }
 
     @Override
     public PlayingSchedule getOneWhereBeginTimeAfter(PlayingSchedule playingSchedule){
-        return playingScheduleRepository.getOneWhereBeginTimeAfter(playingSchedule);
+        return playingScheduleRepository.getOneWhereBeginTimeAfter(playingSchedule.getProjector().getId(),
+                playingSchedule.getWeekDay().getId(),
+                playingSchedule.getBeginTime());
     }
 
 

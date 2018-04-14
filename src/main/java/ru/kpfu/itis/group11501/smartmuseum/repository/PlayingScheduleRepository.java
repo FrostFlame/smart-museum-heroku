@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import ru.kpfu.itis.group11501.smartmuseum.model.PlayingSchedule;
 import ru.kpfu.itis.group11501.smartmuseum.model.Projector;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,12 +19,12 @@ public interface PlayingScheduleRepository  extends JpaRepository<PlayingSchedul
     @Query("select x from PlayingSchedule as x where x.projector.id in ?1 and x.weekDay.id in ?2 ")
     List<PlayingSchedule> getPlayingScheduleByProjectorsByWeekDay( List<Long> projectors_id, List<Long> weekDays_id);
 
-    @Query("delete from PlayingSchedule as x where x.projector.id = ?1.projector.id and x.weekDay.id = ?1.weekDay.id and x.beginTime >= ?1.beginTime and x.endTime <= ?1.endTime")
-    void deleteAllBetween(PlayingSchedule playingSchedule);
+    @Query("delete from PlayingSchedule as x where x.projector.id = ?1 and x.weekDay.id = ?2 and x.beginTime >= ?3 and x.endTime <= ?4")
+    void deleteAllBetween(Long projectorId,Long weekDayId, Date beginTime,Date endTime);
 
-    @Query("select x from PlayingSchedule as x where x.projector.id = ?1.projector.id and x.weekDay.id = ?1.weekDay.id and x.beginTime < ?1.beginTime order by x.beginTime desc limit 1")
-    PlayingSchedule getOneWhereBeginTimeBefore(PlayingSchedule playingSchedule);
+    @Query("select p from PlayingSchedule as p where p.beginTime = (select max(x.beginTime) from PlayingSchedule as x where x.projector.id = ?1 and x.weekDay.id = ?2 and x.beginTime < ?3 )")
+    PlayingSchedule getOneWhereBeginTimeBefore(Long projectorId,Long weekDayId, Date beginTime);
 
-    @Query("select x from PlayingSchedule as x where x.projector.id = ?1.projector.id and x.weekDay.id = ?1.weekDay.id and x.beginTime > ?1.beginTime order by x.beginTime asc limit 1")
-    PlayingSchedule getOneWhereBeginTimeAfter(PlayingSchedule playingSchedule);
+    @Query("select p from PlayingSchedule as p where p.beginTime = (select min(x.beginTime) from PlayingSchedule as x where x.projector.id = ?1 and x.weekDay.id = ?2 and x.beginTime > ?3 )")
+    PlayingSchedule getOneWhereBeginTimeAfter(Long projectorId,Long weekDayId, Date beginTime);
 }

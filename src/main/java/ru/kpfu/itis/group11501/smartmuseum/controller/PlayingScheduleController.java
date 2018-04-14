@@ -56,6 +56,7 @@ public class PlayingScheduleController {
     }
 
     @ModelAttribute("projectors")
+    @RequestMapping(value = "/{exposition_id}*")
     public List<Projector> projectors(@PathVariable("exposition_id") Long expositionId) {
         Exposition exposition = expositionService.getExpositionById(expositionId);
         return exposition.getProjectors();
@@ -64,7 +65,8 @@ public class PlayingScheduleController {
     @RequestMapping(path = "")
     public String getPlayingSchedule() {
         Exposition exposition = expositionService.getFirstExposition();
-        return  "redirect:/playing_schedule/"+exposition.getId();
+        if (exposition == null) return  "redirect:/sign_in";
+        else return  "redirect:/playing_schedule/"+exposition.getId();
     }
 
 
