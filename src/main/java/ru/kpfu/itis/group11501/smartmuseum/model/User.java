@@ -17,17 +17,17 @@ public class User {
     private Long id;
 
 
-    public User(String password, String login, String name, String surname, String third_name, String photo, boolean status, Role role, Position position, Date block_date) {
+    public User(String password, String login, String name, String surname, String thirdName, String photo, boolean status, Role role, Position position, Date blockDate) {
         this.password = password;
         this.login = login;
         this.name = name;
         this.surname = surname;
-        this.third_name = third_name;
+        this.thirdName = thirdName;
         this.photo = photo;
         this.status = status;
         this.role = role;
         this.position = position;
-        this.block_date = block_date;
+        this.blockDate = blockDate;
     }
 
     public User() {
@@ -38,27 +38,28 @@ public class User {
     @Column( nullable = false)
     private String login;
     @Column( nullable = false)
-    public String name;
+    private String name;
     @Column( nullable = false)
-    public String surname;
+    private String surname;
 
-    public String third_name;
+    private String thirdName;
 
-    public String photo;
+    private String photo;
 
     @Column( nullable = false)
-    public boolean status;
+    private boolean status;
+
 
     @ManyToOne(targetEntity = Role.class)
     @JoinColumn(name = "rolesid", referencedColumnName = "id")
 //    @ManyToOne(optional = false)
-    public Role role;
+    private Role role;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "positionsid", referencedColumnName = "id")
     public Position position;
 
-    public Date block_date;
+    private Date blockDate;
 
 
     public Long getId() {
@@ -101,12 +102,12 @@ public class User {
         this.surname = surname;
     }
 
-    public String getThird_name() {
-        return third_name;
+    public String getThirdName() {
+        return thirdName;
     }
 
-    public void setThird_name(String third_name) {
-        this.third_name = third_name;
+    public void setThirdName(String thirdName) {
+        this.thirdName = thirdName;
     }
 
     public String getPhoto() {
@@ -125,11 +126,11 @@ public class User {
         this.status = status;
     }
 
-    public Role getRolesid() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRolesid(Role role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
@@ -141,11 +142,11 @@ public class User {
         this.position = position;
     }
 
-    public Date getBlock_date() {
-        return block_date;
+    public Date getBlockDate() {
+        return blockDate;
     }
 
     public void setBlock_date(Date block_date) {
-        this.block_date = block_date;
+        this.blockDate = blockDate;
     }
 }

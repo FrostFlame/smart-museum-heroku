@@ -1,8 +1,9 @@
-package ru.kpfu.itis.group11501.smartmuseum.util;
+package ru.kpfu.itis.group11501.smartmuseum.util.Transoformers;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.kpfu.itis.group11501.smartmuseum.model.User;
+import ru.kpfu.itis.group11501.smartmuseum.util.UserForm;
 
 import java.util.function.Function;
 

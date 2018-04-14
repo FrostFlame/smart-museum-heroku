@@ -1,6 +1,8 @@
 package ru.kpfu.itis.group11501.smartmuseum.model;
 
 import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by volkov on 12.04.2018.
@@ -17,11 +19,13 @@ public class Projector {
     private Long id;
 
 
-    public Projector(String name, char status, Video current_video, Long sum_time) {
+    public Projector(String name, char status, Video currentVideo, Long sumTime, Date videoTime, List<Video> videos) {
         this.name = name;
         this.status = status;
-        this.current_video = current_video;
-        this.sum_time = sum_time;
+        this.currentVideo = currentVideo;
+        this.sumTime = sumTime;
+        this.videoTime = videoTime;
+        this.videos = videos;
     }
 
     public Projector() {
@@ -31,13 +35,26 @@ public class Projector {
     private String name;
 
     @Column(nullable = false)
-    public char status;
+    private char status;
 
     @ManyToOne(optional = false)
-    public Video current_video;
+    private Video currentVideo;
+
+
 
     @Column(nullable = false)
-    public Long sum_time;
+    private Long sumTime;
+
+    @Column( nullable = false)
+    @Temporal(TemporalType.TIME)
+    private Date videoTime;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable( name = "projector_videos",
+            joinColumns = {@JoinColumn(name = "projectorsid")},
+            inverseJoinColumns = {@JoinColumn(name = "videosid")}
+    )
+    private List<Video> videos;
 
     public Long getId() {
         return id;
@@ -63,19 +80,35 @@ public class Projector {
         this.status = status;
     }
 
-    public Video getCurrent_video() {
-        return current_video;
+    public Video getCurrentVideo() {
+        return currentVideo;
     }
 
-    public void setCurrent_video(Video current_video) {
-        this.current_video = current_video;
+    public void setCurrentVideo(Video currentVideo) {
+        this.currentVideo = currentVideo;
     }
 
-    public Long getSum_time() {
-        return sum_time;
+    public Long getSumTime() {
+        return sumTime;
     }
 
-    public void setSum_time(Long sum_time) {
-        this.sum_time = sum_time;
+    public void setSumTime(Long sumTime) {
+        this.sumTime = sumTime;
+    }
+
+    public Date getVideoTime() {
+        return videoTime;
+    }
+
+    public void setVideoTime(Date videoTime) {
+        this.videoTime = videoTime;
+    }
+
+    public List<Video> getVideos() {
+        return videos;
+    }
+
+    public void setVideos(List<Video> videos) {
+        this.videos = videos;
     }
 }

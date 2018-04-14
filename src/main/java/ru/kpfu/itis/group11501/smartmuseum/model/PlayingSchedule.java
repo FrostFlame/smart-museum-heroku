@@ -17,11 +17,10 @@ public class PlayingSchedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public PlayingSchedule(Date begin_time, Date end_time, WeekDay week_day, Video video, Projector projector) {
-        this.begin_time = begin_time;
-        this.end_time = end_time;
+    public PlayingSchedule(Date beginTime, Date endTime, WeekDay week_day, Projector projector) {
+        this.beginTime = beginTime;
+        this.endTime = endTime;
         this.week_day = week_day;
-        this.video = video;
         this.projector = projector;
     }
     public PlayingSchedule() {
@@ -29,20 +28,18 @@ public class PlayingSchedule {
 
     @Column( nullable = false)
     @Temporal(TemporalType.TIME)
-    private Date begin_time;
+    private Date beginTime;
 
     @Column( nullable = false)
     @Temporal(TemporalType.TIME)
-    public Date end_time;
+    private Date endTime;
 
     @ManyToOne(optional = false)
-    public WeekDay week_day;
+    private WeekDay week_day;
+
 
     @ManyToOne(optional = false)
-    public Video video;
-
-    @ManyToOne(optional = false)
-    public Projector projector;
+    private Projector projector;
 
     public Long getId() {
         return id;
@@ -52,20 +49,20 @@ public class PlayingSchedule {
         this.id = id;
     }
 
-    public Date getBegin_time() {
-        return begin_time;
+    public Date getBeginTime() {
+        return beginTime;
     }
 
-    public void setBegin_time(Date begin_time) {
-        this.begin_time = begin_time;
+    public void setBeginTime(Date beginTime) {
+        this.beginTime = beginTime;
     }
 
-    public Date getEnd_time() {
-        return end_time;
+    public Date getEndTime() {
+        return endTime;
     }
 
-    public void setEnd_time(Date end_time) {
-        this.end_time = end_time;
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
     public WeekDay getWeek_day() {
@@ -74,14 +71,6 @@ public class PlayingSchedule {
 
     public void setWeek_day(WeekDay week_day) {
         this.week_day = week_day;
-    }
-
-    public Video getVideo() {
-        return video;
-    }
-
-    public void setVideo(Video video) {
-        this.video = video;
     }
 
     public Projector getProjector() {

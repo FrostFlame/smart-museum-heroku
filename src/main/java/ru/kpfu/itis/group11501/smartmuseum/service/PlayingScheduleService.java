@@ -1,5 +1,6 @@
 package ru.kpfu.itis.group11501.smartmuseum.service;
 
+import ru.kpfu.itis.group11501.smartmuseum.model.Exposition;
 import ru.kpfu.itis.group11501.smartmuseum.model.PlayingSchedule;
 
 import java.util.List;
@@ -12,4 +13,8 @@ public interface PlayingScheduleService {
     List<PlayingSchedule> getAllPlayingSchedule();
 
     PlayingSchedule addPlayingSchedule(PlayingSchedule playingSchedule);
+
+    List<PlayingSchedule> getPlayingScheduleByProjectors(List<Long> projectors);
+
+    List<PlayingSchedule> getPlayingScheduleByProjectorsByWeekDays(List<Long> projectors, List<Long> weekDays);
 }

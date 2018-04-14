@@ -1,26 +1,26 @@
 package ru.kpfu.itis.group11501.smartmuseum.model;
+
 import javax.persistence.*;
 
 /**
- * Created by Bogdan Popov on 13.04.2018.
+ * Created by volkov on 13.04.2018.
  */
 @Entity
-@Table(name = "positions")
-public class Position {
-
+@Table(name = "action_types")
+public class ActionType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column( nullable = false)
     private String name;
 
-    public Long getId() {
-        return id;
+    public ActionType() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public ActionType(String name) {
+        this.name = name;
     }
 
     public String getName() {
@@ -31,10 +31,11 @@ public class Position {
         this.name = name;
     }
 
-    public Position() {
+    public Long getId() {
+        return id;
     }
 
-    public Position(String name) {
-        this.name = name;
+    public void setId(Long id) {
+        this.id = id;
     }
 }
