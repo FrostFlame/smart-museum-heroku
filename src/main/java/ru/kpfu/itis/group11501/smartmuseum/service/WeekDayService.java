@@ -9,4 +9,6 @@ import java.util.List;
  */
 public interface WeekDayService {
     List<WeekDay> getAllWeekDay();
+
+    WeekDay getOneById(Long projectorId);
 }

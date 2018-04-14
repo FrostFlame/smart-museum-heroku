@@ -31,12 +31,47 @@ public class PlayingScheduleServiceImpl implements PlayingScheduleService {
     }
 
     @Override
-    public List<PlayingSchedule> getPlayingScheduleByProjectors(List<Long> projectors_id) {
-        return playingScheduleRepository.getPlayingScheduleByExposition(projectors_id);
+    public List<PlayingSchedule> getPlayingScheduleByProjectors(List<Long> projectorsId) {
+        return playingScheduleRepository.getPlayingScheduleByExposition(projectorsId);
     }
 
     @Override
-    public List<PlayingSchedule> getPlayingScheduleByProjectorsByWeekDays(List<Long> projectors_id, List<Long> weekDays_id) {
-        return playingScheduleRepository.getPlayingScheduleByProjectorsByWeekDay(projectors_id,weekDays_id);
+    public List<PlayingSchedule> getPlayingScheduleByProjectorsByWeekDays(List<Long> projectorsId, List<Long> weekDaysId) {
+        return playingScheduleRepository.getPlayingScheduleByProjectorsByWeekDay(projectorsId,weekDaysId);
     }
+
+    @Override
+    public void save(PlayingSchedule playingSchedule){
+        playingScheduleRepository.save(playingSchedule);
+    }
+
+    @Override
+    public void deleteAllBetween(PlayingSchedule playingSchedule){
+        playingScheduleRepository.deleteAllBetween(playingSchedule.getProjector().getId(),
+                playingSchedule.getWeekDay().getId(),
+                playingSchedule.getBeginTime(),
+                playingSchedule.getEndTime());
+    }
+
+    @Override
+    public void delete(PlayingSchedule playingSchedule){
+        playingScheduleRepository.delete(playingSchedule);
+    }
+
+    @Override
+    public PlayingSchedule getOneWhereBeginTimeBefore(PlayingSchedule playingSchedule){
+        return playingScheduleRepository.getOneWhereBeginTimeBefore(playingSchedule.getProjector().getId(),
+                playingSchedule.getWeekDay().getId(),
+                playingSchedule.getBeginTime());
+    }
+
+    @Override
+    public PlayingSchedule getOneWhereBeginTimeAfter(PlayingSchedule playingSchedule){
+        return playingScheduleRepository.getOneWhereBeginTimeAfter(playingSchedule.getProjector().getId(),
+                playingSchedule.getWeekDay().getId(),
+                playingSchedule.getBeginTime());
+    }
+
+
+
 }

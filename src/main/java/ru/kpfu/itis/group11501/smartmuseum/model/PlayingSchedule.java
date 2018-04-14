@@ -23,6 +23,7 @@ public class PlayingSchedule {
         this.weekDay = weekDay;
         this.projector = projector;
     }
+
     public PlayingSchedule() {
     }
 

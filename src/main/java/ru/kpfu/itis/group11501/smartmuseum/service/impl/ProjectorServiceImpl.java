@@ -1,6 +1,7 @@
 package ru.kpfu.itis.group11501.smartmuseum.service.impl;
 
 import org.springframework.stereotype.Service;
+import ru.kpfu.itis.group11501.smartmuseum.model.Projector;
 import ru.kpfu.itis.group11501.smartmuseum.repository.ProjectorRepository;
 import ru.kpfu.itis.group11501.smartmuseum.service.ProjectorService;
 
@@ -16,5 +17,8 @@ public class ProjectorServiceImpl implements ProjectorService {
         this.projectorRepository = projectorRepository;
     }
 
-
+    @Override
+    public Projector getOneById(Long projectorId){
+        return projectorRepository.getOne(projectorId);
+    }
 }

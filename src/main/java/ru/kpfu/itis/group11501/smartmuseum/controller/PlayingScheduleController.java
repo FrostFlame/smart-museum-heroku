@@ -3,14 +3,18 @@ package ru.kpfu.itis.group11501.smartmuseum.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.kpfu.itis.group11501.smartmuseum.model.Exposition;
 import ru.kpfu.itis.group11501.smartmuseum.model.PlayingSchedule;
 import ru.kpfu.itis.group11501.smartmuseum.model.Projector;
+import ru.kpfu.itis.group11501.smartmuseum.model.WeekDay;
 import ru.kpfu.itis.group11501.smartmuseum.service.ExpositionService;
 import ru.kpfu.itis.group11501.smartmuseum.service.PlayingScheduleService;
+import ru.kpfu.itis.group11501.smartmuseum.service.ProjectorService;
 import ru.kpfu.itis.group11501.smartmuseum.service.WeekDayService;
-import ru.kpfu.itis.group11501.smartmuseum.util.PlayingScheduleCreateForm;
+import ru.kpfu.itis.group11501.smartmuseum.util.PlayingScheduleAddForm;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -26,52 +30,139 @@ public class PlayingScheduleController {
     private PlayingScheduleService playingScheduleService;
     private ExpositionService expositionService;
     private WeekDayService weekDayService;
+    private ProjectorService projectorService;
 
     @Autowired
     public PlayingScheduleController(PlayingScheduleService playingScheduleService,
                                      ExpositionService expositionService,
-                                     WeekDayService weekDayService) {
+                                     WeekDayService weekDayService,
+                                     ProjectorService projectorService) {
         this.playingScheduleService = playingScheduleService;
         this.expositionService = expositionService;
         this.weekDayService = weekDayService;
+        this.projectorService = projectorService;
     }
 
+
+
+    @ModelAttribute("expositions")
+    public List<Exposition> classCreateForm() {
+        return expositionService.getAllExposition();
+    }
+
+    @ModelAttribute("weekDays")
+    public List<WeekDay> weekDays() {
+        return weekDayService.getAllWeekDay();
+    }
+
+    @ModelAttribute("projectors")
+    @RequestMapping(value = "/{exposition_id}*")
+    public List<Projector> projectors(@PathVariable("exposition_id") Long expositionId) {
+        Exposition exposition = expositionService.getExpositionById(expositionId);
+        return exposition.getProjectors();
+    }
 
     @RequestMapping(path = "")
     public String getPlayingSchedule() {
         Exposition exposition = expositionService.getFirstExposition();
-        return  "redirect:/playing_schedule/"+exposition.getId();
+        if (exposition == null) return  "redirect:/sign_in";
+        else return  "redirect:/playing_schedule/"+exposition.getId();
     }
 
 
     @RequestMapping(value = "/{exposition_id}", method = RequestMethod.GET)
-    public String getPlayingSchedule(Model model,@PathVariable("exposition_id") Long exposition_id,
-                                     @RequestParam(value = "weekDays_id", required = false)  List<Long> weekDays_id,
-                                     @RequestParam(value = "projectors_id", required = false)  List<Long> projectors_id) {
+    public String getPlayingSchedule(Model model,@PathVariable("exposition_id") Long expositionId,
+                                     @RequestParam(value = "weekDays_id", required = false)  List<Long> weekDaysId,
+                                     @RequestParam(value = "projectors_id", required = false)  List<Long> projectorsId) {
         List<PlayingSchedule> playingSchedule;
-        Exposition exposition = expositionService.getExpositionById(exposition_id);
+        Exposition exposition = expositionService.getExpositionById(expositionId);
 
-        if (projectors_id == null){
-            projectors_id = new ArrayList<>();
+        if (projectorsId == null){
+            projectorsId = new ArrayList<>();
             for(Projector p: exposition.getProjectors()){
-                projectors_id.add(p.getId());
+                projectorsId.add(p.getId());
             }
         }
 
-        if (weekDays_id == null ){
-            playingSchedule = playingScheduleService.getPlayingScheduleByProjectors(projectors_id);
+        if (weekDaysId == null ){
+            playingSchedule = playingScheduleService.getPlayingScheduleByProjectors(projectorsId);
         }
         else {
-            playingSchedule = playingScheduleService.getPlayingScheduleByProjectorsByWeekDays(projectors_id,weekDays_id);
+            playingSchedule = playingScheduleService.getPlayingScheduleByProjectorsByWeekDays(projectorsId,weekDaysId);
         }
-        List<Exposition> expositions = expositionService.getAllExposition();
 
-        model.addAttribute("expositions", expositions);
         model.addAttribute("playingSchedule", playingSchedule);
-        model.addAttribute("projectors", exposition.getProjectors());
-        model.addAttribute("weekDay", weekDayService.getAllWeekDay());
-        model.addAttribute("form", new PlayingScheduleCreateForm());
         return "playing_schedule";
+    }
+
+    @RequestMapping(value = "/{exposition_id}/add", method = RequestMethod.GET)
+    public String addPlayingSchedule(Model model,
+                                     @RequestParam(value = "error", required = false) Boolean error,
+                                     @PathVariable("exposition_id") String expositionId) {
+        model.addAttribute("error",error );
+        model.addAttribute("form", new PlayingScheduleAddForm());
+        return "add_playing_schedule";
+    }
+
+    @RequestMapping(value = "/{exposition_id}/add", method = RequestMethod.POST)
+    public String addPlayingSchedule(@ModelAttribute("form") @Valid PlayingScheduleAddForm form,
+                                     BindingResult bindingResult,
+                                     @PathVariable("exposition_id") Long expositionId,
+                                     RedirectAttributes redirectAttributes) {
+        if( bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error",  bindingResult);
+            return  "redirect:/playing_schedule/"+expositionId+"/add";
+        }
+
+        for(String projectorId: form.getProjectorsId()){
+            for (String weekDayId: form.getWeekDaysId()){
+                Projector projector = projectorService.getOneById(Long.decode(projectorId));
+                WeekDay weekDay = weekDayService.getOneById(Long.decode(weekDayId));
+                PlayingSchedule newPlayingSchedule = new PlayingSchedule(form.getBeginTime(),form.getEndTime(),weekDay,projector);
+
+                playingScheduleService.deleteAllBetween(newPlayingSchedule);
+
+                PlayingSchedule playingScheduleBefore = playingScheduleService.getOneWhereBeginTimeBefore(newPlayingSchedule);
+                PlayingSchedule playingScheduleAfter = playingScheduleService.getOneWhereBeginTimeAfter(newPlayingSchedule);
+
+                if (playingScheduleBefore == null || playingScheduleBefore.getEndTime().compareTo(newPlayingSchedule.getBeginTime()) < 0) {
+                    if (playingScheduleAfter == null || playingScheduleAfter.getBeginTime().compareTo(newPlayingSchedule.getEndTime()) > 0){
+                        playingScheduleService.addPlayingSchedule(newPlayingSchedule);
+                    }
+                    else{
+                        playingScheduleAfter.setBeginTime(newPlayingSchedule.getBeginTime());
+                        playingScheduleService.save(playingScheduleAfter);
+
+                    }
+
+                }
+                else {
+                    if (playingScheduleBefore.getEndTime().compareTo(newPlayingSchedule.getEndTime()) < 0) {
+                        if (playingScheduleAfter == null || playingScheduleAfter.getBeginTime().compareTo(newPlayingSchedule.getEndTime()) > 0) {
+                            playingScheduleBefore.setEndTime(newPlayingSchedule.getEndTime());
+                        }
+                        else{
+                            playingScheduleBefore.setEndTime(playingScheduleAfter.getEndTime());
+                        }
+                        playingScheduleService.save(playingScheduleBefore);
+                    }
+                }
+
+
+
+            }
+        }
+        return  "redirect:/playing_schedule/"+expositionId;
+    }
+
+
+    @RequestMapping(value = "/{exposition_id}/delete", method = RequestMethod.POST)
+    public String addPlayingSchedule(
+                                     @PathVariable("exposition_id") Long expositionId,
+                                     @ModelAttribute("playing_schedule") PlayingSchedule playingSchedule) {
+
+        playingScheduleService.delete(playingSchedule);
+        return  "redirect:/playing_schedule/"+expositionId;
     }
 
 
