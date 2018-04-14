@@ -7,10 +7,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import ru.kpfu.itis.group11501.smartmuseum.model.Role;
 import ru.kpfu.itis.group11501.smartmuseum.model.User;
+import ru.kpfu.itis.group11501.smartmuseum.repository.RoleRepository;
 import ru.kpfu.itis.group11501.smartmuseum.repository.UserRepository;
 import ru.kpfu.itis.group11501.smartmuseum.service.UserService;
-import ru.kpfu.itis.group11501.smartmuseum.service.impl.UserServiceImpl;
+
 import ru.kpfu.itis.group11501.smartmuseum.util.AuthForm;
 
 /**
@@ -19,11 +22,13 @@ import ru.kpfu.itis.group11501.smartmuseum.util.AuthForm;
 @Controller
 public class SignInController {
 
-    private UserService userService;
+    private UserRepository userRepository;
+    private RoleRepository roleRepository;
 
     @Autowired
-    public SignInController(UserService userService) {
-        this.userService = userService;
+    public SignInController(UserRepository userRepository, RoleRepository roleRepository) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
     @RequestMapping(value = "/sign_in", method = RequestMethod.GET)

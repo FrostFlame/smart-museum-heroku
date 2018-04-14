@@ -4,4 +4,9 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+<changeSet id="mock_data_1" author="popov">
+    <loadUpdateData tableName="roles" primaryKey="id" file="db/mock_data/roles.xml">
+        <column name="id" type="numeric"/>
+    </loadUpdateData>
+</changeSet>
 </databaseChangeLog>

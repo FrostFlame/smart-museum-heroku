@@ -27,11 +27,11 @@ public class PlayingSchedule {
     public PlayingSchedule() {
     }
 
-    @Column( nullable = false)
+    @Column(nullable = false, name = "begin_time")
     @Temporal(TemporalType.TIME)
     private Date beginTime;
 
-    @Column( nullable = false)
+    @Column(nullable = false, name = "end_time")
     @Temporal(TemporalType.TIME)
     private Date endTime;
 

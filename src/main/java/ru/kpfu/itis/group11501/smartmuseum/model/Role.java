@@ -2,6 +2,7 @@ package ru.kpfu.itis.group11501.smartmuseum.model;
 
 import javax.persistence.*;
 
+
 /**
  * Created by Bogdan Popov on 13.04.2018.
  */
@@ -15,6 +16,11 @@ public class Role {
     private Long id;
 
     private String name;
+
+
+    public Role() {
+    }
+
 
     public Long getId() {
         return id;
@@ -32,10 +38,4 @@ public class Role {
         this.name = name;
     }
 
-    public Role(String name) {
-        this.name = name;
-    }
-
-    public Role() {
-    }
 }

@@ -20,14 +20,14 @@ public class UserStatistic {
     @ManyToOne(optional = false)
     private ActionType actionType;
 
-    @Column( nullable = false)
+    @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date datetime;
 
     @ManyToOne(optional = false)
     private TableName tableName;
 
-    @Column( nullable = false)
+    @Column(nullable = false)
     private Long tableid;
 
     public UserStatistic() {
