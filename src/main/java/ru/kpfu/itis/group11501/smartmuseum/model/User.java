@@ -55,6 +55,7 @@ public class User {
     public Role role;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "positionsid", referencedColumnName = "id")
     public Position position;
 
     public Date block_date;

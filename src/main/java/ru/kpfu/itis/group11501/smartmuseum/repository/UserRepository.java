@@ -8,4 +8,5 @@ import ru.kpfu.itis.group11501.smartmuseum.model.User;
  */
 public interface UserRepository extends JpaRepository<User, Long> {
     User findOneByLogin(String login);
+    User findByLogin(String login);
 }
