@@ -8,8 +8,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import ru.kpfu.itis.group11501.smartmuseum.model.Position;
 import ru.kpfu.itis.group11501.smartmuseum.model.Role;
 import ru.kpfu.itis.group11501.smartmuseum.model.User;
+import ru.kpfu.itis.group11501.smartmuseum.repository.PositionRepository;
 import ru.kpfu.itis.group11501.smartmuseum.repository.RoleRepository;
 import ru.kpfu.itis.group11501.smartmuseum.repository.UserRepository;
 import ru.kpfu.itis.group11501.smartmuseum.service.UserService;
@@ -24,11 +26,13 @@ public class SignInController {
 
     private UserRepository userRepository;
     private RoleRepository roleRepository;
+    private PositionRepository positionRepository;
 
     @Autowired
-    public SignInController(UserRepository userRepository, RoleRepository roleRepository) {
+    public SignInController(UserRepository userRepository, RoleRepository roleRepository, PositionRepository positionRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.positionRepository = positionRepository;
     }
 
     @RequestMapping(value = "/sign_in", method = RequestMethod.GET)
@@ -40,8 +44,10 @@ public class SignInController {
     @RequestMapping(value = "/create_user")
     public String createUser() {
         PasswordEncoder encoder = new BCryptPasswordEncoder();
-        //User u = new User(encoder.encode("1234"), "kolya", "kolya", "volkov", "", "", true, 1L, 2L, null);
-        //userService.addUser(u);
+        Role role = roleRepository.getOne(1L);
+        Position position = positionRepository.getOne(1L);
+        User u = new User(encoder.encode("admin"), "admin", "Вася", "Пупкин", "", "", true, role, position, null);
+        userRepository.save(u);
         return "sign_in";
     }
 
