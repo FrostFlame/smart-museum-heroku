@@ -1,6 +1,8 @@
 package ru.kpfu.itis.group11501.smartmuseum.model;
 
 import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by volkov on 12.04.2018.
@@ -17,11 +19,13 @@ public class Projector {
     private Long id;
 
 
-    public Projector(String name, char status, Video current_video, Long sum_time) {
+    public Projector(String name, char status, Video current_video, Long sum_time, Date video_time, List<Video> videos) {
         this.name = name;
         this.status = status;
         this.current_video = current_video;
         this.sum_time = sum_time;
+        this.video_time = video_time;
+        this.videos = videos;
     }
 
     public Projector() {
@@ -31,13 +35,26 @@ public class Projector {
     private String name;
 
     @Column(nullable = false)
-    public char status;
+    private char status;
 
     @ManyToOne(optional = false)
-    public Video current_video;
+    private Video current_video;
+
+
 
     @Column(nullable = false)
-    public Long sum_time;
+    private Long sum_time;
+
+    @Column( nullable = false)
+    @Temporal(TemporalType.TIME)
+    private Date video_time;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable( name = "projector_videos",
+            joinColumns = {@JoinColumn(name = "projectorsid")},
+            inverseJoinColumns = {@JoinColumn(name = "videosid")}
+    )
+    private List<Video> videos;
 
     public Long getId() {
         return id;
@@ -77,5 +94,21 @@ public class Projector {
 
     public void setSum_time(Long sum_time) {
         this.sum_time = sum_time;
+    }
+
+    public Date getVideo_time() {
+        return video_time;
+    }
+
+    public void setVideo_time(Date video_time) {
+        this.video_time = video_time;
+    }
+
+    public List<Video> getVideos() {
+        return videos;
+    }
+
+    public void setVideos(List<Video> videos) {
+        this.videos = videos;
     }
 }
