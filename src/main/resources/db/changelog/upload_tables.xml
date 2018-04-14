@@ -220,7 +220,7 @@
             <column name="endTime" type="time(7)">
                 <constraints nullable="false"/>
             </column>
-            <column name="week_day" type="bigint">
+            <column name="weekDay" type="bigint">
                 <constraints nullable="false"/>
             </column>
             <column name="projectorsid" type="bigint">
@@ -231,7 +231,7 @@
             </column>
         </createTable>
         <sql>
-            ALTER TABLE playing_schedule ADD CONSTRAINT week_day_count CHECK (week_day&gt;0 AND week_day &lt;8)
+            ALTER TABLE playing_schedule ADD CONSTRAINT week_day_count CHECK (weekDay&gt;0 AND weekDay &lt;8)
         </sql>
     </changeSet>
     <changeSet id="100420181117_17" author="korgutlova">

@@ -17,25 +17,25 @@ public class PlayingSchedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public PlayingSchedule(Date beginTime, Date endTime, WeekDay week_day, Projector projector) {
+    public PlayingSchedule(Date beginTime, Date endTime, WeekDay weekDay, Projector projector) {
         this.beginTime = beginTime;
         this.endTime = endTime;
-        this.week_day = week_day;
+        this.weekDay = weekDay;
         this.projector = projector;
     }
     public PlayingSchedule() {
     }
 
-    @Column( nullable = false)
+    @Column(nullable = false, name = "begin_time")
     @Temporal(TemporalType.TIME)
     private Date beginTime;
 
-    @Column( nullable = false)
+    @Column(nullable = false, name = "end_time")
     @Temporal(TemporalType.TIME)
     private Date endTime;
 
     @ManyToOne(optional = false)
-    private WeekDay week_day;
+    private WeekDay weekDay;
 
 
     @ManyToOne(optional = false)
@@ -65,12 +65,12 @@ public class PlayingSchedule {
         this.endTime = endTime;
     }
 
-    public WeekDay getWeek_day() {
-        return week_day;
+    public WeekDay getWeekDay() {
+        return weekDay;
     }
 
-    public void setWeek_day(WeekDay week_day) {
-        this.week_day = week_day;
+    public void setWeekDay(WeekDay weekDay) {
+        this.weekDay = weekDay;
     }
 
     public Projector getProjector() {

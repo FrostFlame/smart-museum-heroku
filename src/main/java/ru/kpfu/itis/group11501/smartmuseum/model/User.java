@@ -42,6 +42,7 @@ public class User {
     @Column( nullable = false)
     private String surname;
 
+    @Column(name = "third_name")
     private String thirdName;
 
     private String photo;
@@ -58,6 +59,7 @@ public class User {
     @ManyToOne(optional = false)
     private Position position;
 
+    @Column(name = "block_date")
     private Date blockDate;
 
 

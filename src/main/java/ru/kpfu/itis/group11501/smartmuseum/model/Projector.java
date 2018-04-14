@@ -42,10 +42,10 @@ public class Projector {
 
 
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "sum_time")
     private Long sumTime;
 
-    @Column( nullable = false)
+    @Column(nullable = false, name = "video_time")
     @Temporal(TemporalType.TIME)
     private Date videoTime;
 

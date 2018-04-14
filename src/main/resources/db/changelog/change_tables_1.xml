@@ -17,7 +17,7 @@
         <sql>
             ALTER TABLE projectors ADD CONSTRAINT status_border CHECK (status='E' OR status='D' OR status='F')
         </sql>
-        <dropColumn tableName="playing_schedule" columnName="week_day"/>
+        <dropColumn tableName="playing_schedule" columnName="weekDay"/>
     </changeSet>
     <changeSet id="110420182109_2" author="korgutlova">
         <createTable tableName="week_days">
