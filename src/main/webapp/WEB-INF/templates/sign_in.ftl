@@ -1,5 +1,4 @@
-<#include "base.ftl">
-<#macro content>
+
     <#assign sf=JspTaglibs["http://www.springframework.org/tags/form"]>
     <#assign c=JspTaglibs["http://www.springframework.org/security/tags"]>
     <@sf.form action="/login/process" method="post" modelAttribute="authForm">
@@ -10,4 +9,3 @@
         Remember Me: <input type="checkbox" name="remember-me" />
     <input type="submit" value="Войти">
     </@sf.form>
-</#macro>
