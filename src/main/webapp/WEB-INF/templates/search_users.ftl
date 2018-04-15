@@ -20,7 +20,7 @@
 </#list>
 </select>
     <select name="status">
-        <option value="null">Все</option>
+        <option value="all">Все</option>
         <option value="true">Активные</option>
         <option value="false">Заблокированные</option>
     </select>
@@ -32,7 +32,12 @@
 <h3>Role: ${u.role.name}</h3>
 <h3>Position: ${u.position.name}</h3>
 <h3>Login: ${u.login}</h3>
-<br>
+<#if u.status>
+    <h3>Status: активен</h3>
+<#else>
+    <h3>Status: заблокирован</h3>
+</#if>
+<hr>
 <#else>
 Нет пользователей
 </#list>

@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface PositionService {
     List<Position> getAllPositions();
+
+    Position getPosition(Long positionId);
 }

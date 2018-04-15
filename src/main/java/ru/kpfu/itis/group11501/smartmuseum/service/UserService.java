@@ -12,7 +12,7 @@ public interface UserService {
 
     User addUser(User user);
 
-    List<User> getUsersByParameters(String searchField, String role, String position, Boolean status);
+    List<User> getUsersByParameters(String searchField, String role, String position, String status);
 
     List<User> getAllUsers();
 }

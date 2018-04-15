@@ -20,4 +20,9 @@ public class PositionServiceImpl implements PositionService {
     public List<Position> getAllPositions() {
         return positionRepository.findAll();
     }
+
+    @Override
+    public Position getPosition(Long positionId) {
+        return positionRepository.findOne(positionId);
+    }
 }

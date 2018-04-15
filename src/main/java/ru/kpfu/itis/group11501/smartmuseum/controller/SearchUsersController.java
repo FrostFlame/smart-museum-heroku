@@ -36,11 +36,11 @@ public class SearchUsersController {
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public String searchUsers(Model model, @RequestParam(name = "status") Boolean status,
-                              @RequestParam(name = "role") Long roleId,
-                              @RequestParam(name = "position") Long positionId,
+    public String searchUsers(Model model, @RequestParam(name = "status") String status,
+                              @RequestParam(name = "role") String roleId,
+                              @RequestParam(name = "position") String positionId,
                               @RequestParam(name = "searchField") String searchField) {
-        model.addAttribute("users", userService.getUsersByParameters());
+        model.addAttribute("users", userService.getUsersByParameters(searchField, roleId, positionId, status));
         model.addAttribute("roles", roleService.getAllRoles());
         model.addAttribute("positions", positionService.getAllPositions());
         return "search_users";
