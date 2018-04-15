@@ -13,12 +13,11 @@ import java.util.List;
  */
 public class PlayingScheduleAddForm {
 
-    @NotBlank
-    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME,pattern = "HH:mm")
     private Date beginTime;
 
-    @NotBlank
-    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME,pattern = "HH:mm")
     private Date endTime;
 
     @NotEmpty

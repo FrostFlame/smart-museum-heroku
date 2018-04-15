@@ -47,7 +47,8 @@ public class PlayingScheduleServiceImpl implements PlayingScheduleService {
 
     @Override
     public void deleteAllBetween(PlayingSchedule playingSchedule){
-        playingScheduleRepository.deleteAllBetween(playingSchedule.getProjector().getId(),
+        playingScheduleRepository.deleteAllBetween(
+                playingSchedule.getProjector().getId(),
                 playingSchedule.getWeekDay().getId(),
                 playingSchedule.getBeginTime(),
                 playingSchedule.getEndTime());

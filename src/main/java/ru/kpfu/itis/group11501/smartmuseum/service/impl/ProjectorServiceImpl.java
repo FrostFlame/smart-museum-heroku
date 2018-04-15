@@ -19,6 +19,6 @@ public class ProjectorServiceImpl implements ProjectorService {
 
     @Override
     public Projector getOneById(Long projectorId){
-        return projectorRepository.getOne(projectorId);
+        return projectorRepository.findOne(projectorId);
     }
 }

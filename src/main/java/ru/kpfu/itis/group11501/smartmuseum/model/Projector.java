@@ -37,7 +37,8 @@ public class Projector {
     @Column(nullable = false)
     private char status;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(targetEntity = Video.class)
+    @JoinColumn(name = "current_video", referencedColumnName = "id")
     private Video currentVideo;
 
 
@@ -49,8 +50,9 @@ public class Projector {
     @Temporal(TemporalType.TIME)
     private Date videoTime;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable( name = "projector_videos",
+    //@ManyToMany(fetch = FetchType.LAZY) need do working
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable( name = "projectors_videos",
             joinColumns = {@JoinColumn(name = "projectorsid")},
             inverseJoinColumns = {@JoinColumn(name = "videosid")}
     )

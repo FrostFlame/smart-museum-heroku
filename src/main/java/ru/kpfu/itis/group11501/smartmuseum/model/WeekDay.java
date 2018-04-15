@@ -8,7 +8,7 @@ import java.util.Date;
  */
 
 @Entity
-@Table(name = "videos")
+@Table(name = "week_days")
 public class WeekDay {
 
     @Id

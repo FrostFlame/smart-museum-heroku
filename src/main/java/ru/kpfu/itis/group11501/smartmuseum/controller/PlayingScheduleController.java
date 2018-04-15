@@ -46,7 +46,7 @@ public class PlayingScheduleController {
 
 
     @ModelAttribute("expositions")
-    public List<Exposition> classCreateForm() {
+    public List<Exposition> expositions() {
         return expositionService.getAllExposition();
     }
 
@@ -55,11 +55,15 @@ public class PlayingScheduleController {
         return weekDayService.getAllWeekDay();
     }
 
+    @ModelAttribute("exposition")
+    public Exposition exposition(@PathVariable("exposition_id") Long expositionId) {
+        return expositionService.getExpositionById(expositionId);
+    }
+
     @ModelAttribute("projectors")
-    @RequestMapping(value = "/{exposition_id}*")
-    public List<Projector> projectors(@PathVariable("exposition_id") Long expositionId) {
-        Exposition exposition = expositionService.getExpositionById(expositionId);
-        return exposition.getProjectors();
+    public List<Projector> projectors(@ModelAttribute("exposition") Exposition exposition) {
+        if (exposition!= null )return exposition.getProjectors();
+        return null;
     }
 
     @RequestMapping(path = "")
@@ -97,8 +101,7 @@ public class PlayingScheduleController {
 
     @RequestMapping(value = "/{exposition_id}/add", method = RequestMethod.GET)
     public String addPlayingSchedule(Model model,
-                                     @RequestParam(value = "error", required = false) Boolean error,
-                                     @PathVariable("exposition_id") String expositionId) {
+                                     @RequestParam(value = "error", required = false) String error) {
         model.addAttribute("error",error );
         model.addAttribute("form", new PlayingScheduleAddForm());
         return "add_playing_schedule";
@@ -109,8 +112,8 @@ public class PlayingScheduleController {
                                      BindingResult bindingResult,
                                      @PathVariable("exposition_id") Long expositionId,
                                      RedirectAttributes redirectAttributes) {
-        if( bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("error",  bindingResult);
+        if( bindingResult.hasErrors() || form.getBeginTime().compareTo(form.getEndTime())>=0) {
+            redirectAttributes.addAttribute("error",  "Поля заполнены не верно");
             return  "redirect:/playing_schedule/"+expositionId+"/add";
         }
 
