@@ -42,7 +42,7 @@ public class User {
     @Column( nullable = false)
     private String surname;
 
-    @Column(name = "third_name")
+    @Column( name = "third_name")
     private String thirdName;
 
     private String photo;
@@ -60,7 +60,7 @@ public class User {
     @JoinColumn(name = "positionsid", referencedColumnName = "id")
     private Position position;
 
-    @Column(name = "block_date")
+    @Column( name = "block_date")
     private Date blockDate;
 
     public Long getId() {
@@ -147,7 +147,7 @@ public class User {
         return blockDate;
     }
 
-    public void setBlock_date(Date block_date) {
+    public void setBlockDate(Date blockDate) {
         this.blockDate = blockDate;
     }
 
