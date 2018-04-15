@@ -21,4 +21,10 @@ public class ProjectorServiceImpl implements ProjectorService {
     public Projector getOneById(Long projectorId){
         return projectorRepository.getOne(projectorId);
     }
+
+    @Override
+    public void add(Projector projector) {
+        projectorRepository.save(projector);
+    }
+
 }

@@ -7,4 +7,6 @@ import ru.kpfu.itis.group11501.smartmuseum.model.Projector;
  */
 public interface ProjectorService {
     Projector getOneById(Long projector_id);
+
+    void add(Projector projector);
 }

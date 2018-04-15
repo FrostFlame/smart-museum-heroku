@@ -37,15 +37,16 @@ public class Projector {
     @Column(nullable = false)
     private char status;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(targetEntity = Video.class)
+    @JoinColumn(name = "current_video", referencedColumnName = "id")
     private Video currentVideo;
 
 
 
-    @Column(nullable = false, name = "sum_time")
+    @Column(name = "sum_time")
     private Long sumTime;
 
-    @Column(nullable = false, name = "video_time")
+    @Column(name = "video_time")
     @Temporal(TemporalType.TIME)
     private Date videoTime;
 
