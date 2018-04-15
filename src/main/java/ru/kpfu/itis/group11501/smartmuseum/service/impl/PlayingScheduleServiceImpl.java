@@ -32,12 +32,22 @@ public class PlayingScheduleServiceImpl implements PlayingScheduleService {
 
     @Override
     public List<PlayingSchedule> getPlayingScheduleByProjectors(List<Long> projectorsId) {
-        return playingScheduleRepository.getPlayingScheduleByExposition(projectorsId);
+        return playingScheduleRepository.getPlayingScheduleByProjectorsId(projectorsId);
     }
 
     @Override
     public List<PlayingSchedule> getPlayingScheduleByProjectorsByWeekDays(List<Long> projectorsId, List<Long> weekDaysId) {
         return playingScheduleRepository.getPlayingScheduleByProjectorsByWeekDay(projectorsId,weekDaysId);
+    }
+
+    @Override
+    public List<PlayingSchedule> getPlayingScheduleByProjectorsSortByProjector(List<Long> projectorsId) {
+        return playingScheduleRepository.getPlayingScheduleByProjectorsIdSortByProjector(projectorsId);
+    }
+
+    @Override
+    public List<PlayingSchedule> getPlayingScheduleByProjectorsByWeekDaysSortByProjector(List<Long> projectorsId, List<Long> weekDaysId) {
+        return playingScheduleRepository.getPlayingScheduleByProjectorsByWeekDaySortByProjector(projectorsId,weekDaysId);
     }
 
     @Override
@@ -47,7 +57,8 @@ public class PlayingScheduleServiceImpl implements PlayingScheduleService {
 
     @Override
     public void deleteAllBetween(PlayingSchedule playingSchedule){
-        playingScheduleRepository.deleteAllBetween(playingSchedule.getProjector().getId(),
+        playingScheduleRepository.deleteAllBetween(
+                playingSchedule.getProjector().getId(),
                 playingSchedule.getWeekDay().getId(),
                 playingSchedule.getBeginTime(),
                 playingSchedule.getEndTime());
@@ -72,6 +83,10 @@ public class PlayingScheduleServiceImpl implements PlayingScheduleService {
                 playingSchedule.getBeginTime());
     }
 
+    @Override
+    public void deleteById(Long playingScheduleId) {
+        playingScheduleRepository.deleteById(playingScheduleId);
+    }
 
 
 }

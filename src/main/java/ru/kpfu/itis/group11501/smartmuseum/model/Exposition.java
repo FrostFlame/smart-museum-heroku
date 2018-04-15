@@ -17,7 +17,8 @@ public class Exposition {
     @Column( nullable = false)
     private String name;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    //@ManyToMany(fetch = FetchType.LAZY) need do working
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable( name = "expositions_projectors",
             joinColumns = {@JoinColumn(name = "expositionsid")},
             inverseJoinColumns = {@JoinColumn(name = "projectorsid")}
