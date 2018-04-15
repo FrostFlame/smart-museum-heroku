@@ -14,4 +14,9 @@
             <column name="id" type="numeric"/>
         </loadUpdateData>
     </changeSet>
+    <changeSet id="mock_data_3" author="popov">
+        <loadUpdateData tableName="users" primaryKey="id" file="db/mock_data/users.csv">
+            <column name="id" type="numeric"/>
+        </loadUpdateData>
+    </changeSet>
 </databaseChangeLog>
