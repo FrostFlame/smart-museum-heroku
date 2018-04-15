@@ -13,12 +13,19 @@ import java.util.List;
  * Created by volkov on 12.04.2018.
  */
 public interface PlayingScheduleRepository  extends JpaRepository<PlayingSchedule, Long> {
-    @Query("select x from PlayingSchedule as x where x.projector.id in ?1 order by x.weekDay asc")
-    List<PlayingSchedule> getPlayingScheduleByExposition( List<Long> projectors_id);
+    @Query("select x from PlayingSchedule as x where x.projector.id in ?1 order by x.weekDay asc, x.beginTime asc")
+    List<PlayingSchedule> getPlayingScheduleByProjectorsId( List<Long> projectors_id);
 
 
-    @Query("select x from PlayingSchedule as x where x.projector.id in ?1 and x.weekDay.id in ?2 ")
+    @Query("select x from PlayingSchedule as x where x.projector.id in ?1 and x.weekDay.id in ?2 order by x.weekDay asc, x.beginTime asc")
     List<PlayingSchedule> getPlayingScheduleByProjectorsByWeekDay( List<Long> projectors_id, List<Long> weekDays_id);
+
+    @Query("select x from PlayingSchedule as x where x.projector.id in ?1 order by x.projector.name asc, x.weekDay asc, x.beginTime asc")
+    List<PlayingSchedule> getPlayingScheduleByProjectorsIdSortByProjector( List<Long> projectors_id);
+
+
+    @Query("select x from PlayingSchedule as x where x.projector.id in ?1 and x.weekDay.id in ?2 order by x.projector.name asc, x.weekDay asc, x.beginTime asc")
+    List<PlayingSchedule> getPlayingScheduleByProjectorsByWeekDaySortByProjector( List<Long> projectors_id, List<Long> weekDays_id);
 
     @Transactional
     @Modifying
@@ -30,4 +37,8 @@ public interface PlayingScheduleRepository  extends JpaRepository<PlayingSchedul
 
     @Query("select p from PlayingSchedule as p where p.beginTime = (select min(x.beginTime) from PlayingSchedule as x where x.projector.id = ?1 and x.weekDay.id = ?2 and x.beginTime > ?3 and p.id=x.id )")
     PlayingSchedule getOneWhereBeginTimeAfter(Long projectorId,Long weekDayId, Date beginTime);
+
+    @Transactional
+    @Modifying
+    void deleteById(Long playingScheduleId);
 }
