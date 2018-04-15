@@ -56,12 +56,12 @@ public class User {
 //    @ManyToOne(optional = false)
     private Role role;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(targetEntity = Position.class)
+    @JoinColumn(name = "positionsid", referencedColumnName = "id")
     private Position position;
 
     @Column(name = "block_date")
     private Date blockDate;
-
 
     public Long getId() {
         return id;
@@ -135,11 +135,11 @@ public class User {
         this.role = role;
     }
 
-    public Position getPositionsid() {
+    public Position getPosition() {
         return position;
     }
 
-    public void setPositionsid(Position position) {
+    public void setPosition(Position position) {
         this.position = position;
     }
 
@@ -149,5 +149,9 @@ public class User {
 
     public void setBlock_date(Date block_date) {
         this.blockDate = blockDate;
+    }
+
+    public String getFullName(){
+        return this.surname + " " + this.name + " " + this.thirdName;
     }
 }

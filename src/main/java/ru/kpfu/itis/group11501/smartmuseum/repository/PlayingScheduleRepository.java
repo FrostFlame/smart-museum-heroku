@@ -15,7 +15,7 @@ public interface PlayingScheduleRepository  extends JpaRepository<PlayingSchedul
     @Query("select x from PlayingSchedule as x where x.projector.id in ?1 ")
     List<PlayingSchedule> getPlayingScheduleByExposition( List<Long> projectors_id);
 
-    @Query("select x from PlayingSchedule as x where x.projector.id in ?1 and x.week_day in ?2 ")
-    List<PlayingSchedule> getPlayingScheduleByProjectorsByWeekDay( List<Long> projectors_id, List<Long> weekDays_id);
+//    @Query("select x from PlayingSchedule as x where x.projector.id in ?1 and x.week_day in ?2 ")
+//    List<PlayingSchedule> getPlayingScheduleByProjectorsByWeekDay( List<Long> projectors_id, List<Long> weekDays_id);
 
 }

@@ -37,6 +37,7 @@ public class PlayingScheduleServiceImpl implements PlayingScheduleService {
 
     @Override
     public List<PlayingSchedule> getPlayingScheduleByProjectorsByWeekDays(List<Long> projectors_id, List<Long> weekDays_id) {
-        return playingScheduleRepository.getPlayingScheduleByProjectorsByWeekDay(projectors_id,weekDays_id);
+//        return playingScheduleRepository.getPlayingScheduleByProjectorsByWeekDay(projectors_id,weekDays_id);
+        return null;
     }
 }
