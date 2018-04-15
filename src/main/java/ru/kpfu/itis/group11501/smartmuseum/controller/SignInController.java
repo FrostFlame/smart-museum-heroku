@@ -18,6 +18,8 @@ import ru.kpfu.itis.group11501.smartmuseum.service.UserService;
 
 import ru.kpfu.itis.group11501.smartmuseum.util.AuthForm;
 
+import java.util.Date;
+
 /**
  * Created by Bogdan Popov on 05.11.2017.
  */
@@ -44,9 +46,11 @@ public class SignInController {
     @RequestMapping(value = "/create_user")
     public String createUser() {
         PasswordEncoder encoder = new BCryptPasswordEncoder();
-        Role role = roleRepository.getOne(1L);
-        Position position = positionRepository.getOne(1L);
-        User u = new User(encoder.encode("admin"), "admin", "Вася", "Пупкин", "", "", true, role, position, null);
+        Role role = roleRepository.getOne(2L);
+        String password = encoder.encode("manager");
+        Position position = positionRepository.getOne(2L);
+        System.out.println(password);
+        User u = new User(password, "manager", "Вова", "Иванов", "", "", true, role, position, new Date());
         userRepository.save(u);
         return "sign_in";
     }

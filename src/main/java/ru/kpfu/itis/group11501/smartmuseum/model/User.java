@@ -42,7 +42,7 @@ public class User {
     @Column( nullable = false)
     private String surname;
 
-    @Column(name = "third_name")
+    @Column( name = "third_name")
     private String thirdName;
 
     private String photo;
@@ -56,10 +56,11 @@ public class User {
 //    @ManyToOne(optional = false)
     private Role role;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(targetEntity = Position.class)
+    @JoinColumn(name = "positionsid", referencedColumnName = "id")
     private Position position;
 
-    @Column(name = "block_date")
+    @Column( name = "block_date")
     private Date blockDate;
 
 
@@ -135,11 +136,11 @@ public class User {
         this.role = role;
     }
 
-    public Position getPositionsid() {
+    public Position getPosition() {
         return position;
     }
 
-    public void setPositionsid(Position position) {
+    public void setPosition(Position position) {
         this.position = position;
     }
 
@@ -147,7 +148,7 @@ public class User {
         return blockDate;
     }
 
-    public void setBlock_date(Date block_date) {
+    public void setBlockDate(Date blockDate) {
         this.blockDate = blockDate;
     }
 }
