@@ -71,8 +71,7 @@ public class PlayingScheduleController {
     public String getPlayingSchedule(Model model) {
         Exposition exposition = expositionService.getFirstExposition();
         if (exposition == null) {
-            model.addAttribute("error","Экспозиций не существует");
-            return  "redirect:/playing_schedule/0";
+            return  "expositions_not_found";
         }
         else return  "redirect:/playing_schedule/"+exposition.getId();
     }

@@ -17,10 +17,10 @@ public interface PlayingScheduleRepository  extends JpaRepository<PlayingSchedul
     List<PlayingSchedule> getPlayingScheduleByProjectorsId( List<Long> projectors_id);
 
 
-    @Query("select x from PlayingSchedule as x where x.projector.id in ?1 and x.weekDay.id in ?2 order by x.weekDay asc, x.beginTime asc")
+    @Query("select x from PlayingSchedule as x where x.projector.id in ?1 and x.weekDay.id in ?2 order by x.weekDay asc, x.beginTime asc, x.projector.name asc")
     List<PlayingSchedule> getPlayingScheduleByProjectorsByWeekDay( List<Long> projectors_id, List<Long> weekDays_id);
 
-    @Query("select x from PlayingSchedule as x where x.projector.id in ?1 order by x.projector.name asc, x.weekDay asc, x.beginTime asc")
+    @Query("select x from PlayingSchedule as x where x.projector.id in ?1 order by x.projector.name asc, x.weekDay asc, x.beginTime asc, x.projector.name asc")
     List<PlayingSchedule> getPlayingScheduleByProjectorsIdSortByProjector( List<Long> projectors_id);
 
 
