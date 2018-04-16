@@ -128,11 +128,14 @@ public class PlayingScheduleController {
                                      BindingResult bindingResult,
                                      @PathVariable("exposition_id") Long expositionId,
                                      RedirectAttributes redirectAttributes) {
-        if( bindingResult.hasErrors() || form.getBeginTime().compareTo(form.getEndTime())>=0) {
+        if( bindingResult.hasErrors() || form.getBeginTime()==null || form.getEndTime()==null || form.getBeginTime().compareTo(form.getEndTime())>=0) {
             redirectAttributes.addAttribute("error",  "Поля заполнены не верно");
             return  "redirect:/playing_schedule/"+expositionId+"/add";
         }
 
+        System.out.println(form.getBeginTime());
+        System.out.println(form.getEndTime());
+        System.out.println("1111111");
         for(String projectorId: form.getProjectorsId()){
             for (String weekDayId: form.getWeekDaysId()){
                 Projector projector = projectorService.getOneById(Long.decode(projectorId));
@@ -162,6 +165,7 @@ public class PlayingScheduleController {
                         }
                         else{
                             playingScheduleBefore.setEndTime(playingScheduleAfter.getEndTime());
+                            playingScheduleService.delete(playingScheduleAfter);
                         }
                         playingScheduleService.save(playingScheduleBefore);
                     }
