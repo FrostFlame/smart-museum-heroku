@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="200420181907_1" author="korgutlova">
+        <dropColumn tableName="projectors" columnName="current_video"/>
+    </changeSet>
+    <changeSet id="200420181907_2" author="korgutlova">
+        <addColumn tableName="projectors">
+            <column name="current_video" type="bigint"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="200420181907_3" author="korgutlova">
+        <addForeignKeyConstraint baseTableName="projectors"
+                                 baseColumnNames="current_video"
+                                 constraintName="projectors_current_video_fk"
+                                 referencedTableName="videos"
+                                 referencedColumnNames="id"
+                                 onDelete="SET NULL"/>
+    </changeSet>
+</databaseChangeLog>
