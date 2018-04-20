@@ -180,7 +180,7 @@ public class PlayingScheduleController {
 
 
     @RequestMapping(value = "/{exposition_id}/delete", method = RequestMethod.POST)
-    public String addPlayingSchedule(@PathVariable("exposition_id") Long expositionId,
+    public String deletePlayingSchedule(@PathVariable("exposition_id") Long expositionId,
                                      @RequestParam(value = "id", required = true) Long playingScheduleId) {
 
         playingScheduleService.deleteById(playingScheduleId);

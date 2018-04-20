@@ -41,8 +41,6 @@ public class Projector {
     @JoinColumn(name = "current_video", referencedColumnName = "id")
     private Video currentVideo;
 
-
-
     @Column(nullable = false, name = "sum_time")
     private Long sumTime;
 
@@ -57,6 +55,13 @@ public class Projector {
             inverseJoinColumns = {@JoinColumn(name = "videosid")}
     )
     private List<Video> videos;
+
+
+    @OneToMany(targetEntity = PlayingSchedule.class,
+            fetch= FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true, mappedBy = "projector")
+    private List<PlayingSchedule> playingSchedules;
 
     public Long getId() {
         return id;
@@ -112,5 +117,13 @@ public class Projector {
 
     public void setVideos(List<Video> videos) {
         this.videos = videos;
+    }
+
+    public List<PlayingSchedule> getPlayingSchedules() {
+        return playingSchedules;
+    }
+
+    public void setPlayingSchedules(List<PlayingSchedule> playingSchedules) {
+        this.playingSchedules = playingSchedules;
     }
 }
