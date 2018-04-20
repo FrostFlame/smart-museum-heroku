@@ -2,6 +2,7 @@ package ru.kpfu.itis.group11501.smartmuseum.model;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by volkov on 12.04.2018.
@@ -14,12 +15,16 @@ public class Video {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public Video(String password, String login, String name, String surname, String third_name, String photo, boolean status, Long rolesid, Long positionsid, Date block_date) {
-
+    public Video(String name) {
+        this.name = name;
     }
 
     public Video() {
     }
+
+    //need lazy
+    @OneToMany(targetEntity = ProjectorsVideos.class,fetch = FetchType.EAGER,mappedBy = "projector")
+    private List<Projector> projectors;
 
     @Column( nullable = false)
     private String name;
@@ -39,4 +44,13 @@ public class Video {
     public void setName(String name) {
         this.name = name;
     }
+
+    public List<Projector> getProjectors() {
+        return projectors;
+    }
+
+    public void setProjectors(List<Projector> projectors) {
+        this.projectors = projectors;
+    }
+
 }

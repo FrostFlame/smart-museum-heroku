@@ -117,9 +117,15 @@ public class PlayingScheduleController {
 
     @RequestMapping(value = "/{exposition_id}/add", method = RequestMethod.GET)
     public String addPlayingSchedule(Model model,
-                                     @RequestParam(value = "error", required = false) String error) {
-        model.addAttribute("error",error );
-        model.addAttribute("form", new PlayingScheduleAddForm());
+                                     @RequestParam(value = "error", required = false) String error,
+                                     @ModelAttribute("exposition") Exposition exposition) {
+        if( exposition == null) {
+            model.addAttribute("error", "Экспозиция не найдена");
+        }
+        else{
+            model.addAttribute("error",error );
+            model.addAttribute("form", new PlayingScheduleAddForm());
+        }
         return "add_playing_schedule";
     }
 
@@ -133,9 +139,6 @@ public class PlayingScheduleController {
             return  "redirect:/playing_schedule/"+expositionId+"/add";
         }
 
-        System.out.println(form.getBeginTime());
-        System.out.println(form.getEndTime());
-        System.out.println("1111111");
         for(String projectorId: form.getProjectorsId()){
             for (String weekDayId: form.getWeekDaysId()){
                 Projector projector = projectorService.getOneById(Long.decode(projectorId));
@@ -180,7 +183,7 @@ public class PlayingScheduleController {
 
 
     @RequestMapping(value = "/{exposition_id}/delete", method = RequestMethod.POST)
-    public String addPlayingSchedule(@PathVariable("exposition_id") Long expositionId,
+    public String deletePlayingSchedule(@PathVariable("exposition_id") Long expositionId,
                                      @RequestParam(value = "id", required = true) Long playingScheduleId) {
 
         playingScheduleService.deleteById(playingScheduleId);
