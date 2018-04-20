@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.kpfu.itis.group11501.smartmuseum.model.Video;
 import ru.kpfu.itis.group11501.smartmuseum.service.VideoService;
-import ru.kpfu.itis.group11501.smartmuseum.util.Helpers;
+import ru.kpfu.itis.group11501.smartmuseum.util.FileUploader;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,9 +24,12 @@ public class VideoController {
 
     private VideoService videoService;
 
+    private FileUploader fileUploader;
+
     @Autowired
-    public VideoController(VideoService videoService) {
+    public VideoController(VideoService videoService, FileUploader fileUploader) {
         this.videoService = videoService;
+        this.fileUploader = fileUploader;
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
@@ -48,7 +51,7 @@ public class VideoController {
             redirectAttributes.addAttribute("error",  "Видео с таким названием уже существует");
             return  "redirect:/videos";
         }
-        name = Helpers.uploadVideo(file,name);
+        name = fileUploader.uploadVideo(file,name);
         if (name == null ) {
             redirectAttributes.addAttribute("error",  "Не удалось добавить видео");
         }
@@ -64,7 +67,7 @@ public class VideoController {
     public String deleteVideo(@RequestParam(value = "id") Long videoId,
                               RedirectAttributes redirectAttributes) {
 
-        if (Helpers.deleteVideo(videoService.findOneById(videoId)) == null){
+        if (fileUploader.deleteVideo(videoService.findOneById(videoId)) == null){
             redirectAttributes.addAttribute("error",  "Не удалось удалить файл");
             return  "redirect:/videos";
         }

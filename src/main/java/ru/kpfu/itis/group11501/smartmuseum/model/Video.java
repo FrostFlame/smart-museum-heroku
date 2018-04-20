@@ -22,11 +22,8 @@ public class Video {
     public Video() {
     }
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable( name = "projectors_videos",
-            joinColumns = {@JoinColumn(name = "videosid")},
-            inverseJoinColumns = {@JoinColumn(name = "projectorsid")}
-    )
+    //need lazy
+    @OneToMany(targetEntity = ProjectorsVideos.class,fetch = FetchType.EAGER,mappedBy = "projector")
     private List<Projector> projectors;
 
     @Column( nullable = false)

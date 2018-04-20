@@ -48,20 +48,17 @@ public class Projector {
     @Temporal(TemporalType.TIME)
     private Date videoTime;
 
-    //@ManyToMany(fetch = FetchType.LAZY) need do working
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable( name = "projectors_videos",
-            joinColumns = {@JoinColumn(name = "projectorsid")},
-            inverseJoinColumns = {@JoinColumn(name = "videosid")}
-    )
+    // need lazy
+    @OneToMany(targetEntity = ProjectorsVideos.class,fetch = FetchType.EAGER,mappedBy = "video")
     private List<Video> videos;
 
-
-    @OneToMany(targetEntity = PlayingSchedule.class,
+    //maybe will needed
+    /*@OneToMany(targetEntity = ProjectorsVideos.class,
             fetch= FetchType.LAZY,
             cascade = CascadeType.ALL,
-            orphanRemoval = true, mappedBy = "projector")
-    private List<PlayingSchedule> playingSchedules;
+            orphanRemoval = true, mappedBy = "projectors")
+    private List<ProjectorsVideos> projectorsVideos;
+    */
 
     public Long getId() {
         return id;
@@ -119,11 +116,7 @@ public class Projector {
         this.videos = videos;
     }
 
-    public List<PlayingSchedule> getPlayingSchedules() {
-        return playingSchedules;
-    }
 
-    public void setPlayingSchedules(List<PlayingSchedule> playingSchedules) {
-        this.playingSchedules = playingSchedules;
-    }
+
+
 }
