@@ -1,6 +1,6 @@
 <#assign sf=JspTaglibs["http://www.springframework.org/tags/form"]>
 <#assign c=JspTaglibs["http://www.springframework.org/security/tags"]>
-<@sf.form action="/add_exposition" method="post" modelAttribute="form">
+<@sf.form action="/expositions/add" method="post" modelAttribute="form">
       <fieldset>
           <label class=" control-label">Введите название экспозиции</label>
           <br>

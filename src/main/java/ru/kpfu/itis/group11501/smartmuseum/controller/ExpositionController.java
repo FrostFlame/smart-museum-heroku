@@ -87,17 +87,22 @@ public class ExpositionController {
         return  "redirect:/expositions/"+exposition.getId();
     }
 
-    @RequestMapping(name = "/add", method = RequestMethod.GET)
+    @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String getAddExpositionPage(Model model) {
         model.addAttribute("form", new ExpositionForm());
         model.addAttribute("projectors", projectorService.getFreeProjectors());
         return "add_exposition";
     }
 
-    @RequestMapping(name = "/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String addExposition(@ModelAttribute("form") @Valid ExpositionForm expositionForm) {
-        Exposition exposition = new Exposition();
-        exposition.setId(1L);
+        Exposition exposition = expositionService.save(expositionForm.getName(), expositionForm.getProjectorsId());
         return  "redirect:/expositions/"+ exposition.getId();
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public String getExpositionPage(Model model, @PathVariable("id") String id){
+        model.addAttribute("exposition", expositionService.getExpositionById(Long.valueOf(id)));
+        return "exposition";
     }
 }

@@ -9,6 +9,11 @@ public class ExpositionProjector {
 
     }
 
+    public ExpositionProjector(Projector projector, Exposition exposition) {
+        this.projector = projector;
+        this.exposition = exposition;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
