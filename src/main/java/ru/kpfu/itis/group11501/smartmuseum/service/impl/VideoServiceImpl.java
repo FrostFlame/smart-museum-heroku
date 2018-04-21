@@ -29,4 +29,19 @@ public class VideoServiceImpl implements VideoService {
     public Video addVideo(Video video) {
         return videoRepository.save(video);
     }
+
+    @Override
+    public Video findOneById(Long videoId){
+        return videoRepository.findOne(videoId);
+    }
+
+    @Override
+    public Video findOneByName(String name){
+        return videoRepository.findOneByName(name);
+    }
+
+    @Override
+    public void deleteById(Long videoId) {
+        videoRepository.delete(videoId);
+    }
 }

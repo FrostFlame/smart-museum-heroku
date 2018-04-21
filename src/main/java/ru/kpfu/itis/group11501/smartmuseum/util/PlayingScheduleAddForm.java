@@ -1,5 +1,7 @@
 package ru.kpfu.itis.group11501.smartmuseum.util;
 
+import com.sun.istack.NotNull;
+import org.hibernate.annotations.Check;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,9 +17,11 @@ public class PlayingScheduleAddForm {
 
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME,pattern = "HH:mm")
+    @NotNull
     private Date beginTime;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME,pattern = "HH:mm")
+    @NotNull
     private Date endTime;
 
     @NotEmpty

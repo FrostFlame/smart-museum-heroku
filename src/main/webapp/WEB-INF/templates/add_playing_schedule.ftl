@@ -28,7 +28,8 @@
         </#list>
         </@sf.select>
 
-
-        <button  type="submit">Применить</button>
+        <div class="row">
+        <button  type="submit">Добавить</button>
+        </div>
     </fieldset>
 </@sf.form>

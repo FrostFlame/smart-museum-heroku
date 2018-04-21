@@ -71,8 +71,7 @@ public class PlayingScheduleController {
     public String getPlayingSchedule(Model model) {
         Exposition exposition = expositionService.getFirstExposition();
         if (exposition == null) {
-            model.addAttribute("error","Экспозиций не существует");
-            return  "redirect:/playing_schedule/0";
+            return  "expositions_not_found";
         }
         else return  "redirect:/playing_schedule/"+exposition.getId();
     }
@@ -118,9 +117,15 @@ public class PlayingScheduleController {
 
     @RequestMapping(value = "/{exposition_id}/add", method = RequestMethod.GET)
     public String addPlayingSchedule(Model model,
-                                     @RequestParam(value = "error", required = false) String error) {
-        model.addAttribute("error",error );
-        model.addAttribute("form", new PlayingScheduleAddForm());
+                                     @RequestParam(value = "error", required = false) String error,
+                                     @ModelAttribute("exposition") Exposition exposition) {
+        if( exposition == null) {
+            model.addAttribute("error", "Экспозиция не найдена");
+        }
+        else{
+            model.addAttribute("error",error );
+            model.addAttribute("form", new PlayingScheduleAddForm());
+        }
         return "add_playing_schedule";
     }
 
@@ -129,7 +134,7 @@ public class PlayingScheduleController {
                                      BindingResult bindingResult,
                                      @PathVariable("exposition_id") Long expositionId,
                                      RedirectAttributes redirectAttributes) {
-        if( bindingResult.hasErrors() || form.getBeginTime().compareTo(form.getEndTime())>=0) {
+        if( bindingResult.hasErrors() || form.getBeginTime()==null || form.getEndTime()==null || form.getBeginTime().compareTo(form.getEndTime())>=0) {
             redirectAttributes.addAttribute("error",  "Поля заполнены не верно");
             return  "redirect:/playing_schedule/"+expositionId+"/add";
         }
@@ -163,6 +168,7 @@ public class PlayingScheduleController {
                         }
                         else{
                             playingScheduleBefore.setEndTime(playingScheduleAfter.getEndTime());
+                            playingScheduleService.delete(playingScheduleAfter);
                         }
                         playingScheduleService.save(playingScheduleBefore);
                     }
@@ -177,7 +183,7 @@ public class PlayingScheduleController {
 
 
     @RequestMapping(value = "/{exposition_id}/delete", method = RequestMethod.POST)
-    public String addPlayingSchedule(@PathVariable("exposition_id") Long expositionId,
+    public String deletePlayingSchedule(@PathVariable("exposition_id") Long expositionId,
                                      @RequestParam(value = "id", required = true) Long playingScheduleId) {
 
         playingScheduleService.deleteById(playingScheduleId);
