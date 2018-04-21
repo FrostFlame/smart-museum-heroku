@@ -33,27 +33,35 @@ public class ExpositionServiceImpl implements ExpositionService {
     }
 
     @Override
-    public Exposition getExpositionById(Long id){
+    public Exposition getExpositionById(Long id) {
         return expositionRepository.findOne(id);
     }
 
     @Override
-    public Exposition getFirstExposition(){
+    public Exposition getFirstExposition() {
         return expositionRepository.getFirstExposition();
     }
 
     @Override
-    public List<Exposition> getAllExposition(){
+    public List<Exposition> getAllExposition() {
         return expositionRepository.findAll();
     }
 
     @Override
     public Exposition save(String name, List<String> projectorsId) {
         List<Projector> projectors = new ArrayList<>();
-        for (String id : projectorsId){
+        for (String id : projectorsId) {
             projectors.add(projectorService.getOneById(Long.valueOf(id.trim())));
         }
         return expositionRepository.save(new Exposition(name, projectors));
+    }
+
+    @Override
+    public void deleteProjector(Long expositionId, Long projectorId) {
+        ExpositionProjector expositionProjector = expositionProjectorRepository.findByProjectorAndAndExposition(
+                projectorService.getOneById(projectorId),
+                this.getExpositionById(expositionId));
+        expositionProjectorRepository.delete(expositionProjector);
     }
 
 }

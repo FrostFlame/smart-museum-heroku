@@ -105,4 +105,12 @@ public class ExpositionController {
         model.addAttribute("exposition", expositionService.getExpositionById(Long.valueOf(id)));
         return "exposition";
     }
+
+    @RequestMapping(value = "/{exposition_id}/{projector_id}/delete_projector", method = RequestMethod.POST)
+    public String addExposition(@PathVariable("exposition_id") String expositionId,
+                                @PathVariable("projector_id") String projectorId) {
+        expositionService.deleteProjector(Long.valueOf(expositionId), Long.valueOf(projectorId));
+        return  "redirect:/expositions/"+ expositionService.getExpositionById(Long.valueOf(expositionId)).getId();
+    }
+
 }
