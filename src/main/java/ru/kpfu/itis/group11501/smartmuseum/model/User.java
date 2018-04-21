@@ -63,7 +63,6 @@ public class User {
     @Column( name = "block_date")
     private Date blockDate;
 
-
     public Long getId() {
         return id;
     }
@@ -150,5 +149,9 @@ public class User {
 
     public void setBlockDate(Date blockDate) {
         this.blockDate = blockDate;
+    }
+
+    public String getFullName(){
+        return this.surname + " " + this.name + " " + this.thirdName;
     }
 }

@@ -46,7 +46,7 @@ public class PlayingScheduleController {
 
 
     @ModelAttribute("expositions")
-    public List<Exposition> classCreateForm() {
+    public List<Exposition> expositions() {
         return expositionService.getAllExposition();
     }
 
@@ -55,28 +55,46 @@ public class PlayingScheduleController {
         return weekDayService.getAllWeekDay();
     }
 
+    @ModelAttribute("exposition")
+    public Exposition exposition(@PathVariable(value = "exposition_id",required = false) Long expositionId) {
+        if (expositionId == null) return null;
+        return expositionService.getExpositionById(expositionId);
+    }
+
     @ModelAttribute("projectors")
-    @RequestMapping(value = "/{exposition_id}*")
-    public List<Projector> projectors(@PathVariable("exposition_id") Long expositionId) {
-        Exposition exposition = expositionService.getExpositionById(expositionId);
-        return exposition.getProjectors();
+    public List<Projector> projectors(@ModelAttribute("exposition") Exposition exposition) {
+        if (exposition!= null )return exposition.getProjectors();
+        return null;
     }
 
     @RequestMapping(path = "")
-    public String getPlayingSchedule() {
+    public String getPlayingSchedule(Model model) {
         Exposition exposition = expositionService.getFirstExposition();
-        if (exposition == null) return  "redirect:/sign_in";
+        if (exposition == null) {
+            return  "expositions_not_found";
+        }
         else return  "redirect:/playing_schedule/"+exposition.getId();
     }
 
 
     @RequestMapping(value = "/{exposition_id}", method = RequestMethod.GET)
-    public String getPlayingSchedule(Model model,@PathVariable("exposition_id") Long expositionId,
+    public String getPlayingSchedule(Model model,@ModelAttribute("exposition") Exposition exposition,
+                                     @ModelAttribute("error") String error,
                                      @RequestParam(value = "weekDays_id", required = false)  List<Long> weekDaysId,
-                                     @RequestParam(value = "projectors_id", required = false)  List<Long> projectorsId) {
-        List<PlayingSchedule> playingSchedule;
-        Exposition exposition = expositionService.getExpositionById(expositionId);
+                                     @RequestParam(value = "projectors_id", required = false)  List<Long> projectorsId,
+                                     @RequestParam(value = "sort", required = false)  String sort) {
 
+
+        if (error != null && !error.equals("")){
+            return "playing_schedule";
+        }
+
+        if (exposition == null ) {
+            model.addAttribute("error", "Экспозиция не найдена");
+            return "playing_schedule";
+        }
+
+        List<PlayingSchedule> playingSchedule = new ArrayList<>();
         if (projectorsId == null){
             projectorsId = new ArrayList<>();
             for(Projector p: exposition.getProjectors()){
@@ -84,23 +102,30 @@ public class PlayingScheduleController {
             }
         }
 
-        if (weekDaysId == null ){
-            playingSchedule = playingScheduleService.getPlayingScheduleByProjectors(projectorsId);
+        if (projectorsId.size()!=0) {
+            if (weekDaysId == null) {
+                if (sort !=null && sort.equals("projectors")) playingSchedule = playingScheduleService.getPlayingScheduleByProjectorsSortByProjector(projectorsId);
+                else playingSchedule = playingScheduleService.getPlayingScheduleByProjectors(projectorsId);
+            } else {
+                if (sort !=null && sort.equals("projectors")) playingSchedule = playingScheduleService.getPlayingScheduleByProjectorsByWeekDaysSortByProjector(projectorsId, weekDaysId);
+                else playingSchedule = playingScheduleService.getPlayingScheduleByProjectorsByWeekDays(projectorsId, weekDaysId);
+            }
         }
-        else {
-            playingSchedule = playingScheduleService.getPlayingScheduleByProjectorsByWeekDays(projectorsId,weekDaysId);
-        }
-
         model.addAttribute("playingSchedule", playingSchedule);
         return "playing_schedule";
     }
 
     @RequestMapping(value = "/{exposition_id}/add", method = RequestMethod.GET)
     public String addPlayingSchedule(Model model,
-                                     @RequestParam(value = "error", required = false) Boolean error,
-                                     @PathVariable("exposition_id") String expositionId) {
-        model.addAttribute("error",error );
-        model.addAttribute("form", new PlayingScheduleAddForm());
+                                     @RequestParam(value = "error", required = false) String error,
+                                     @ModelAttribute("exposition") Exposition exposition) {
+        if( exposition == null) {
+            model.addAttribute("error", "Экспозиция не найдена");
+        }
+        else{
+            model.addAttribute("error",error );
+            model.addAttribute("form", new PlayingScheduleAddForm());
+        }
         return "add_playing_schedule";
     }
 
@@ -109,8 +134,8 @@ public class PlayingScheduleController {
                                      BindingResult bindingResult,
                                      @PathVariable("exposition_id") Long expositionId,
                                      RedirectAttributes redirectAttributes) {
-        if( bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("error",  bindingResult);
+        if( bindingResult.hasErrors() || form.getBeginTime()==null || form.getEndTime()==null || form.getBeginTime().compareTo(form.getEndTime())>=0) {
+            redirectAttributes.addAttribute("error",  "Поля заполнены не верно");
             return  "redirect:/playing_schedule/"+expositionId+"/add";
         }
 
@@ -143,6 +168,7 @@ public class PlayingScheduleController {
                         }
                         else{
                             playingScheduleBefore.setEndTime(playingScheduleAfter.getEndTime());
+                            playingScheduleService.delete(playingScheduleAfter);
                         }
                         playingScheduleService.save(playingScheduleBefore);
                     }
@@ -157,11 +183,10 @@ public class PlayingScheduleController {
 
 
     @RequestMapping(value = "/{exposition_id}/delete", method = RequestMethod.POST)
-    public String addPlayingSchedule(
-                                     @PathVariable("exposition_id") Long expositionId,
-                                     @ModelAttribute("playing_schedule") PlayingSchedule playingSchedule) {
+    public String deletePlayingSchedule(@PathVariable("exposition_id") Long expositionId,
+                                     @RequestParam(value = "id", required = true) Long playingScheduleId) {
 
-        playingScheduleService.delete(playingSchedule);
+        playingScheduleService.deleteById(playingScheduleId);
         return  "redirect:/playing_schedule/"+expositionId;
     }
 

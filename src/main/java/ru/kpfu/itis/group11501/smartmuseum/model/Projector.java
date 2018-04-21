@@ -42,20 +42,24 @@ public class Projector {
     private Video currentVideo;
 
 
-
-    @Column(name = "sum_time")
+    @Column(nullable = false, name = "sum_time")
     private Long sumTime;
 
     @Column(name = "video_time")
     @Temporal(TemporalType.TIME)
     private Date videoTime;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable( name = "projector_videos",
-            joinColumns = {@JoinColumn(name = "projectorsid")},
-            inverseJoinColumns = {@JoinColumn(name = "videosid")}
-    )
+    // need lazy
+    @OneToMany(targetEntity = ProjectorsVideos.class,fetch = FetchType.EAGER,mappedBy = "video")
     private List<Video> videos;
+
+    //maybe will needed
+    /*@OneToMany(targetEntity = ProjectorsVideos.class,
+            fetch= FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true, mappedBy = "projectors")
+    private List<ProjectorsVideos> projectorsVideos;
+    */
 
     public Long getId() {
         return id;

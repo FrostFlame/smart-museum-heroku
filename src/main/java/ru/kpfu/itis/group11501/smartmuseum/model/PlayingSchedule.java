@@ -35,11 +35,13 @@ public class PlayingSchedule {
     @Temporal(TemporalType.TIME)
     private Date endTime;
 
-    @ManyToOne(optional = false)
+
+    @ManyToOne(targetEntity = WeekDay.class,optional = false,fetch = FetchType.EAGER)
+    @JoinColumn(name = "week_daysid", referencedColumnName = "id")
     private WeekDay weekDay;
 
-
-    @ManyToOne(optional = false)
+    @ManyToOne(targetEntity = Projector.class,optional = false,fetch= FetchType.EAGER)
+    @JoinColumn(name = "projectorsid", referencedColumnName = "id")
     private Projector projector;
 
     public Long getId() {

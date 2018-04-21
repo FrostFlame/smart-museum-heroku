@@ -11,4 +11,10 @@ public interface VideoService {
     List<Video> getAllVideo();
 
     Video addVideo(Video video);
+
+    Video findOneById(Long videoId);
+
+    Video findOneByName(String name);
+
+    void deleteById(Long videoId);
 }

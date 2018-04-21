@@ -26,6 +26,6 @@ public class WeekDayServiceImpl implements WeekDayService {
 
     @Override
     public WeekDay getOneById(Long projectorId){
-        return weekDayRepository.getOne(projectorId);
+        return weekDayRepository.findOne(projectorId);
     }
 }

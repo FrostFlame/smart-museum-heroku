@@ -18,6 +18,10 @@ public interface PlayingScheduleService {
 
     List<PlayingSchedule> getPlayingScheduleByProjectorsByWeekDays(List<Long> projectors, List<Long> weekDays);
 
+    List<PlayingSchedule> getPlayingScheduleByProjectorsSortByProjector(List<Long> projectorsId);
+
+    List<PlayingSchedule> getPlayingScheduleByProjectorsByWeekDaysSortByProjector(List<Long> projectorsId, List<Long> weekDaysId);
+
     void save(PlayingSchedule playingSchedule);
 
     void deleteAllBetween(PlayingSchedule playingSchedule);
@@ -28,4 +32,6 @@ public interface PlayingScheduleService {
     PlayingSchedule getOneWhereBeginTimeBefore(PlayingSchedule playingSchedule);
 
     PlayingSchedule getOneWhereBeginTimeAfter(PlayingSchedule playingSchedule);
+
+    void deleteById(Long playingScheduleId);
 }

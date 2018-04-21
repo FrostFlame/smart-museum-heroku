@@ -8,4 +8,5 @@
     <include file="db/changelog/upload_tables.xml"/>
     <include file="db/changelog/change_tables_1.xml"/>
     <include file="db/changelog/change_tables_2.xml"/>
+    <include file="db/changelog/change_tables_3.xml"/>
 </databaseChangeLog>
