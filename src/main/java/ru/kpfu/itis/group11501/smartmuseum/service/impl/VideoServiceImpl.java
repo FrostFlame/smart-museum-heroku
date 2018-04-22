@@ -22,7 +22,7 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public List<Video> getAllVideo() {
-        return videoRepository.findAll();
+        return videoRepository.findAllByOrderByNameAsc();
     }
 
     @Override

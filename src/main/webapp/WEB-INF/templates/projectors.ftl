@@ -8,8 +8,8 @@
 <#if projectors?has_content>
     <#list projectors as projector>
     <a href="/projector/${projector.getId()}">${projector.getName()}</a>
-    <form action="/projector/delete/${projector.getId()}" method="post">
-        <input type="submit">
+    <form action="/projector/${projector.getId()}delete/" method="post">
+        <input type="submit" value="удалить">
     </form>
     </#list>
 <#else>

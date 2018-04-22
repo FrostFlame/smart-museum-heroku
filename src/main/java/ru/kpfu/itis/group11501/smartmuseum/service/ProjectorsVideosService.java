@@ -11,9 +11,16 @@ import java.util.List;
 public interface ProjectorsVideosService {
     ProjectorsVideos addProjectorsVideos(ProjectorsVideos projectorsVideos);
 
-    ProjectorsVideos getProjectorsVideosByProjectorIdWhereLastNum(Long projectorId);
+    ProjectorsVideos getOneByProjectorIdWhereLastNum(Long projectorId);
 
-    ProjectorsVideos getProjectorsVideosByProjectorIdByVideoId(Long projectorId, Long videoId);
+    ProjectorsVideos getOneByProjectorIdByVideoId(Long projectorId, Long videoId);
 
     List<ProjectorsVideos> getProjectorVideos(Projector projector);
+
+
+    void addProjectorsVideosList(List<String> projectorsId, List<String> videosId);
+
+    void deleteByProjectorIdByVideoId(Long id, Long videoId);
+
+    void updateNum(ProjectorsVideos projectorsVideos,Long num);
 }
