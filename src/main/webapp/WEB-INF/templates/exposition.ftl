@@ -10,5 +10,6 @@
 <#else>
 <h4>В данной экспозиции нет проекторов</h4>
 </#if>
+<h4><a href="/expositions/${exposition.id}/addVideo">Добавить видео к проекторам</a></h4>
 <h4><a href="/expositions/${exposition.id}/edit">Редактировать экспозицию</a></h4>
 <h4><a href="/expositions">К списку экспозиций</a></h4>

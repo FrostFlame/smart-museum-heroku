@@ -71,7 +71,7 @@
     <#list playingSchedule as p>
     <tbody>
         <tr>
-            <td><a href="#" >${p.projector.name}</a></td>
+            <td><a href="/projector/${p.projector.id}" >${p.projector.name}</a></td>
             <td>${p.weekDay.name}</td>
             <td>${p.beginTime}</td>
             <td>${p.endTime}</td>
@@ -87,6 +87,6 @@
     </table>
 
     <#else>
-    <h3><a href="#">Добавьте проекторы в эксозицию</a></h3>
+    <h3><a href="/expositions/${exposition.id}/edit">Добавьте проекторы в эксозицию</a></h3>
     </#if>
 </#if>
