@@ -9,7 +9,7 @@
     <#list projectors as projector>
     <a href="/projector/${projector.getId()}">${projector.getName()}</a>
     <form action="/projector/delete/${projector.getId()}" method="post">
-        <input type="submit">
+        <input type="submit" value="Удалить">
     </form>
     </#list>
 <#else>

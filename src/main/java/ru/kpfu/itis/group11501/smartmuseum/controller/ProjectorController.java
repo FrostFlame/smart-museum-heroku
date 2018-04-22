@@ -6,11 +6,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.kpfu.itis.group11501.smartmuseum.model.Projector;
+import ru.kpfu.itis.group11501.smartmuseum.model.ProjectorStatistic;
 import ru.kpfu.itis.group11501.smartmuseum.model.ProjectorsVideos;
 import ru.kpfu.itis.group11501.smartmuseum.service.ProjectorService;
+import ru.kpfu.itis.group11501.smartmuseum.service.ProjectorStatisticService;
 import ru.kpfu.itis.group11501.smartmuseum.service.ProjectorsVideosService;
 import ru.kpfu.itis.group11501.smartmuseum.util.ProjectorAddForm;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -23,11 +26,13 @@ public class ProjectorController {
 
     private ProjectorService projectorService;
     private ProjectorsVideosService projectorsVideosService;
+    private ProjectorStatisticService projectorStatisticService;
 
     @Autowired
-    public ProjectorController(ProjectorService projectorService, ProjectorsVideosService projectorsVideosService) {
+    public ProjectorController(ProjectorService projectorService, ProjectorsVideosService projectorsVideosService, ProjectorStatisticService projectorStatisticService) {
         this.projectorService = projectorService;
         this.projectorsVideosService = projectorsVideosService;
+        this.projectorStatisticService = projectorStatisticService;
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -56,8 +61,10 @@ public class ProjectorController {
     public String getProjector(Model model, @PathVariable(value = "id") Long id) {
         Projector projector = projectorService.getOneById(id);
         List<ProjectorsVideos> projectorsVideos = projectorsVideosService.getProjectorVideos(projector);
+        List<ProjectorStatistic> projectorStatistics = projectorStatisticService.getAllStatistic(projector);
         model.addAttribute("projectorVideos", projectorsVideos);
         model.addAttribute("projector", projector);
+        model.addAttribute("projectorStatistics", projectorStatistics);
         return "projector";
     }
 
@@ -65,5 +72,18 @@ public class ProjectorController {
     public String deleteProjector(@PathVariable(value = "id") Long id) {
         projectorService.deleteProjector(id);
         return "redirect:/projector/all";
+    }
+
+    // Возможно, лучше будет сделать через AJAX
+    @RequestMapping(value = "/turn_on/{id}", method = RequestMethod.POST)
+    public String turnOn(@PathVariable(value = "id") Long id, HttpServletRequest request) {
+        projectorService.turnOn(id);
+        return "redirect:" + request.getHeader("Referer");
+    }
+
+    @RequestMapping(value = "/turn_off/{id}", method = RequestMethod.POST)
+    public String turnOff(@PathVariable(value = "id") Long id, HttpServletRequest request) {
+        projectorService.turnOff(id);
+        return "redirect:" + request.getHeader("Referer");
     }
 }
