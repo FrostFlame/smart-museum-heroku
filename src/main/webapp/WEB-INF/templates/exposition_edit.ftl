@@ -10,6 +10,7 @@
     <#list projectors as projector>
         <option value="${projector.id}">${projector.name}</option>
     </#list>
-    </select>
+    </select><br><br>
     <input type="submit" value="Сохранить">
 </form>
+<h4><a href="/expositions/${exposition.id}">К странице экспозиции</a></h4>

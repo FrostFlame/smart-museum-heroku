@@ -43,7 +43,7 @@ public class ExpositionController {
         return expositionService.getExpositionById(expositionId);
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public String expositionsPage(Model model) {
         model.addAttribute("expositions", expositionService.getAllExposition());
         return "expositions";
@@ -107,13 +107,21 @@ public class ExpositionController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String getExpositionPage(Model model, @PathVariable("id") String id) {
-        model.addAttribute("exposition", expositionService.getExpositionById(Long.valueOf(id)));
+        Exposition exposition = expositionService.getExpositionById(Long.valueOf(id));
+        if (exposition == null){
+            return "404_not_found";
+        }
+        model.addAttribute("exposition", exposition);
         return "exposition";
     }
 
     @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
     public String getExpositionEditPage(Model model, @PathVariable("id") String id) {
-        model.addAttribute("exposition", expositionService.getExpositionById(Long.valueOf(id)));
+        Exposition exposition = expositionService.getExpositionById(Long.valueOf(id));
+        if (exposition == null){
+            return "404_not_found";
+        }
+        model.addAttribute("exposition", exposition);
         model.addAttribute("projectors", projectorService.getFreeProjectors());
         return "exposition_edit";
     }

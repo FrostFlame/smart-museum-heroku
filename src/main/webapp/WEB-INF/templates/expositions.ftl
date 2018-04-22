@@ -1,3 +1,5 @@
+<h3><a href="/expositions/add">Добавить новую экспозицию</a></h3>
+<#if expositions?has_content>
 <h3>Список экспозиций</h3>
 <#list expositions as exposition>
     <a href="/expositions/${exposition.id}">${exposition.name}</a>
@@ -6,3 +8,6 @@
     </form>
 <hr>
 </#list>
+<#else>
+    <h4>Экспозиций не найдено</h4>
+</#if>
