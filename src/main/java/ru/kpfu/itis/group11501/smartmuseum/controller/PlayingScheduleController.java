@@ -19,6 +19,8 @@ import ru.kpfu.itis.group11501.smartmuseum.util.PlayingScheduleAddForm;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * Created by volkov on 12.04.2018.
@@ -32,7 +34,7 @@ public class PlayingScheduleController {
     private WeekDayService weekDayService;
     private ProjectorService projectorService;
 
-    @Autowired
+
     public PlayingScheduleController(PlayingScheduleService playingScheduleService,
                                      ExpositionService expositionService,
                                      WeekDayService weekDayService,
@@ -68,7 +70,7 @@ public class PlayingScheduleController {
     }
 
     @RequestMapping(path = "")
-    public String getPlayingSchedule(Model model) {
+    public String getPlayingSchedule() {
         Exposition exposition = expositionService.getFirstExposition();
         if (exposition == null) {
             return  "expositions_not_found";
@@ -93,25 +95,14 @@ public class PlayingScheduleController {
             model.addAttribute("error", "Экспозиция не найдена");
             return "playing_schedule";
         }
-
-        List<PlayingSchedule> playingSchedule = new ArrayList<>();
-        if (projectorsId == null){
-            projectorsId = new ArrayList<>();
-            for(Projector p: exposition.getProjectors()){
-                projectorsId.add(p.getId());
-            }
+        if (exposition.getProjectors().size()>0) {
+            if (projectorsId == null) projectorsId = exposition.getProjectors()
+                    .stream()
+                    .map(Projector::getId)
+                    .collect(Collectors.toList());
+            List<PlayingSchedule> playingSchedule = playingScheduleService.getPlayingScheduleByParameters(projectorsId,weekDaysId,sort);
+            model.addAttribute("playingSchedule", playingSchedule);
         }
-
-        if (projectorsId.size()!=0) {
-            if (weekDaysId == null) {
-                if (sort !=null && sort.equals("projectors")) playingSchedule = playingScheduleService.getPlayingScheduleByProjectorsSortByProjector(projectorsId);
-                else playingSchedule = playingScheduleService.getPlayingScheduleByProjectors(projectorsId);
-            } else {
-                if (sort !=null && sort.equals("projectors")) playingSchedule = playingScheduleService.getPlayingScheduleByProjectorsByWeekDaysSortByProjector(projectorsId, weekDaysId);
-                else playingSchedule = playingScheduleService.getPlayingScheduleByProjectorsByWeekDays(projectorsId, weekDaysId);
-            }
-        }
-        model.addAttribute("playingSchedule", playingSchedule);
         return "playing_schedule";
     }
 
@@ -139,45 +130,7 @@ public class PlayingScheduleController {
             return  "redirect:/playing_schedule/"+expositionId+"/add";
         }
 
-        for(String projectorId: form.getProjectorsId()){
-            for (String weekDayId: form.getWeekDaysId()){
-                Projector projector = projectorService.getOneById(Long.decode(projectorId));
-                WeekDay weekDay = weekDayService.getOneById(Long.decode(weekDayId));
-                PlayingSchedule newPlayingSchedule = new PlayingSchedule(form.getBeginTime(),form.getEndTime(),weekDay,projector);
-
-                playingScheduleService.deleteAllBetween(newPlayingSchedule);
-
-                PlayingSchedule playingScheduleBefore = playingScheduleService.getOneWhereBeginTimeBefore(newPlayingSchedule);
-                PlayingSchedule playingScheduleAfter = playingScheduleService.getOneWhereBeginTimeAfter(newPlayingSchedule);
-
-                if (playingScheduleBefore == null || playingScheduleBefore.getEndTime().compareTo(newPlayingSchedule.getBeginTime()) < 0) {
-                    if (playingScheduleAfter == null || playingScheduleAfter.getBeginTime().compareTo(newPlayingSchedule.getEndTime()) > 0){
-                        playingScheduleService.addPlayingSchedule(newPlayingSchedule);
-                    }
-                    else{
-                        playingScheduleAfter.setBeginTime(newPlayingSchedule.getBeginTime());
-                        playingScheduleService.save(playingScheduleAfter);
-
-                    }
-
-                }
-                else {
-                    if (playingScheduleBefore.getEndTime().compareTo(newPlayingSchedule.getEndTime()) < 0) {
-                        if (playingScheduleAfter == null || playingScheduleAfter.getBeginTime().compareTo(newPlayingSchedule.getEndTime()) > 0) {
-                            playingScheduleBefore.setEndTime(newPlayingSchedule.getEndTime());
-                        }
-                        else{
-                            playingScheduleBefore.setEndTime(playingScheduleAfter.getEndTime());
-                            playingScheduleService.delete(playingScheduleAfter);
-                        }
-                        playingScheduleService.save(playingScheduleBefore);
-                    }
-                }
-
-
-
-            }
-        }
+        playingScheduleService.addPlayingScheduleByParameters(form.getProjectorsId(),form.getWeekDaysId(),form.getBeginTime(),form.getEndTime());
         return  "redirect:/playing_schedule/"+expositionId;
     }
 

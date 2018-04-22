@@ -45,8 +45,9 @@ public class ExpositionController {
 
 
     @RequestMapping(value = "/{exposition_id}/addVideo", method = RequestMethod.GET)
-    public String addVideo(Model model, @ModelAttribute("exposition") Exposition exposition,
-                                      @ModelAttribute("error") String error) {
+    public String addVideo(Model model,
+                           @ModelAttribute("exposition") Exposition exposition,
+                           @ModelAttribute("error") String error) {
 
         if (error != null && !error.equals("")){
             return "add_video";
@@ -67,23 +68,9 @@ public class ExpositionController {
 
     @RequestMapping(value = "/{exposition_id}/addVideo", method = RequestMethod.POST)
     public String addVideo(@ModelAttribute("exposition") Exposition exposition,
-                                     @RequestParam(value = "projectors_id", required = false)  List<String> projectorsId,
-                                     @RequestParam(value = "videos_id", required = false)  List<String> videosId
-                                     ) {
-
-        for(String projectorId: projectorsId){
-            for (String videoId: videosId){
-                if(projectorsVideosService.getProjectorsVideosByProjectorIdByVideoId(Long.decode(projectorId),Long.decode(videoId)) == null){
-                    Projector projector = projectorService.getOneById(Long.decode(projectorId));
-                    Video video = videoService.findOneById(Long.decode(videoId));
-                    Long lastNum =0L;
-                    ProjectorsVideos hasLastNum = projectorsVideosService.getProjectorsVideosByProjectorIdWhereLastNum(projector.getId());
-                    if (hasLastNum != null) lastNum = hasLastNum.getNum();
-                    ProjectorsVideos newProjectorsVideos = new ProjectorsVideos(video,projector,++lastNum);
-                    projectorsVideosService.addProjectorsVideos(newProjectorsVideos);
-                }
-            }
-        }
+                           @RequestParam(value = "projectors_id", required = false)  List<String> projectorsId,
+                           @RequestParam(value = "videos_id", required = false)  List<String> videosId) {
+        projectorsVideosService.addProjectorsVideosList(projectorsId,videosId);
         return  "redirect:/expositions/"+exposition.getId();
     }
 
@@ -100,9 +87,8 @@ public class ExpositionController {
         return  "redirect:/expositions/"+ exposition.getId();
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String getExpositionPage(Model model, @PathVariable("id") String id){
-        model.addAttribute("exposition", expositionService.getExpositionById(Long.valueOf(id)));
+    @RequestMapping(value = "/{exposition_id}", method = RequestMethod.GET)
+    public String getExpositionPage(){
         return "exposition";
     }
 }

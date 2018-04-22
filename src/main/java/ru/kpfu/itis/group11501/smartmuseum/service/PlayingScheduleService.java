@@ -1,8 +1,8 @@
 package ru.kpfu.itis.group11501.smartmuseum.service;
 
-import ru.kpfu.itis.group11501.smartmuseum.model.Exposition;
 import ru.kpfu.itis.group11501.smartmuseum.model.PlayingSchedule;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -10,22 +10,14 @@ import java.util.List;
  */
 public interface PlayingScheduleService {
 
+
     List<PlayingSchedule> getAllPlayingSchedule();
 
     PlayingSchedule addPlayingSchedule(PlayingSchedule playingSchedule);
 
-    List<PlayingSchedule> getPlayingScheduleByProjectors(List<Long> projectors);
-
-    List<PlayingSchedule> getPlayingScheduleByProjectorsByWeekDays(List<Long> projectors, List<Long> weekDays);
-
-    List<PlayingSchedule> getPlayingScheduleByProjectorsSortByProjector(List<Long> projectorsId);
-
-    List<PlayingSchedule> getPlayingScheduleByProjectorsByWeekDaysSortByProjector(List<Long> projectorsId, List<Long> weekDaysId);
-
     void save(PlayingSchedule playingSchedule);
 
     void deleteAllBetween(PlayingSchedule playingSchedule);
-
 
     void delete(PlayingSchedule playingSchedule);
 
@@ -34,4 +26,9 @@ public interface PlayingScheduleService {
     PlayingSchedule getOneWhereBeginTimeAfter(PlayingSchedule playingSchedule);
 
     void deleteById(Long playingScheduleId);
+
+
+    List<PlayingSchedule> getPlayingScheduleByParameters(List<Long> projectorsId, List<Long> weekDaysId, String sort);
+
+    void addPlayingScheduleByParameters(List<String> projectorsId, List<String> weekDaysId, Date beginTime, Date endTime);
 }
