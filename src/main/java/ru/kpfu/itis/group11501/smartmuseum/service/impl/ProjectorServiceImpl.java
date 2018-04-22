@@ -28,4 +28,20 @@ public class ProjectorServiceImpl implements ProjectorService {
     public List<Projector> getFreeProjectors() {
         return projectorRepository.findAllFree();
     }
+
+    @Override
+    public List<Projector> getAllProjectors() {
+        return projectorRepository.findAll();
+    }
+
+    @Override
+    public void deleteProjector(Long id) {
+        projectorRepository.delete(id);
+    }
+
+    @Override
+    public void add(Projector projector) {
+        projectorRepository.save(projector);
+    }
+
 }

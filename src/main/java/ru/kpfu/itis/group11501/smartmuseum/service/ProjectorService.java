@@ -10,5 +10,12 @@ import java.util.List;
 public interface ProjectorService {
     Projector getOneById(Long projector_id);
 
+
+    void add(Projector projector);
+
     List<Projector> getFreeProjectors();
+
+    List<Projector> getAllProjectors();
+
+    void deleteProjector(Long id);
 }
