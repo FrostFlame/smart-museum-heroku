@@ -38,7 +38,7 @@ public class ExpositionController {
     }
 
     @ModelAttribute("exposition")
-    public Exposition exposition(@PathVariable(value = "exposition_id", required = false) Long expositionId) {
+    public Exposition exposition(@PathVariable(value = "id", required = false) Long expositionId) {
         if (expositionId == null) return null;
         return expositionService.getExpositionById(expositionId);
     }
@@ -49,7 +49,7 @@ public class ExpositionController {
         return "expositions";
     }
 
-    @RequestMapping(value = "/{exposition_id}/addVideo", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}/addVideo", method = RequestMethod.GET)
 
 
     public String addVideo(Model model,
@@ -61,8 +61,7 @@ public class ExpositionController {
         }
 
         if (exposition == null) {
-            model.addAttribute("error", "Экспозиция не найдена");
-            return "add_video";
+            return "404_not_found";
         }
 
 
@@ -73,7 +72,7 @@ public class ExpositionController {
         return "add_video";
     }
 
-    @RequestMapping(value = "/{exposition_id}/addVideo", method = RequestMethod.POST)
+    @RequestMapping(value = "/{id}/addVideo", method = RequestMethod.POST)
     public String addVideo(@ModelAttribute("exposition") Exposition exposition,
                            @RequestParam(value = "projectors_id", required = false)  List<String> projectorsId,
                            @RequestParam(value = "videos_id", required = false)  List<String> videosId) {
@@ -96,23 +95,18 @@ public class ExpositionController {
 
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String getExpositionPage(Model model, @PathVariable("id") String id) {
-        Exposition exposition = expositionService.getExpositionById(Long.valueOf(id));
+    public String getExpositionPage(Model model, @ModelAttribute("exposition") Exposition exposition) {
         if (exposition == null){
             return "404_not_found";
         }
-        model.addAttribute("exposition", exposition);
-
         return "exposition";
     }
 
     @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
-    public String getExpositionEditPage(Model model, @PathVariable("id") String id) {
-        Exposition exposition = expositionService.getExpositionById(Long.valueOf(id));
+    public String getExpositionEditPage(Model model, @ModelAttribute("exposition") Exposition exposition) {
         if (exposition == null){
             return "404_not_found";
         }
-        model.addAttribute("exposition", exposition);
         model.addAttribute("projectors", projectorService.getFreeProjectors());
         return "exposition_edit";
     }
