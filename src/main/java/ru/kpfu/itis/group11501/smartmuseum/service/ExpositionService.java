@@ -16,5 +16,7 @@ public interface ExpositionService {
 
     Exposition save(String name, List<String> projectorsId);
 
-    void deleteProjector(Long expositionId, Long projectorId);
+    void editExposition(Long id, String name, List<String> deleteProjectors, List<String> newProjectors);
+
+    void deleteExposition(Long id);
 }

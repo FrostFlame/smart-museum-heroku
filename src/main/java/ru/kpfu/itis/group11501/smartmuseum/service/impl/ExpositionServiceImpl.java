@@ -57,11 +57,34 @@ public class ExpositionServiceImpl implements ExpositionService {
     }
 
     @Override
-    public void deleteProjector(Long expositionId, Long projectorId) {
-        ExpositionProjector expositionProjector = expositionProjectorRepository.findByProjectorAndAndExposition(
-                projectorService.getOneById(projectorId),
-                this.getExpositionById(expositionId));
-        expositionProjectorRepository.delete(expositionProjector);
+    public void editExposition(Long id, String name, List<String> deleteProjectors, List<String> newProjectors) {
+        Exposition exposition = expositionRepository.findOne(id);
+        exposition.setName(name);
+        List<Projector> projectors = exposition.getProjectors();
+        List<Projector> willDelete = new ArrayList<>();
+        if (deleteProjectors != null) {
+            for (String projectorId : deleteProjectors) {
+                for(Projector projector: projectors){
+                    if (Long.valueOf(projectorId).equals(projector.getId())){
+                        willDelete.add(projector);
+                    }
+                }
+            }
+        }
+        projectors.removeAll(willDelete);
+        if (newProjectors != null) {
+            for (String projector : newProjectors) {
+                projectors.add(projectorService.getOneById(Long.valueOf(projector)));
+            }
+        }
+        System.out.println(projectors);
+        exposition.setProjectors(projectors);
+        expositionRepository.save(exposition);
+    }
+
+    @Override
+    public void deleteExposition(Long id) {
+        expositionRepository.delete(id);
     }
 
 }
