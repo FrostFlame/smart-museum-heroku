@@ -20,6 +20,12 @@ public class ProjectorsVideos {
         this.num = num;
     }
 
+    public ProjectorsVideos(Long id, Video video, Long num) {
+        this.video = video;
+        this.num = num;
+        this.id = id;
+    }
+
     public ProjectorsVideos() {
     }
 

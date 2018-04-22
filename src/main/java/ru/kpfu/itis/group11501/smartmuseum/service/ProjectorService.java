@@ -15,4 +15,7 @@ public interface ProjectorService {
 
     List<Projector> getFreeProjectors();
 
+    List<Projector> getAllProjectors();
+
+    void deleteProjector(Long id);
 }

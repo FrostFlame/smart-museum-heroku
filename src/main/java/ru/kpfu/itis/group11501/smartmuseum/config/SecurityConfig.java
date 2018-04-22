@@ -38,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/sign_in").anonymous()
-                .antMatchers("/", "/projector/*").authenticated()
+                .antMatchers("/").authenticated()
                 .and().rememberMe().rememberMeParameter("remember-me").tokenRepository(tokenRepository());
 
         http.csrf().disable()

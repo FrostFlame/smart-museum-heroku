@@ -5,3 +5,13 @@
     <@sf.errors path="name" cssClass="help-block"/>
 <input type="submit" value="Создать">
 </@sf.form>
+<#if projectors?has_content>
+    <#list projectors as projector>
+    <a href="/projector/${projector.getId()}">${projector.getName()}</a>
+    <form action="/projector/delete/${projector.getId()}" method="post">
+        <input type="submit">
+    </form>
+    </#list>
+<#else>
+Нет проекторов
+</#if>

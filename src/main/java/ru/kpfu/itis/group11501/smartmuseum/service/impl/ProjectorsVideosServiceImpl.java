@@ -7,6 +7,8 @@ import ru.kpfu.itis.group11501.smartmuseum.model.Video;
 import ru.kpfu.itis.group11501.smartmuseum.repository.ProjectorsVideosRepository;
 import ru.kpfu.itis.group11501.smartmuseum.service.ProjectorsVideosService;
 
+import java.util.List;
+
 /**
  * Created by volkov on 20.04.2018.
  */
@@ -31,5 +33,10 @@ public class ProjectorsVideosServiceImpl implements ProjectorsVideosService{
     @Override
     public ProjectorsVideos getProjectorsVideosByProjectorIdByVideoId(Long projectorId, Long videoId){
         return projectorsVideosRepository.getProjectorsVideosByProjectorIdByVideoID(projectorId,videoId);
+    }
+
+    @Override
+    public List<ProjectorsVideos> getProjectorVideos(Projector projector) {
+        return projectorsVideosRepository.findALlByProjector(projector);
     }
 }

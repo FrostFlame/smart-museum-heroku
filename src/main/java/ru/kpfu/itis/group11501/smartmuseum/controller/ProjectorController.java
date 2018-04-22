@@ -4,14 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import ru.kpfu.itis.group11501.smartmuseum.model.Projector;
+import ru.kpfu.itis.group11501.smartmuseum.model.ProjectorsVideos;
 import ru.kpfu.itis.group11501.smartmuseum.service.ProjectorService;
+import ru.kpfu.itis.group11501.smartmuseum.service.ProjectorsVideosService;
 import ru.kpfu.itis.group11501.smartmuseum.util.ProjectorAddForm;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Created by Bogdan Popov on 15.04.2018.
@@ -21,16 +22,12 @@ import javax.validation.Valid;
 public class ProjectorController {
 
     private ProjectorService projectorService;
+    private ProjectorsVideosService projectorsVideosService;
 
     @Autowired
-    public ProjectorController(ProjectorService projectorService) {
+    public ProjectorController(ProjectorService projectorService, ProjectorsVideosService projectorsVideosService) {
         this.projectorService = projectorService;
-    }
-
-    @RequestMapping(value = "/create", method = RequestMethod.GET)
-    public String addProjector(Model model) {
-        model.addAttribute("projectorForm", new ProjectorAddForm());
-        return "create_projector";
+        this.projectorsVideosService = projectorsVideosService;
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -41,7 +38,32 @@ public class ProjectorController {
         }
         Projector projector = new Projector();
         projector.setName(form.getName());
+        projector.setStatus('D');
+        projector.setSumTime(0L);
         projectorService.add(projector);
-        return "redirect:/projector/create";
+        return "redirect:/projector/all";
+    }
+
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    public String allProjectors(Model model) {
+        List<Projector> projectors = projectorService.getAllProjectors();
+        model.addAttribute("projectors", projectors);
+        model.addAttribute("projectorForm", new ProjectorAddForm());
+        return "projectors";
+    }
+
+    @RequestMapping(value = "/{id}")
+    public String getProjector(Model model, @PathVariable(value = "id") Long id) {
+        Projector projector = projectorService.getOneById(id);
+        List<ProjectorsVideos> projectorsVideos = projectorsVideosService.getProjectorVideos(projector);
+        model.addAttribute("projectorVideos", projectorsVideos);
+        model.addAttribute("projector", projector);
+        return "projector";
+    }
+
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
+    public String deleteProjector(@PathVariable(value = "id") Long id) {
+        projectorService.deleteProjector(id);
+        return "redirect:/projector/all";
     }
 }
