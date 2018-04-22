@@ -18,4 +18,8 @@ public interface ProjectorService {
     List<Projector> getAllProjectors();
 
     void deleteProjector(Long id);
+
+    void turnOn(Long id);
+
+    void turnOff(Long id);
 }
