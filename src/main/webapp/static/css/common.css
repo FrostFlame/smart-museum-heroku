@@ -4,11 +4,13 @@
 }
 .header-smart{
     margin-bottom: 50px;
-    margin-left: 145px;
-    width: 600px;
+    text-align: center;
 }
 
 .account{
     margin-top: 30px;
     margin-right: 13px;
+}
+.floor-margin{
+    margin-bottom: 20px;
 }
