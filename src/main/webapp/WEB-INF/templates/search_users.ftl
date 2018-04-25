@@ -1,3 +1,8 @@
+<#include "base.ftl">
+<#macro title>
+Найти пользователя
+</#macro>
+<#macro content>
 <form action="/admin/users/search">
     <input type="text" name="searchField">
 <select name="role">
@@ -41,3 +46,4 @@
 <#else>
 Нет пользователей
 </#list>
+</#macro>

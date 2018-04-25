@@ -1,3 +1,8 @@
+<#include "base.ftl">
+<#macro title>
+Добавление расписания
+</#macro>
+<#macro content>
 <#assign sf=JspTaglibs["http://www.springframework.org/tags/form"]>
 
 <#if error?has_content>
@@ -33,3 +38,4 @@
         </div>
     </fieldset>
 </@sf.form>
+</#macro>

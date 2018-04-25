@@ -1,3 +1,8 @@
+<#include "base.ftl">
+<#macro title>
+Добавление экспозиции
+</#macro>
+<#macro content>
 <#assign sf=JspTaglibs["http://www.springframework.org/tags/form"]>
 <#assign c=JspTaglibs["http://www.springframework.org/security/tags"]>
 <@sf.form action="/expositions/add" method="post" modelAttribute="form">
@@ -18,3 +23,4 @@
           <input type="submit" value="Добавить экспозицию"/>
       </fieldset>
 </@sf.form>
+</#macro>

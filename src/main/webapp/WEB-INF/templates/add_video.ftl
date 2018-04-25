@@ -1,5 +1,8 @@
-
-
+<#include "base.ftl">
+<#macro title>
+Добавление видео
+</#macro>
+<#macro content>
 <#if error?has_content>
 <b style="color: red">Error: ${error}</b><br/>
 <#else>
@@ -32,3 +35,4 @@
     <h3><a href="/expositions/${exposition.id}/edit">Добавьте проекторы в эксозицию</a></h3>
     </#if>
 </#if>
+</#macro>

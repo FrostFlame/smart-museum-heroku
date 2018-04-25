@@ -1,3 +1,8 @@
+<#include "base.ftl">
+<#macro title>
+Проектор ${projector.getName()}
+</#macro>
+<#macro content>
 ${projector.getName()}
 ${projector.getStatus()}
 <br/>
@@ -33,3 +38,4 @@ ${projector.getStatus()}
     Выключен: ${projectorStatistic.getEndDate()}
     </#list>
 </#if>
+</#macro>

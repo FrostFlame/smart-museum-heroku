@@ -1,3 +1,8 @@
+<#include "base.ftl">
+<#macro title>
+Добавление видео
+</#macro>
+<#macro content>
 <h3>Название экспозиции</h3>
 <form action="/expositions/${exposition.id}/edit" method="post">
     <input name="name" type="text" value="${exposition.name}"/>
@@ -14,3 +19,4 @@
     <input type="submit" value="Сохранить">
 </form>
 <h4><a href="/expositions/${exposition.id}">К странице экспозиции</a></h4>
+</#macro>

@@ -1,3 +1,8 @@
+<#include "base.ftl">
+<#macro title>
+Проекторы
+</#macro>
+<#macro content>
 <#assign sf=JspTaglibs["http://www.springframework.org/tags/form"]>
 <#assign c=JspTaglibs["http://www.springframework.org/security/tags"]>
 <@sf.form action="/projector/create" method="post" modelAttribute="projectorForm">
@@ -15,3 +20,4 @@
 <#else>
 Нет проекторов
 </#if>
+</#macro>
