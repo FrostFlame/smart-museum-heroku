@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.kpfu.itis.group11501.smartmuseum.model.Position;
 import ru.kpfu.itis.group11501.smartmuseum.model.Role;
 import ru.kpfu.itis.group11501.smartmuseum.model.User;
+import ru.kpfu.itis.group11501.smartmuseum.model.annotation.Action;
+import ru.kpfu.itis.group11501.smartmuseum.model.enums.ActionTypeName;
 import ru.kpfu.itis.group11501.smartmuseum.repository.UserRepository;
 import ru.kpfu.itis.group11501.smartmuseum.service.PositionService;
 import ru.kpfu.itis.group11501.smartmuseum.service.RoleService;
@@ -35,6 +37,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Action(name = ActionTypeName.ADD)
     public User addUser(User user) {
         return userRepository.save(user);
     }

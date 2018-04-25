@@ -19,4 +19,16 @@
             <column name="id" type="numeric"/>
         </loadUpdateData>
     </changeSet>
+
+    <changeSet id="mock_data_4" author="volkov">
+        <loadUpdateData tableName="action_types" primaryKey="id" file="db/mock_data/actiontypes.csv">
+            <column name="id" type="numeric"/>
+        </loadUpdateData>
+    </changeSet>
+
+    <changeSet id="mock_data_5" author="volkov">
+        <loadUpdateData tableName="tablenames" primaryKey="id" file="db/mock_data/tablenames.csv">
+            <column name="id" type="numeric"/>
+        </loadUpdateData>
+    </changeSet>
 </databaseChangeLog>

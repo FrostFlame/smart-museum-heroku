@@ -1,5 +1,7 @@
 package ru.kpfu.itis.group11501.smartmuseum.model;
 
+import ru.kpfu.itis.group11501.smartmuseum.model.interfaces.GettingId;
+
 import javax.persistence.*;
 
 
@@ -9,7 +11,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "roles")
-public class Role {
+public class Role implements GettingId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
