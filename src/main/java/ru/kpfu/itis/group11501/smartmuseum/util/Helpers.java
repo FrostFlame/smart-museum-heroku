@@ -24,11 +24,7 @@ public class Helpers  {
 
     public static User getCurrentUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(!(principal instanceof UserDetails)) {
-            return null;
-        }
-        SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return ((UserDetails) principal).getUser();
+        return (User)principal;
     }
 
 

@@ -15,6 +15,7 @@
         <spring.security.version>4.2.1.RELEASE</spring.security.version>
         <hibernate.version>5.2.2.Final</hibernate.version>
         <jackson.version>2.8.3</jackson.version>
+        <aspectj.version>1.8.9</aspectj.version>
     </properties>
     <dependencies>
         <!-- Spring -->
@@ -194,6 +195,27 @@
             <artifactId>commons-fileupload</artifactId>
             <version>1.3.1</version>
         </dependency>
+
+        <!-- AOP -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjtools</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
+
+
     </dependencies>
 
     <profiles>

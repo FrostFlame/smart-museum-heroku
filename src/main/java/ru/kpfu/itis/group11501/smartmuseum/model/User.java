@@ -1,6 +1,7 @@
 package ru.kpfu.itis.group11501.smartmuseum.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import ru.kpfu.itis.group11501.smartmuseum.model.interfaces.GettingId;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -10,7 +11,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements GettingId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

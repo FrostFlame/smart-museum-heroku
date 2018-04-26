@@ -2,6 +2,8 @@ package ru.kpfu.itis.group11501.smartmuseum.service.impl;
 
 import org.springframework.stereotype.Service;
 import ru.kpfu.itis.group11501.smartmuseum.model.Video;
+import ru.kpfu.itis.group11501.smartmuseum.model.annotation.Action;
+import ru.kpfu.itis.group11501.smartmuseum.model.enums.ActionTypeName;
 import ru.kpfu.itis.group11501.smartmuseum.repository.VideoRepository;
 import ru.kpfu.itis.group11501.smartmuseum.service.VideoService;
 
@@ -26,6 +28,7 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
+    @Action(name = ActionTypeName.ADD)
     public Video addVideo(Video video) {
         return videoRepository.save(video);
     }
@@ -41,6 +44,7 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
+    @Action(name = ActionTypeName.DELETE)
     public void deleteById(Long videoId) {
         videoRepository.delete(videoId);
     }

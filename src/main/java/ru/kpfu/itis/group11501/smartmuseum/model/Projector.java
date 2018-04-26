@@ -1,5 +1,7 @@
 package ru.kpfu.itis.group11501.smartmuseum.model;
 
+import ru.kpfu.itis.group11501.smartmuseum.model.interfaces.GettingId;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -11,7 +13,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "projectors")
-public class Projector {
+public class Projector implements GettingId {
 
 
     @Id

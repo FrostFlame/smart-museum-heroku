@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.kpfu.itis.group11501.smartmuseum.model.Projector;
 import ru.kpfu.itis.group11501.smartmuseum.model.ProjectorsVideos;
 import ru.kpfu.itis.group11501.smartmuseum.model.Video;
+import ru.kpfu.itis.group11501.smartmuseum.model.annotation.Action;
+import ru.kpfu.itis.group11501.smartmuseum.model.enums.ActionTypeName;
 import ru.kpfu.itis.group11501.smartmuseum.repository.ProjectorsVideosRepository;
 import ru.kpfu.itis.group11501.smartmuseum.service.ProjectorService;
 import ru.kpfu.itis.group11501.smartmuseum.service.ProjectorsVideosService;
@@ -27,8 +29,11 @@ public class ProjectorsVideosServiceImpl implements ProjectorsVideosService{
     @Autowired
     private VideoService videoService;
 
+    @Autowired
+    private ProjectorsVideosService projectorsVideosService;
 
     @Override
+    @Action(name = ActionTypeName.ADD)
     public ProjectorsVideos addProjectorsVideos(ProjectorsVideos projectorsVideos){
         return projectorsVideosRepository.save(projectorsVideos);
     }
@@ -58,7 +63,7 @@ public class ProjectorsVideosServiceImpl implements ProjectorsVideosService{
                     ProjectorsVideos hasLastNum = getOneByProjectorIdWhereLastNum(projector.getId());
                     if (hasLastNum != null) lastNum = hasLastNum.getNum();
                     ProjectorsVideos newProjectorsVideos = new ProjectorsVideos(video,projector,++lastNum);
-                    addProjectorsVideos(newProjectorsVideos);
+                    projectorsVideosService.addProjectorsVideos(newProjectorsVideos);
                 }
             }
         }

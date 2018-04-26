@@ -1,10 +1,12 @@
 package ru.kpfu.itis.group11501.smartmuseum.model;
 
+import ru.kpfu.itis.group11501.smartmuseum.model.interfaces.GettingId;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "expositions_projectors")
-public class ExpositionProjector {
+public class ExpositionProjector implements GettingId {
     public ExpositionProjector() {
 
     }

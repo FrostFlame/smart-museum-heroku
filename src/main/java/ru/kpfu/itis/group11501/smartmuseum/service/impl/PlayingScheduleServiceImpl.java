@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.kpfu.itis.group11501.smartmuseum.model.PlayingSchedule;
 import ru.kpfu.itis.group11501.smartmuseum.model.Projector;
 import ru.kpfu.itis.group11501.smartmuseum.model.WeekDay;
+import ru.kpfu.itis.group11501.smartmuseum.model.annotation.Action;
+import ru.kpfu.itis.group11501.smartmuseum.model.enums.ActionTypeName;
 import ru.kpfu.itis.group11501.smartmuseum.repository.PlayingScheduleRepository;
 import ru.kpfu.itis.group11501.smartmuseum.service.PlayingScheduleService;
 import ru.kpfu.itis.group11501.smartmuseum.service.ProjectorService;
@@ -28,6 +30,9 @@ public class PlayingScheduleServiceImpl implements PlayingScheduleService {
     @Autowired
     private WeekDayService weekDayService;
 
+    @Autowired
+    private PlayingScheduleService playingScheduleService;
+
 
     @Override
     public List<PlayingSchedule> getAllPlayingSchedule() {
@@ -35,12 +40,14 @@ public class PlayingScheduleServiceImpl implements PlayingScheduleService {
     }
 
     @Override
+    @Action(name = ActionTypeName.ADD)
     public PlayingSchedule addPlayingSchedule(PlayingSchedule playingSchedule) {
         return playingScheduleRepository.save(playingSchedule);
     }
 
     @Override
-    public void save(PlayingSchedule playingSchedule){
+    @Action(name = ActionTypeName.UPDATE)
+    public void updatePlayingSchedule(PlayingSchedule playingSchedule){
         playingScheduleRepository.save(playingSchedule);
     }
 
@@ -51,11 +58,6 @@ public class PlayingScheduleServiceImpl implements PlayingScheduleService {
                 playingSchedule.getWeekDay().getId(),
                 playingSchedule.getBeginTime(),
                 playingSchedule.getEndTime());
-    }
-
-    @Override
-    public void delete(PlayingSchedule playingSchedule){
-        playingScheduleRepository.delete(playingSchedule);
     }
 
     @Override
@@ -73,6 +75,7 @@ public class PlayingScheduleServiceImpl implements PlayingScheduleService {
     }
 
     @Override
+    @Action(name = ActionTypeName.DELETE)
     public void deleteById(Long playingScheduleId) {
         playingScheduleRepository.deleteById(playingScheduleId);
     }
@@ -100,17 +103,17 @@ public class PlayingScheduleServiceImpl implements PlayingScheduleService {
                 WeekDay weekDay = weekDayService.getOneById(Long.decode(weekDayId));
                 PlayingSchedule newPlayingSchedule = new PlayingSchedule(beginTime,endTime,weekDay,projector);
 
-                deleteAllBetween(newPlayingSchedule);
+                playingScheduleService.deleteAllBetween(newPlayingSchedule);
                 PlayingSchedule playingScheduleBefore = getOneWhereBeginTimeBefore(newPlayingSchedule);
                 PlayingSchedule playingScheduleAfter = getOneWhereBeginTimeAfter(newPlayingSchedule);
 
                 if (playingScheduleBefore == null || playingScheduleBefore.getEndTime().compareTo(newPlayingSchedule.getBeginTime()) < 0) {
                     if (playingScheduleAfter == null || playingScheduleAfter.getBeginTime().compareTo(newPlayingSchedule.getEndTime()) > 0){
-                        addPlayingSchedule(newPlayingSchedule);
+                        playingScheduleService.addPlayingSchedule(newPlayingSchedule);
                     }
                     else{
                         playingScheduleAfter.setBeginTime(newPlayingSchedule.getBeginTime());
-                        save(playingScheduleAfter);
+                        playingScheduleService.updatePlayingSchedule(playingScheduleAfter);
 
                     }
 
@@ -122,9 +125,9 @@ public class PlayingScheduleServiceImpl implements PlayingScheduleService {
                         }
                         else{
                             playingScheduleBefore.setEndTime(playingScheduleAfter.getEndTime());
-                            delete(playingScheduleAfter);
+                            playingScheduleService.deleteById(playingScheduleAfter.getId());
                         }
-                        save(playingScheduleBefore);
+                        playingScheduleService.updatePlayingSchedule(playingScheduleBefore);
                     }
                 }
 
