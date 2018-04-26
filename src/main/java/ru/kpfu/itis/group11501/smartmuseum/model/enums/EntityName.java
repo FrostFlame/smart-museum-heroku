@@ -8,8 +8,8 @@ public enum EntityName {
     PLAYINGSCHEDULE("Расписание", null), // not page for individual playing_schedule
     PROJECTORSVIDEOS("ПроеткорВидео",  null),  //not page for individual projector_video; only add
     VIDEO("Видео", null),   //not page for individual video
-    PROJECTOR("Проектор", "/projector/"), // need do update,turnnon,turnoff,fault
-    USER("Пользователь", "/user/");  //only add
+    PROJECTOR("Проектор", "/projector/"), // need doing fault
+    USER("Пользователь", "/user/");  // need doing fault,delete,update
     private final String rusName;
     private final String link;
 

@@ -45,11 +45,13 @@ public class ProjectorServiceImpl implements ProjectorService {
     }
 
     @Override
+    @Action(name = ActionTypeName.TURNON)
     public void turnOn(Long id) {
         projectorRepository.changeStatus(id, 'E');
     }
 
     @Override
+    @Action(name = ActionTypeName.TURNOFF)
     public void turnOff(Long id) {
         projectorRepository.changeStatus(id, 'D');
     }
