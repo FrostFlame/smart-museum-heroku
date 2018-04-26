@@ -8,5 +8,5 @@ import ru.kpfu.itis.group11501.smartmuseum.model.ActionType;
  */
 public interface ActionTypeRepository extends JpaRepository<ActionType, Long> {
 
-    ActionType getOneByName(String name);
+    ActionType findOneByName(String name);
 }

@@ -1,5 +1,6 @@
 package ru.kpfu.itis.group11501.smartmuseum.util;
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 
@@ -47,16 +48,16 @@ public class UserLogger {
         Object result = thisJoinPoint.proceed();
 
         User currentUser = Helpers.getCurrentUser();
-        ActionType actionType = actionTypeService.getOneByName(annotation.name().getEngName());
-        TableName tableName = tableNameService.getOneByName(Class.forName(className).getAnnotation(CoherentEntity.class).name().getEngName());
+        ActionType actionType = actionTypeService.getOneByName(annotation.name().toString());
+        TableName tableName = tableNameService.getOneByName(Class.forName(className).getAnnotation(CoherentEntity.class).name().toString());
         Date currentTime = new Date();
         Long id;
 
-        if(actionType.getName().equals(ActionTypeName.ADD.getEngName())){
+        if(actionType.getName().equals(ActionTypeName.ADD.name())){
             id =((GettingId)result).getId();
         }
         else{
-            if(actionType.getName().equals(ActionTypeName.UPDATE.getEngName())){
+            if(actionType.getName().equals(ActionTypeName.UPDATE.name())){
                 id = ((GettingId)thisJoinPoint.getArgs()[0]).getId();
             }
             else{

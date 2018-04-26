@@ -8,5 +8,5 @@ import ru.kpfu.itis.group11501.smartmuseum.model.TableName;
  */
 public interface TableNameRepository extends JpaRepository<TableName, Long> {
 
-    TableName getOneByName(String name);
+    TableName findOneByName(String name);
 }

@@ -16,11 +16,11 @@ public class UserStatistic implements GettingId {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false, targetEntity = User.class)
+    @ManyToOne(optional = false, targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "usersid", referencedColumnName = "id")
     private User user;
 
-    @ManyToOne(optional = false , targetEntity = ActionType.class)
+    @ManyToOne(optional = false , targetEntity = ActionType.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "action_typesid", referencedColumnName = "id")
     private ActionType actionType;
 
@@ -28,12 +28,15 @@ public class UserStatistic implements GettingId {
     @Temporal(TemporalType.TIMESTAMP)
     private Date datetime;
 
-    @ManyToOne(optional = false, targetEntity = TableName.class)
+    @ManyToOne(optional = false, targetEntity = TableName.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "tablenamesid", referencedColumnName = "id")
     private TableName tableName;
 
     @Column(nullable = false, name = "tableid")
     private Long tableid;
+
+    @Transient
+    private String link;
 
     public UserStatistic() {
     }
@@ -92,5 +95,13 @@ public class UserStatistic implements GettingId {
 
     public void setTableid(Long tableid) {
         this.tableid = tableid;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }

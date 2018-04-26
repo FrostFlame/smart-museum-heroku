@@ -1,7 +1,7 @@
 ID,NAME
-1,add
-2,delete
-3,update
-4,enable
-5,disable
-6,fault
+1,ADD
+2,DELETE
+3,UPDATE
+4,TURNON
+5,TURNOFF
+6,FAULT
