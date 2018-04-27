@@ -9,7 +9,8 @@ public enum ActionTypeName {
     UPDATE("Изменение"),
     TURNON("Включение"),
     TURNOFF("Выключение"),
-    FAULT("Неисправен");
+    FAULT("Неисправен"),
+    AUTHORIZATION("Авторизация");
 
     private final String rusName;
 

@@ -12,7 +12,7 @@
 
 
     <label class=" control-label">Действие</label>
-    <select multiple size="6" id="actions" name="actions">
+    <select multiple size="7" id="actions" name="actions">
         <#list actions as a>
             <option value="${a.id}">${a.name}</option>
         </#list>
