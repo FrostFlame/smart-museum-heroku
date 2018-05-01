@@ -1,6 +1,6 @@
 package ru.kpfu.itis.group11501.smartmuseum.util;
 
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 

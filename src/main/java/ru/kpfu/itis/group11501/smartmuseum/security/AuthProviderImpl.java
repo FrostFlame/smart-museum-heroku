@@ -28,7 +28,6 @@ public class AuthProviderImpl implements AuthenticationProvider {
 
     private UserService userService;
     private final PasswordEncoder encoder;
-//    private final MyUserDetailsService userDetailsService;
 
     @Autowired
     public AuthProviderImpl(UserService userService) {
