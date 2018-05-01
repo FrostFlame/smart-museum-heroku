@@ -1,5 +1,8 @@
-
-
+<#include "base.ftl">
+<#macro title>
+Видео
+</#macro>
+<#macro content>
 <#if error?has_content>
 <b style="color: red">Error: ${error}</b>
 <br/>
@@ -19,3 +22,4 @@ Name: ${v.name}
 <#else>
 Нет видео
 </#list>
+</#macro>

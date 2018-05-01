@@ -1,14 +1,15 @@
 package ru.kpfu.itis.group11501.smartmuseum.model;
 
+import ru.kpfu.itis.group11501.smartmuseum.model.interfaces.GettingId;
+
 import javax.persistence.*;
-import java.util.List;
 
 /**
  * Created by volkov on 20.04.2018.
  */
 @Entity
 @Table(name = "projectors_videos")
-public class ProjectorsVideos {
+public class ProjectorsVideos implements GettingId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -11,6 +11,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import ru.kpfu.itis.group11501.smartmuseum.model.User;
+import ru.kpfu.itis.group11501.smartmuseum.model.annotation.Action;
+import ru.kpfu.itis.group11501.smartmuseum.model.annotation.CoherentEntity;
+import ru.kpfu.itis.group11501.smartmuseum.model.enums.ActionTypeName;
+import ru.kpfu.itis.group11501.smartmuseum.model.enums.EntityName;
 import ru.kpfu.itis.group11501.smartmuseum.service.UserService;
 
 import java.util.ArrayList;
@@ -33,6 +37,7 @@ public class AuthProviderImpl implements AuthenticationProvider {
     }
 
     @Override
+    @Action(name = ActionTypeName.AUTHORIZATION)
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String email = authentication.getName();
         User user = userService.getUser(email);

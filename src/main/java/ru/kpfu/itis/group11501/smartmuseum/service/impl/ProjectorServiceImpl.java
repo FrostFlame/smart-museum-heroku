@@ -3,6 +3,8 @@ package ru.kpfu.itis.group11501.smartmuseum.service.impl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kpfu.itis.group11501.smartmuseum.model.Projector;
+import ru.kpfu.itis.group11501.smartmuseum.model.annotation.Action;
+import ru.kpfu.itis.group11501.smartmuseum.model.enums.ActionTypeName;
 import ru.kpfu.itis.group11501.smartmuseum.repository.ProjectorRepository;
 import ru.kpfu.itis.group11501.smartmuseum.service.ProjectorService;
 
@@ -37,23 +39,28 @@ public class ProjectorServiceImpl implements ProjectorService {
     }
 
     @Override
+    @Action(name = ActionTypeName.DELETE)
     public void deleteProjector(Long id) {
         projectorRepository.delete(id);
     }
 
     @Override
+    @Action(name = ActionTypeName.TURNON)
     public void turnOn(Long id) {
         projectorRepository.changeStatus(id, 'E');
     }
 
     @Override
+    @Action(name = ActionTypeName.TURNOFF)
     public void turnOff(Long id) {
         projectorRepository.changeStatus(id, 'D');
     }
 
-    @Override
-    public void add(Projector projector) {
-        projectorRepository.save(projector);
+
+    @Action(name = ActionTypeName.ADD)
+    public Projector add(Projector projector) {
+        return projectorRepository.save(projector);
+
     }
 
 }

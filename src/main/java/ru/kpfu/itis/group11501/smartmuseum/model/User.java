@@ -1,6 +1,7 @@
 package ru.kpfu.itis.group11501.smartmuseum.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import ru.kpfu.itis.group11501.smartmuseum.model.interfaces.GettingId;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +16,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "users")
-public class User implements UserDetails{
+public class User implements UserDetails, GettingId{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

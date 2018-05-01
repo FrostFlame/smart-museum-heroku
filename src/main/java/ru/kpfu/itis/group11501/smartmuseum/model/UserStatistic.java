@@ -1,5 +1,7 @@
 package ru.kpfu.itis.group11501.smartmuseum.model;
 
+import ru.kpfu.itis.group11501.smartmuseum.model.interfaces.GettingId;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -7,28 +9,34 @@ import java.util.Date;
  * Created by volkov on 13.04.2018.
  */
 @Entity
-@Table(name = "user_statistics")
-public class UserStatistic {
+@Table(name = "users_statistics")
+public class UserStatistic implements GettingId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, targetEntity = User.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "usersid", referencedColumnName = "id")
     private User user;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false , targetEntity = ActionType.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "action_typesid", referencedColumnName = "id")
     private ActionType actionType;
 
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date datetime;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, targetEntity = TableName.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "tablenamesid", referencedColumnName = "id")
     private TableName tableName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "tableid")
     private Long tableid;
+
+    @Transient
+    private String link;
 
     public UserStatistic() {
     }
@@ -87,5 +95,13 @@ public class UserStatistic {
 
     public void setTableid(Long tableid) {
         this.tableid = tableid;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }

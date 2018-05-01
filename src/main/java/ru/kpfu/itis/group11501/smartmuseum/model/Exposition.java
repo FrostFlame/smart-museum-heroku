@@ -1,5 +1,7 @@
 package ru.kpfu.itis.group11501.smartmuseum.model;
 
+import ru.kpfu.itis.group11501.smartmuseum.model.interfaces.GettingId;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -8,7 +10,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "expositions")
-public class Exposition {
+public class Exposition implements GettingId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

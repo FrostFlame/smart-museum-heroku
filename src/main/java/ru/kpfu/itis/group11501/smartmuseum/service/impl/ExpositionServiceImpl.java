@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.kpfu.itis.group11501.smartmuseum.model.Exposition;
 import ru.kpfu.itis.group11501.smartmuseum.model.ExpositionProjector;
 import ru.kpfu.itis.group11501.smartmuseum.model.Projector;
+import ru.kpfu.itis.group11501.smartmuseum.model.annotation.Action;
+import ru.kpfu.itis.group11501.smartmuseum.model.enums.ActionTypeName;
 import ru.kpfu.itis.group11501.smartmuseum.repository.ExpositionProjectorRepository;
 import ru.kpfu.itis.group11501.smartmuseum.repository.ExpositionRepository;
 import ru.kpfu.itis.group11501.smartmuseum.service.ExpositionService;
@@ -22,14 +24,13 @@ public class ExpositionServiceImpl implements ExpositionService {
     private ExpositionRepository expositionRepository;
     private ExpositionProjectorRepository expositionProjectorRepository;
     private ProjectorService projectorService;
-
     @Autowired
-    public ExpositionServiceImpl(ExpositionRepository expositionRepository,
-                                 ProjectorService projectorService,
-                                 ExpositionProjectorRepository expositionProjectorRepository) {
+    private ExpositionService expositionService;
+
+    public ExpositionServiceImpl(ExpositionRepository expositionRepository, ExpositionProjectorRepository expositionProjectorRepository, ProjectorService projectorService) {
         this.expositionRepository = expositionRepository;
-        this.projectorService = projectorService;
         this.expositionProjectorRepository = expositionProjectorRepository;
+        this.projectorService = projectorService;
     }
 
     @Override
@@ -48,6 +49,7 @@ public class ExpositionServiceImpl implements ExpositionService {
     }
 
     @Override
+    @Action(name = ActionTypeName.ADD)
     public Exposition save(String name, List<String> projectorsId) {
         List<Projector> projectors = new ArrayList<>();
         for (String id : projectorsId) {
@@ -77,12 +79,18 @@ public class ExpositionServiceImpl implements ExpositionService {
                 projectors.add(projectorService.getOneById(Long.valueOf(projector)));
             }
         }
-        System.out.println(projectors);
         exposition.setProjectors(projectors);
+        expositionService.editExposition(exposition);
+    }
+
+    @Override
+    @Action(name = ActionTypeName.UPDATE)
+    public void editExposition(Exposition exposition){
         expositionRepository.save(exposition);
     }
 
     @Override
+    @Action(name = ActionTypeName.DELETE)
     public void deleteExposition(Long id) {
         expositionRepository.delete(id);
     }

@@ -1,7 +1,8 @@
 package ru.kpfu.itis.group11501.smartmuseum.model;
 
+import ru.kpfu.itis.group11501.smartmuseum.model.interfaces.GettingId;
+
 import javax.persistence.*;
-import java.util.Date;
 
 /**
  * Created by volkov on 12.04.2018.
@@ -9,7 +10,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "week_days")
-public class WeekDay {
+public class WeekDay implements GettingId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
