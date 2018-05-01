@@ -14,6 +14,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
@@ -32,21 +34,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private final AuthenticationProvider authProvider;
     private final AccessDeniedHandler accessDeniedHandler;
-    private final DataSource dataSource;
     @Autowired
     @Qualifier("userDetailsService")
     UserDetailsService userDetailsService;
 
     @Autowired
-    public SecurityConfig(AuthenticationProvider authProvider, AccessDeniedHandler accessDeniedHandler, DataSource dataSource) {
+    public SecurityConfig(AuthenticationProvider authProvider, AccessDeniedHandler accessDeniedHandler, UserDetailsService userDetailsService) {
         this.authProvider = authProvider;
         this.accessDeniedHandler = accessDeniedHandler;
-        this.dataSource = dataSource;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http
+                .authorizeRequests()
                 .antMatchers("/sign_in").anonymous()
                 .antMatchers("/").authenticated()
                 .and()
