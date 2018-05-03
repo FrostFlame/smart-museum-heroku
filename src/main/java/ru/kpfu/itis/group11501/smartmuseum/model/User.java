@@ -80,7 +80,7 @@ public class User implements UserDetails, GettingId{
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(role.getName()));
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
         return authorities;
     }
 

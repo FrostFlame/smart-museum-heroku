@@ -5,11 +5,11 @@
     <title>Private page</title>
 </head>
 <body>
-    <div>Имя: ${user.name}</div>
-    <div>Фамилия: ${user.surname}</div>
-    <div>Отчество: ${user.thirdName}</div>
-    <div>Роль: ${user.role.name}</div>
-    <div>Должность: ${user.position.name}</div>
-    <div>Фото: <img src="${user.photo}"></div>
+    <div>Имя: ${u.name}</div>
+    <div>Фамилия: ${u.surname}</div>
+    <div>Отчество: ${u.thirdName}</div>
+    <div>Роль: ${u.role.name}</div>
+    <div>Должность: ${u.position.name}</div>
+    <div>Фото: <img src="${u.photo}"></div>
 </body>
 </html>
