@@ -16,6 +16,8 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long> {
     User findOneByLogin(String login);
 
+    User findOneById(Long id);
+
     @Query("select u from User as u where u.role in ?1 and u.position in ?2 and u.status in ?3" +
             " and (LOWER(concat(u.login, ' ', u.surname, ' ', u.name, ' ', u.thirdName)) like ?4" +
             " or LOWER(concat(u.surname, ' ', u.thirdName)) like ?4 or " +
