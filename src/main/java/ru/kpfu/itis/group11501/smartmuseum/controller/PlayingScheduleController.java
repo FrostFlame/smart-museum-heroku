@@ -15,6 +15,7 @@ import ru.kpfu.itis.group11501.smartmuseum.service.PlayingScheduleService;
 import ru.kpfu.itis.group11501.smartmuseum.service.ProjectorService;
 import ru.kpfu.itis.group11501.smartmuseum.service.WeekDayService;
 import ru.kpfu.itis.group11501.smartmuseum.util.PlayingScheduleAddForm;
+import ru.kpfu.itis.group11501.smartmuseum.validator.PlayingScheduleAddValidator;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -33,19 +34,15 @@ public class PlayingScheduleController {
     private ExpositionService expositionService;
     private WeekDayService weekDayService;
     private ProjectorService projectorService;
+    private PlayingScheduleAddValidator playingScheduleAddValidator;
 
-
-    public PlayingScheduleController(PlayingScheduleService playingScheduleService,
-                                     ExpositionService expositionService,
-                                     WeekDayService weekDayService,
-                                     ProjectorService projectorService) {
+    public PlayingScheduleController(PlayingScheduleService playingScheduleService, ExpositionService expositionService, WeekDayService weekDayService, ProjectorService projectorService, PlayingScheduleAddValidator playingScheduleAddValidator) {
         this.playingScheduleService = playingScheduleService;
         this.expositionService = expositionService;
         this.weekDayService = weekDayService;
         this.projectorService = projectorService;
+        this.playingScheduleAddValidator = playingScheduleAddValidator;
     }
-
-
 
     @ModelAttribute("expositions")
     public List<Exposition> expositions() {
@@ -108,14 +105,13 @@ public class PlayingScheduleController {
 
     @RequestMapping(value = "/{exposition_id}/add", method = RequestMethod.GET)
     public String addPlayingSchedule(Model model,
-                                     @RequestParam(value = "error", required = false) String error,
+                                     //@RequestParam(value = "error", required = false) String error,
                                      @ModelAttribute("exposition") Exposition exposition) {
         if( exposition == null) {
             model.addAttribute("error", "Экспозиция не найдена");
         }
         else{
-            model.addAttribute("error",error );
-            model.addAttribute("form", new PlayingScheduleAddForm());
+            if (!model.containsAttribute("form")) model.addAttribute("form", new PlayingScheduleAddForm());
         }
         return "add_playing_schedule";
     }
@@ -125,8 +121,11 @@ public class PlayingScheduleController {
                                      BindingResult bindingResult,
                                      @PathVariable("exposition_id") Long expositionId,
                                      RedirectAttributes redirectAttributes) {
-        if( bindingResult.hasErrors() || form.getBeginTime()==null || form.getEndTime()==null || form.getBeginTime().compareTo(form.getEndTime())>=0) {
-            redirectAttributes.addAttribute("error",  "Поля заполнены не верно");
+
+        playingScheduleAddValidator.validate(form,bindingResult);
+        if( bindingResult.hasErrors() ) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.form",  bindingResult);
+            redirectAttributes.addFlashAttribute("form", form);
             return  "redirect:/playing_schedule/"+expositionId+"/add";
         }
 
