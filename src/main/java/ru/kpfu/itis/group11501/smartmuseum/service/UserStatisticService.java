@@ -15,5 +15,5 @@ public interface UserStatisticService {
 
     List<UserStatistic> setRussianNames(List<UserStatistic> userStatistics);
 
-    List<UserStatistic> findByParameter(List<Long> users, List<Long> actions, List<Long> entities);
+    List<UserStatistic> findByParameter(List<Long> users, List<Long> actions, List<Long> entities, String searchField);
 }

@@ -61,7 +61,7 @@ public class UserStatisticServiceImpl implements UserStatisticService {
     }
 
     @Override
-    public List<UserStatistic> findByParameter(List<Long> users, List<Long> actions, List<Long> entities) {
+    public List<UserStatistic> findByParameter(List<Long> users, List<Long> actions, List<Long> entities, String searchField) {
         if (users == null){
             users = userService.getAllUsers().stream().map(User::getId).collect(Collectors.toList());
         }
@@ -71,6 +71,6 @@ public class UserStatisticServiceImpl implements UserStatisticService {
         if (entities == null){
             entities = tableNameService.findAll().stream().map(TableName::getId).collect(Collectors.toList());
         }
-        return userStatisticRepository.findByParameter(users,actions,entities);
+        return userStatisticRepository.findByParameter(users,actions,entities,"%" + searchField.toLowerCase() + "%");
     }
 }

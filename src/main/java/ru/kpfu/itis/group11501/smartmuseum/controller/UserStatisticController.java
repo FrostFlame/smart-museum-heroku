@@ -76,10 +76,11 @@ public class UserStatisticController {
 
     @RequestMapping(path = "/search", method = RequestMethod.GET)
     public String userStatisticSearch(Model model,
+                                      @RequestParam(name = "searchField") String searchField,
                                       @RequestParam(value = "actions", required = false)  List<Long> actions,
                                       @RequestParam(value = "entities", required = false)  List<Long> entities,
                                       @RequestParam(value = "users", required = false)  List<Long> users) {
-        List<UserStatistic> userStatistics = userStatisticService.findByParameter(users,actions,entities);
+        List<UserStatistic> userStatistics = userStatisticService.findByParameter(users,actions,entities,searchField);
         if (userStatistics == null) return "user_statistic";
         userStatistics = userStatisticService.setRussianNames(userStatistics);
         model.addAttribute("user_statistic", userStatistics);

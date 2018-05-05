@@ -2,6 +2,9 @@
 
 <form action="/user_statistic/search" method="get">
 
+    <label class=" control-label">Поиск</label>
+    <input type="text" name="searchField">
+
     <label class=" control-label">Пользователь</label>
     <select multiple size="10" id="users" name="users">
         <#list users as u>
