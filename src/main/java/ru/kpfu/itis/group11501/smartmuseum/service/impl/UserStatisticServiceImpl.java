@@ -1,6 +1,8 @@
 package ru.kpfu.itis.group11501.smartmuseum.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.kpfu.itis.group11501.smartmuseum.model.ActionType;
 import ru.kpfu.itis.group11501.smartmuseum.model.TableName;
@@ -14,6 +16,7 @@ import ru.kpfu.itis.group11501.smartmuseum.service.TableNameService;
 import ru.kpfu.itis.group11501.smartmuseum.service.UserService;
 import ru.kpfu.itis.group11501.smartmuseum.service.UserStatisticService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +31,7 @@ public class UserStatisticServiceImpl implements UserStatisticService {
     private UserService userService;
     private ActionTypeService actionTypeService;
     private TableNameService tableNameService;
+    private static int size = 15;
 
     public UserStatisticServiceImpl(UserStatisticRepository userStatisticRepository, UserService userService, ActionTypeService actionTypeService, TableNameService tableNameService) {
         this.userStatisticRepository = userStatisticRepository;
@@ -41,10 +45,6 @@ public class UserStatisticServiceImpl implements UserStatisticService {
         return userStatisticRepository.save(userStatistic);
     }
 
-    @Override
-    public List<UserStatistic> findAll() {
-        return userStatisticRepository.findAll();
-    }
 
     @Override
     public List<UserStatistic> setRussianNames(List<UserStatistic> userStatistics) {
@@ -61,7 +61,7 @@ public class UserStatisticServiceImpl implements UserStatisticService {
     }
 
     @Override
-    public List<UserStatistic> findByParameter(List<Long> users, List<Long> actions, List<Long> entities, String searchField) {
+    public List<UserStatistic> findByParameter(List<Long> users, List<Long> actions, List<Long> entities, String searchField, String page) {
         if (users == null){
             users = userService.getAllUsers().stream().map(User::getId).collect(Collectors.toList());
         }
@@ -71,6 +71,18 @@ public class UserStatisticServiceImpl implements UserStatisticService {
         if (entities == null){
             entities = tableNameService.findAll().stream().map(TableName::getId).collect(Collectors.toList());
         }
-        return userStatisticRepository.findByParameter(users,actions,entities,"%" + searchField.toLowerCase() + "%");
+        if (searchField == null){
+            searchField = "";
+        }
+        int pageId = 0;
+        if (page != null) pageId = Integer.parseInt(page);
+
+        Pageable pageRequest = new PageRequest(pageId,size);
+        return userStatisticRepository.findByParameter(users,actions,entities,searchField, pageRequest);
+    }
+
+    @Override
+    public Long getLastPage() {
+        return userStatisticRepository.getCountRow()/size;
     }
 }

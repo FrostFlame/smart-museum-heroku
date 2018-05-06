@@ -16,8 +16,10 @@ import ru.kpfu.itis.group11501.smartmuseum.service.ActionTypeService;
 import ru.kpfu.itis.group11501.smartmuseum.service.TableNameService;
 import ru.kpfu.itis.group11501.smartmuseum.service.UserService;
 import ru.kpfu.itis.group11501.smartmuseum.service.UserStatisticService;
+import ru.kpfu.itis.group11501.smartmuseum.util.Helpers;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -64,26 +66,26 @@ public class UserStatisticController {
         return userService.getAllUsers();
     }
 
-
-    @RequestMapping(method = RequestMethod.GET)
-    public String userStatisticPage(Model model) {
-        List<UserStatistic> userStatistics = userStatisticService.findAll();
-        if (userStatistics == null) return "user_statistic";
-        userStatistics = userStatisticService.setRussianNames(userStatistics);
-        model.addAttribute("user_statistic", userStatistics);
-        return "user_statistic";
-    }
-
-    @RequestMapping(path = "/search", method = RequestMethod.GET)
+    @RequestMapping( method = RequestMethod.GET)
     public String userStatisticSearch(Model model,
-                                      @RequestParam(name = "searchField") String searchField,
+                                      @RequestParam(value = "page", required = false) String page,
+                                      @RequestParam(value = "searchField", required = false) String searchField,
                                       @RequestParam(value = "actions", required = false)  List<Long> actions,
                                       @RequestParam(value = "entities", required = false)  List<Long> entities,
                                       @RequestParam(value = "users", required = false)  List<Long> users) {
-        List<UserStatistic> userStatistics = userStatisticService.findByParameter(users,actions,entities,searchField);
+        List<UserStatistic> userStatistics = userStatisticService.findByParameter(users,actions,entities,searchField,page);
         if (userStatistics == null) return "user_statistic";
         userStatistics = userStatisticService.setRussianNames(userStatistics);
+
+        Long currentPage = 0L;
+        if (page != null) currentPage = Long.valueOf(page);
+        Long lastPage = userStatisticService.getLastPage();
+        List<Long> pages = Helpers.getListPages(currentPage,lastPage,4L);
+
         model.addAttribute("user_statistic", userStatistics);
+        model.addAttribute("pages", pages);
+        model.addAttribute("page", currentPage);
+        model.addAttribute("lastPage", lastPage);
         return "user_statistic";
     }
 
