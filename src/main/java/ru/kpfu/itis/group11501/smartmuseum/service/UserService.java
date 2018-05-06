@@ -25,7 +25,7 @@ public interface UserService {
 
     List<User> getAllUsers();
 
-    void normalEditProfile(User editableUser, EditProfileForm editProfileForm);
+    void normalEditProfileAndSave(User editableUser, EditProfileForm editProfileForm);
 
-    void adminEditProfile(User editableUser, EditProfileForm editProfileForm);
+    void adminEditProfileAndSave(User editableUser, EditProfileForm editProfileForm);
 }

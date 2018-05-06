@@ -69,7 +69,7 @@ public class EditUserController {
             model.addAttribute("error", "Неверный текущий пароль.");
             return "edit_profile";
         }
-        userService.normalEditProfile(editableUser, editProfileForm);
+        userService.normalEditProfileAndSave(editableUser, editProfileForm);
         return "private_page";
     }
 
@@ -80,7 +80,7 @@ public class EditUserController {
         if (error != null && !error.equals("")) {
             return "edit_profile";
         }
-        userService.adminEditProfile(editableUser, editProfileForm);
+        userService.adminEditProfileAndSave(editableUser, editProfileForm);
         //TODO user list
         return "404_not_found";
     }

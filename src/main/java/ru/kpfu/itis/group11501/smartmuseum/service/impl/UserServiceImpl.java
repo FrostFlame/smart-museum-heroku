@@ -89,13 +89,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void normalEditProfile(User editableUser, EditProfileForm editProfileForm) {
+    public void normalEditProfileAndSave(User editableUser, EditProfileForm editProfileForm) {
         editCommonInfo(editableUser, editProfileForm);
         addUser(editableUser);
     }
 
     @Override
-    public void adminEditProfile(User editableUser, EditProfileForm editProfileForm) {
+    public void adminEditProfileAndSave(User editableUser, EditProfileForm editProfileForm) {
         editCommonInfo(editableUser, editProfileForm);
         editableUser.setPosition(positionService.getPosition(editProfileForm.getPosition()));
         editableUser.setRole(roleService.getRole(editProfileForm.getRole()));
