@@ -1,6 +1,7 @@
 package ru.kpfu.itis.group11501.smartmuseum.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.kpfu.itis.group11501.smartmuseum.model.Position;
 import ru.kpfu.itis.group11501.smartmuseum.model.Role;
@@ -11,6 +12,7 @@ import ru.kpfu.itis.group11501.smartmuseum.repository.UserRepository;
 import ru.kpfu.itis.group11501.smartmuseum.service.PositionService;
 import ru.kpfu.itis.group11501.smartmuseum.service.RoleService;
 import ru.kpfu.itis.group11501.smartmuseum.service.UserService;
+import ru.kpfu.itis.group11501.smartmuseum.util.EditProfileForm;
 
 import java.util.*;
 
@@ -23,17 +25,24 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private RoleService roleService;
     private PositionService positionService;
+    private PasswordEncoder encoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleService roleService, PositionService positionService) {
+    public UserServiceImpl(UserRepository userRepository, RoleService roleService, PositionService positionService, PasswordEncoder encoder) {
         this.roleService = roleService;
         this.userRepository = userRepository;
         this.positionService = positionService;
+        this.encoder = encoder;
     }
 
     @Override
     public User getUser(String login) {
         return userRepository.findOneByLogin(login);
+    }
+
+    @Override
+    public User getUser(Long id) {
+        return userRepository.findOneById(id);
     }
 
     @Override
@@ -70,4 +79,26 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
+    public void editCommonInfo(User editableUser, EditProfileForm editProfileForm){
+        editableUser.setName(editProfileForm.getName());
+        editableUser.setSurname(editProfileForm.getSurname());
+        editableUser.setThirdName(editProfileForm.getThirdName());
+        editableUser.setLogin(editProfileForm.getLogin());
+        editableUser.setPhoto(editProfileForm.getPhoto());
+        editableUser.setPassword(encoder.encode(editProfileForm.getNewPassword()));
+    }
+
+    @Override
+    public void normalEditProfile(User editableUser, EditProfileForm editProfileForm) {
+        editCommonInfo(editableUser, editProfileForm);
+        addUser(editableUser);
+    }
+
+    @Override
+    public void adminEditProfile(User editableUser, EditProfileForm editProfileForm) {
+        editCommonInfo(editableUser, editProfileForm);
+        editableUser.setPosition(positionService.getPosition(editProfileForm.getPosition()));
+        editableUser.setRole(roleService.getRole(editProfileForm.getRole()));
+        addUser(editableUser);
+    }
 }
