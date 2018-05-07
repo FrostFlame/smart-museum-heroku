@@ -17,6 +17,7 @@ import ru.kpfu.itis.group11501.smartmuseum.model.annotation.CoherentEntity;
 import ru.kpfu.itis.group11501.smartmuseum.model.enums.ActionTypeName;
 import ru.kpfu.itis.group11501.smartmuseum.model.enums.EntityName;
 import ru.kpfu.itis.group11501.smartmuseum.service.UserService;
+import ru.kpfu.itis.group11501.smartmuseum.util.Helpers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +29,9 @@ import java.util.List;
 public class AuthProviderImpl implements AuthenticationProvider {
 
     private UserService userService;
-    private final PasswordEncoder encoder;
-
     @Autowired
     public AuthProviderImpl(UserService userService) {
         this.userService = userService;
-        encoder = new BCryptPasswordEncoder();
     }
 
     @Override
@@ -45,7 +43,7 @@ public class AuthProviderImpl implements AuthenticationProvider {
             throw new UsernameNotFoundException("Пользователь не найден");
         }
         String password = authentication.getCredentials().toString();
-        if (!encoder.matches(password, user.getPassword())) {
+        if (!Helpers.getEncoder().matches(password, user.getPassword())) {
             throw new BadCredentialsException("Неверный пароль");
         }
 

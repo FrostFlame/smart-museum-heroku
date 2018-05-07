@@ -1,6 +1,7 @@
 package ru.kpfu.itis.group11501.smartmuseum.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.kpfu.itis.group11501.smartmuseum.model.Position;
@@ -13,6 +14,7 @@ import ru.kpfu.itis.group11501.smartmuseum.service.PositionService;
 import ru.kpfu.itis.group11501.smartmuseum.service.RoleService;
 import ru.kpfu.itis.group11501.smartmuseum.service.UserService;
 import ru.kpfu.itis.group11501.smartmuseum.util.EditProfileForm;
+import ru.kpfu.itis.group11501.smartmuseum.util.Helpers;
 
 import java.util.*;
 
@@ -25,14 +27,12 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private RoleService roleService;
     private PositionService positionService;
-    private PasswordEncoder encoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleService roleService, PositionService positionService, PasswordEncoder encoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleService roleService, PositionService positionService) {
         this.roleService = roleService;
         this.userRepository = userRepository;
         this.positionService = positionService;
-        this.encoder = encoder;
     }
 
     @Override
@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
         editableUser.setThirdName(editProfileForm.getThirdName());
         editableUser.setLogin(editProfileForm.getLogin());
         editableUser.setPhoto(editProfileForm.getPhoto());
-        editableUser.setPassword(encoder.encode(editProfileForm.getNewPassword()));
+        editableUser.setPassword(Helpers.getEncoder().encode(editProfileForm.getNewPassword()));
     }
 
     @Override

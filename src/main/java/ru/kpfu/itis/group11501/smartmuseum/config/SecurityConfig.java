@@ -20,6 +20,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import ru.kpfu.itis.group11501.smartmuseum.service.impl.MyUserDetailsService;
+import ru.kpfu.itis.group11501.smartmuseum.util.Helpers;
 
 import javax.sql.DataSource;
 
@@ -39,10 +40,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     UserDetailsService userDetailsService;
 
     @Autowired
-    public SecurityConfig(AuthenticationProvider authProvider, AccessDeniedHandler accessDeniedHandler, UserDetailsService userDetailsService) {
+    public SecurityConfig(AuthenticationProvider authProvider, AccessDeniedHandler accessDeniedHandler) {
         this.authProvider = authProvider;
         this.accessDeniedHandler = accessDeniedHandler;
-        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -79,11 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(Helpers.getEncoder());
     }
 
-    @Bean
-    public PasswordEncoder encoder() {
-        return new BCryptPasswordEncoder(11);
-    }
 }

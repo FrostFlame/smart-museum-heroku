@@ -9,11 +9,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import ru.kpfu.itis.group11501.smartmuseum.model.User;
+import ru.kpfu.itis.group11501.smartmuseum.util.Helpers;
 
 import java.security.Principal;
 import java.util.Collection;
 
-import static ru.kpfu.itis.group11501.smartmuseum.util.Helpers.getCurrentUser;
 
 @Controller
 @RequestMapping(path = "/profile")
@@ -21,7 +21,7 @@ public class PrivatePageController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String get(Model model){
-        User user = getCurrentUser();
+        User user = Helpers.getCurrentUser();
         model.addAttribute("u", user);
         return "private_page";
     }

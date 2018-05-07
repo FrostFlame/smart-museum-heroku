@@ -6,6 +6,8 @@ import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.multipart.MultipartFile;
 import ru.kpfu.itis.group11501.smartmuseum.model.User;
@@ -24,6 +26,12 @@ import java.util.Properties;
  */
 
 public class Helpers  {
+
+    private static final PasswordEncoder encoder = new BCryptPasswordEncoder();
+
+    public static PasswordEncoder getEncoder() {
+        return encoder;
+    }
 
     public static User getCurrentUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
