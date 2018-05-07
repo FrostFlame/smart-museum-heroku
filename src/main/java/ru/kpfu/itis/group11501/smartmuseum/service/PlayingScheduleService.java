@@ -35,7 +35,9 @@ public interface PlayingScheduleService {
     void deleteById(Long playingScheduleId);
 
 
-    List<PlayingSchedule> getPlayingScheduleByParameters(List<Long> projectorsId, List<Long> weekDaysId, String sort);
+    List<PlayingSchedule> getPlayingScheduleByParameters(List<Long> projectorsId, List<Long> weekDaysId, String sort, Long page);
 
     void addPlayingScheduleByParameters(List<String> projectorsId, List<String> weekDaysId, Date beginTime, Date endTime);
+
+    Long getLastPage(List<Long> weekDaysId, List<Long> projectorsId);
 }

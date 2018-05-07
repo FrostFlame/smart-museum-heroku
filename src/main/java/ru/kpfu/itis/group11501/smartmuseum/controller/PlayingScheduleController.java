@@ -1,26 +1,18 @@
 package ru.kpfu.itis.group11501.smartmuseum.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ru.kpfu.itis.group11501.smartmuseum.model.Exposition;
-import ru.kpfu.itis.group11501.smartmuseum.model.PlayingSchedule;
-import ru.kpfu.itis.group11501.smartmuseum.model.Projector;
-import ru.kpfu.itis.group11501.smartmuseum.model.WeekDay;
-import ru.kpfu.itis.group11501.smartmuseum.service.ExpositionService;
-import ru.kpfu.itis.group11501.smartmuseum.service.PlayingScheduleService;
-import ru.kpfu.itis.group11501.smartmuseum.service.ProjectorService;
-import ru.kpfu.itis.group11501.smartmuseum.service.WeekDayService;
-import ru.kpfu.itis.group11501.smartmuseum.util.PlayingScheduleAddForm;
+import ru.kpfu.itis.group11501.smartmuseum.model.*;
+import ru.kpfu.itis.group11501.smartmuseum.service.*;
+import ru.kpfu.itis.group11501.smartmuseum.util.*;
 import ru.kpfu.itis.group11501.smartmuseum.validator.PlayingScheduleAddValidator;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -33,14 +25,12 @@ public class PlayingScheduleController {
     private PlayingScheduleService playingScheduleService;
     private ExpositionService expositionService;
     private WeekDayService weekDayService;
-    private ProjectorService projectorService;
     private PlayingScheduleAddValidator playingScheduleAddValidator;
 
-    public PlayingScheduleController(PlayingScheduleService playingScheduleService, ExpositionService expositionService, WeekDayService weekDayService, ProjectorService projectorService, PlayingScheduleAddValidator playingScheduleAddValidator) {
+    public PlayingScheduleController(PlayingScheduleService playingScheduleService, ExpositionService expositionService, WeekDayService weekDayService,  PlayingScheduleAddValidator playingScheduleAddValidator) {
         this.playingScheduleService = playingScheduleService;
         this.expositionService = expositionService;
         this.weekDayService = weekDayService;
-        this.projectorService = projectorService;
         this.playingScheduleAddValidator = playingScheduleAddValidator;
     }
 
@@ -77,11 +67,13 @@ public class PlayingScheduleController {
 
 
     @RequestMapping(value = "/{exposition_id}", method = RequestMethod.GET)
-    public String getPlayingSchedule(Model model,@ModelAttribute("exposition") Exposition exposition,
+    public String getPlayingSchedule(Model model, @ModelAttribute("exposition") Exposition exposition,
                                      @ModelAttribute("error") String error,
                                      @RequestParam(value = "weekDays_id", required = false)  List<Long> weekDaysId,
                                      @RequestParam(value = "projectors_id", required = false)  List<Long> projectorsId,
-                                     @RequestParam(value = "sort", required = false)  String sort) {
+                                     @RequestParam(value = "sort", required = false)  String sort,
+                                     @RequestParam(value = "page", required = false) String page,
+                                     HttpSession httpSession) {
 
 
         if (error != null && !error.equals("")){
@@ -93,19 +85,45 @@ public class PlayingScheduleController {
             return "playing_schedule";
         }
         if (exposition.getProjectors().size()>0) {
-            if (projectorsId == null) projectorsId = exposition.getProjectors()
+            if (projectorsId == null || projectorsId.size()==0) projectorsId = exposition.getProjectors()
                     .stream()
                     .map(Projector::getId)
                     .collect(Collectors.toList());
-            List<PlayingSchedule> playingSchedule = playingScheduleService.getPlayingScheduleByParameters(projectorsId,weekDaysId,sort);
+
+            Long currentPage = 0L;
+            if (page != null) currentPage = Long.valueOf(page);
+            Long lastPage = playingScheduleService.getLastPage(weekDaysId,projectorsId);
+            List<Long> pages = Helpers.getListPages(currentPage,lastPage,4L);
+            List<PlayingSchedule> playingSchedule = playingScheduleService.getPlayingScheduleByParameters(projectorsId,weekDaysId,sort,currentPage);
+
             model.addAttribute("playingSchedule", playingSchedule);
+            model.addAttribute("pages", pages);
+            model.addAttribute("page", currentPage);
+            model.addAttribute("lastPage", lastPage);
+            model.addAttribute("sort", sort);
+            httpSession.setAttribute("weekDays_id", weekDaysId);
+            httpSession.setAttribute("projectors_id", projectorsId);
+            httpSession.setAttribute("sort", sort);
         }
         return "playing_schedule";
     }
 
+    @RequestMapping(value = "/{exposition_id}/goToAnotherPage", method = RequestMethod.GET)
+    public String getPlayingSchedule(@PathVariable("exposition_id") Long expositionId,
+                                     @RequestParam(value = "page", required = false) String page,
+                                     RedirectAttributes redirectAttributes,
+                                     HttpSession httpSession) {
+
+
+        redirectAttributes.addAttribute("weekDays_id", httpSession.getAttribute("weekDays_id"));
+        redirectAttributes.addAttribute("projectors_id", httpSession.getAttribute("projectors_id"));
+        redirectAttributes.addAttribute("sort", httpSession.getAttribute("sort"));
+        redirectAttributes.addAttribute("page", page);
+        return  "redirect:/playing_schedule/"+expositionId;
+    }
+
     @RequestMapping(value = "/{exposition_id}/add", method = RequestMethod.GET)
     public String addPlayingSchedule(Model model,
-                                     //@RequestParam(value = "error", required = false) String error,
                                      @ModelAttribute("exposition") Exposition exposition) {
         if( exposition == null) {
             model.addAttribute("error", "Экспозиция не найдена");
@@ -136,9 +154,16 @@ public class PlayingScheduleController {
 
     @RequestMapping(value = "/{exposition_id}/delete", method = RequestMethod.POST)
     public String deletePlayingSchedule(@PathVariable("exposition_id") Long expositionId,
-                                     @RequestParam(value = "id", required = true) Long playingScheduleId) {
+                                        @RequestParam(value = "id", required = true) Long playingScheduleId,
+                                        @RequestParam(value = "page", required = false) String page,
+                                        RedirectAttributes redirectAttributes,
+                                        HttpSession httpSession) {
 
         playingScheduleService.deleteById(playingScheduleId);
+        redirectAttributes.addAttribute("weekDays_id", httpSession.getAttribute("weekDays_id"));
+        redirectAttributes.addAttribute("projectors_id", httpSession.getAttribute("projectors_id"));
+        redirectAttributes.addAttribute("sort", httpSession.getAttribute("sort"));
+        redirectAttributes.addAttribute("page", page);
         return  "redirect:/playing_schedule/"+expositionId;
     }
 

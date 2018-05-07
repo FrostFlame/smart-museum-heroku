@@ -1,6 +1,5 @@
 package ru.kpfu.itis.group11501.smartmuseum.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,6 @@ import ru.kpfu.itis.group11501.smartmuseum.service.TableNameService;
 import ru.kpfu.itis.group11501.smartmuseum.service.UserService;
 import ru.kpfu.itis.group11501.smartmuseum.service.UserStatisticService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,7 +59,7 @@ public class UserStatisticServiceImpl implements UserStatisticService {
     }
 
     @Override
-    public List<UserStatistic> findByParameter(List<Long> users, List<Long> actions, List<Long> entities, String searchField, String page) {
+    public List<UserStatistic> findByParameter(List<Long> users, List<Long> actions, List<Long> entities, String searchField, Long page) {
         if (users == null){
             users = userService.getAllUsers().stream().map(User::getId).collect(Collectors.toList());
         }
@@ -74,15 +72,28 @@ public class UserStatisticServiceImpl implements UserStatisticService {
         if (searchField == null){
             searchField = "";
         }
-        int pageId = 0;
-        if (page != null) pageId = Integer.parseInt(page);
 
-        Pageable pageRequest = new PageRequest(pageId,size);
+        Pageable pageRequest = new PageRequest(page.intValue(),size);
         return userStatisticRepository.findByParameter(users,actions,entities,searchField, pageRequest);
     }
 
     @Override
-    public Long getLastPage() {
-        return userStatisticRepository.getCountRow()/size;
+    public Long getLastPage(List<Long> users, List<Long> actions, List<Long> entities, String searchField) {
+        if (users == null){
+            users = userService.getAllUsers().stream().map(User::getId).collect(Collectors.toList());
+        }
+        if (actions == null){
+            actions= actionTypeService.findAll().stream().map(ActionType::getId).collect(Collectors.toList());
+        }
+        if (entities == null){
+            entities = tableNameService.findAll().stream().map(TableName::getId).collect(Collectors.toList());
+        }
+        if (searchField == null){
+            searchField = "";
+        }
+        Long rows = userStatisticRepository.getCountRow(users,actions,entities,searchField);
+        if ( rows % size == 0)  return rows/size -1;
+        else   return rows/size;
     }
+
 }

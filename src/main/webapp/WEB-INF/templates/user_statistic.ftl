@@ -95,27 +95,27 @@
 </#list>
 </table>
 <div class = "pagination">
-    <a href="/user_statistic?page=0" >&lt;</a>
+    <a href="/user_statistic/goToAnotherPage?page=0" >&lt;</a>
     <#if (page-1) gte 0>
-        <a href="/user_statistic?page=${page-1}">&laquo;</a>
+        <a href="/user_statistic/goToAnotherPage?page=${page-1}">&laquo;</a>
     <#else>
         <a href="#" >&laquo;</a>
     </#if>
 
     <#list pages as p>
         <#if page == p>
-            <a href="/user_statistic?page=${p}" class = "active">${p}</a>
+            <a href="/user_statistic/goToAnotherPage?page=${p}" class = "active">${p}</a>
         <#else>
-            <a href="/user_statistic?page=${p}">${p}</a>
+            <a href="/user_statistic/goToAnotherPage?page=${p}">${p}</a>
         </#if>
     </#list>
 
     <#if (page+1) lte lastPage>
-        <a href="/user_statistic?page=${page+1}" >&raquo;</a>
+        <a href="/user_statistic/goToAnotherPage?page=${page+1}" >&raquo;</a>
     <#else>
         <a href="#">&raquo;</a>
     </#if>
-        <a href="/user_statistic?page=${lastPage}" >&gt;</a>
+        <a href="/user_statistic/goToAnotherPage?page=${lastPage}" >&gt;</a>
 </div>
 </body>
 </html>

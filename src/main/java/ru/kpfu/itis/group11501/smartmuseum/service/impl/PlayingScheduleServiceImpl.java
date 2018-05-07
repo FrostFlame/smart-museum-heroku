@@ -1,6 +1,9 @@
 package ru.kpfu.itis.group11501.smartmuseum.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.kpfu.itis.group11501.smartmuseum.model.PlayingSchedule;
 import ru.kpfu.itis.group11501.smartmuseum.model.Projector;
@@ -21,18 +24,19 @@ import java.util.List;
 @Service
 public class PlayingScheduleServiceImpl implements PlayingScheduleService {
 
-    @Autowired
     private PlayingScheduleRepository playingScheduleRepository;
-
-    @Autowired
     private ProjectorService projectorService;
-
-    @Autowired
     private WeekDayService weekDayService;
+    private static int size = 5;
 
     @Autowired
     private PlayingScheduleService playingScheduleService;
 
+    public PlayingScheduleServiceImpl(PlayingScheduleRepository playingScheduleRepository, ProjectorService projectorService, WeekDayService weekDayService) {
+        this.playingScheduleRepository = playingScheduleRepository;
+        this.projectorService = projectorService;
+        this.weekDayService = weekDayService;
+    }
 
     @Override
     public List<PlayingSchedule> getAllPlayingSchedule() {
@@ -81,17 +85,20 @@ public class PlayingScheduleServiceImpl implements PlayingScheduleService {
     }
 
     @Override
-    public List<PlayingSchedule> getPlayingScheduleByParameters(List<Long> projectorsId, List<Long> weekDaysId, String sort) {
+    public List<PlayingSchedule> getPlayingScheduleByParameters(List<Long> projectorsId, List<Long> weekDaysId, String sort, Long page) {
 
-        if (weekDaysId == null) {
-            if (sort != null && sort.equals("projectors"))
-                return playingScheduleRepository.getPlayingScheduleByProjectorsIdSortByProjector(projectorsId);
-            else return playingScheduleRepository.getPlayingScheduleByProjectorsId(projectorsId);
+        Pageable pageRequest;
+        if (sort != null && sort.equals("projectors")) {
+            pageRequest = new PageRequest(page.intValue(), size, Sort.Direction.ASC, "projector.name", "weekDay", "beginTime");
+        }
+        else {
+            pageRequest = new PageRequest(page.intValue(), size, Sort.Direction.ASC, "weekDay", "beginTime", "projector.name");
+        }
+
+        if (weekDaysId == null || weekDaysId.size()==0) {
+            return playingScheduleRepository.getPlayingScheduleByProjectors(projectorsId,pageRequest);
         } else {
-            if (sort != null && sort.equals("projectors"))
-                return playingScheduleRepository.getPlayingScheduleByProjectorsByWeekDaySortByProjector(projectorsId,weekDaysId);
-            else
-                return  playingScheduleRepository.getPlayingScheduleByProjectorsByWeekDay(projectorsId,weekDaysId);
+            return  playingScheduleRepository.getPlayingScheduleByProjectorsByWeekDay(projectorsId,weekDaysId,pageRequest);
         }
     }
 
@@ -135,6 +142,18 @@ public class PlayingScheduleServiceImpl implements PlayingScheduleService {
 
             }
         }
+    }
+
+    @Override
+    public Long getLastPage(List<Long> weekDaysId, List<Long> projectorsId) {
+        Long rows;
+        if (weekDaysId == null || weekDaysId.size()==0) {
+            rows = playingScheduleRepository.getCountRow(projectorsId);
+        } else {
+            rows =  playingScheduleRepository.getCountRowByWeekDay(projectorsId,weekDaysId);
+        }
+        if ( rows % size == 0)  return rows/size -1;
+        else   return rows/size;
     }
 
 
