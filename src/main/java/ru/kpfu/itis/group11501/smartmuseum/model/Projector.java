@@ -1,8 +1,11 @@
 package ru.kpfu.itis.group11501.smartmuseum.model;
 
+import org.apache.commons.lang3.time.DateUtils;
 import ru.kpfu.itis.group11501.smartmuseum.model.interfaces.GettingId;
 
 import javax.persistence.*;
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
@@ -117,5 +120,13 @@ public class Projector implements GettingId {
 
     public void setVideos(List<Video> videos) {
         this.videos = videos;
+    }
+
+    public String getCustomSumTime(){
+        long allSeconds = getSumTime() / 1000;
+        int seconds = (int) (allSeconds % 60);
+        int minutes = (int) ((allSeconds % 3600) / 60);
+        int hours = (int) (allSeconds / 3600);
+        return hours + " ч " + minutes + " м " + seconds + " с";
     }
 }
