@@ -20,6 +20,9 @@ public class EditProfileForm {
     private String newPassword;
     private String newPasswordConf;
 
+    public EditProfileForm() {
+    }
+
     public EditProfileForm(String login, String name, String surname, String thirdName, String photo, Long position, Long role) {
         this.login = login;
         this.name = name;

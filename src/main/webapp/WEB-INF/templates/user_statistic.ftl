@@ -1,6 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    .pagination a {
+        colour: black;
+        float: left;
+        padding: 8px 16px;
+    }
+    .pagination a.active{
+        background-color: #4CAF50;
+        colour:white;
+    }
+    .pagination a:hover:not(.active)
+    {background-color: #ddd;}
+    .pagination {display: inline-block}
+</style>
+</head>
+<body>
+<form action="/user_statistic" method="get">
 
-
-<form action="/user_statistic/search" method="get">
+    <label class=" control-label">Поиск</label>
+    <input type="text" name="searchField">
 
     <label class=" control-label">Пользователь</label>
     <select multiple size="10" id="users" name="users">
@@ -74,3 +94,28 @@
     Не нашлось ни одного элемента
 </#list>
 </table>
+<div class = "pagination">
+    <a href="/user_statistic/goToAnotherPage?page=0" >&lt;</a>
+    <#if (page-1) gte 0>
+        <a href="/user_statistic/goToAnotherPage?page=${page-1}">&laquo;</a>
+    <#else>
+        <a href="#" >&laquo;</a>
+    </#if>
+
+    <#list pages as p>
+        <#if page == p>
+            <a href="/user_statistic/goToAnotherPage?page=${p}" class = "active">${p}</a>
+        <#else>
+            <a href="/user_statistic/goToAnotherPage?page=${p}">${p}</a>
+        </#if>
+    </#list>
+
+    <#if (page+1) lte lastPage>
+        <a href="/user_statistic/goToAnotherPage?page=${page+1}" >&raquo;</a>
+    <#else>
+        <a href="#">&raquo;</a>
+    </#if>
+        <a href="/user_statistic/goToAnotherPage?page=${lastPage}" >&gt;</a>
+</div>
+</body>
+</html>

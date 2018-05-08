@@ -37,8 +37,14 @@
 
         <label class=" control-label">Сортировка по:</label>
         <select id="sort" name="sort" class="form-control">
+            <#if  (sort!"") = "projectors" >
+                <option  value="projectors">Проекторы</option>
+                <option  value="dayWeeks">Дни недели</option>
+            <#else>
                 <option  value="dayWeeks">Дни недели</option>
                 <option  value="projectors">Проекторы</option>
+            </#if>
+
         </select>
 
 
@@ -74,7 +80,7 @@
             <td>${p.weekDay.name}</td>
             <td>${p.beginTime}</td>
             <td>${p.endTime}</td>
-            <td><form action="/playing_schedule/${exposition.id}/delete?id=${p.id}" method="post">
+            <td><form action="/playing_schedule/${exposition.id}/delete?id=${p.id}&page=${page}" method="post">
                 <input type="submit"  value="Удалить" /></td>
                 </form>
             </td>
@@ -84,6 +90,30 @@
     Не нашлось ни одного расписания
     </#list>
     </table>
+
+    <div class = "pagination">
+        <a href="/playing_schedule/${exposition.id}/goToAnotherPage?page=0" >&lt;</a>
+        <#if (page-1) gte 0>
+            <a href="/playing_schedule/${exposition.id}/goToAnotherPage?page=${page-1}">&laquo;</a>
+        <#else>
+            <a href="#" >&laquo;</a>
+        </#if>
+
+        <#list pages as p>
+            <#if page == p>
+                <a href="/playing_schedule/${exposition.id}/goToAnotherPage?page=${p}" class = "active">${p}</a>
+            <#else>
+                <a href="/playing_schedule/${exposition.id}/goToAnotherPage?page=${p}">${p}</a>
+            </#if>
+        </#list>
+
+        <#if (page+1) lte lastPage>
+            <a href="/playing_schedule/${exposition.id}/goToAnotherPage?page=${page+1}" >&raquo;</a>
+        <#else>
+            <a href="#">&raquo;</a>
+        </#if>
+        <a href="/playing_schedule/${exposition.id}/goToAnotherPage?page=${lastPage}" >&gt;</a>
+    </div>
 
     <#else>
     <h3><a href="/expositions/${exposition.id}/edit">Добавьте проекторы в эксозицию</a></h3>

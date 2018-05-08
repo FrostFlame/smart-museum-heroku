@@ -1,5 +1,6 @@
 package ru.kpfu.itis.group11501.smartmuseum.repository;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -13,25 +14,14 @@ import java.util.List;
  * Created by volkov on 12.04.2018.
  */
 public interface PlayingScheduleRepository  extends JpaRepository<PlayingSchedule, Long> {
-    @Query("select x from PlayingSchedule as x where x.projector.id in ?1 order by x.weekDay asc, x.beginTime asc")
-    List<PlayingSchedule> getPlayingScheduleByProjectorsId( List<Long> projectors_id);
+    @Query("select x from PlayingSchedule as x "+
+            "where x.projector.id in ?1 ")
+    List<PlayingSchedule> getPlayingScheduleByProjectors( List<Long> projectors_id, Pageable pageRequest);
 
 
     @Query("select x from PlayingSchedule as x "+
-            "where x.projector.id in ?1 and x.weekDay.id in ?2 "+
-            "order by x.weekDay asc, x.beginTime asc, x.projector.name asc")
-    List<PlayingSchedule> getPlayingScheduleByProjectorsByWeekDay( List<Long> projectors_id, List<Long> weekDays_id);
-
-    @Query("select x from PlayingSchedule as x "+
-            "where x.projector.id in ?1 "+
-            "order by x.projector.name asc, x.weekDay asc, x.beginTime asc, x.projector.name asc")
-    List<PlayingSchedule> getPlayingScheduleByProjectorsIdSortByProjector( List<Long> projectors_id);
-
-
-    @Query("select x from PlayingSchedule as x "+
-            "where x.projector.id in ?1 and x.weekDay.id in ?2 "+
-            "order by x.projector.name asc, x.weekDay asc, x.beginTime asc")
-    List<PlayingSchedule> getPlayingScheduleByProjectorsByWeekDaySortByProjector( List<Long> projectors_id, List<Long> weekDays_id);
+            "where x.projector.id in ?1 and x.weekDay.id in ?2 ")
+    List<PlayingSchedule> getPlayingScheduleByProjectorsByWeekDay(List<Long> projectors_id, List<Long> weekDays_id, Pageable pageRequest);
 
     @Transactional
     @Modifying
@@ -52,4 +42,12 @@ public interface PlayingScheduleRepository  extends JpaRepository<PlayingSchedul
     @Transactional
     @Modifying
     void deleteById(Long playingScheduleId);
+
+    @Query("select count(p.id) from PlayingSchedule as p "+
+            "where p.projector.id in ?1 ")
+    Long getCountRow(List<Long> projectorsId);
+
+    @Query("select count(p.id) from PlayingSchedule as p "+
+            "where p.projector.id in ?1 and p.weekDay.id in ?2 ")
+    Long getCountRowByWeekDay(List<Long> projectorsId, List<Long> weekDaysId);
 }

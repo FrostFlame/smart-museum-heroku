@@ -9,6 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor;
@@ -29,6 +30,7 @@ import java.io.IOException;
 @PropertySource("classpath:persistence.properties")
 @EnableJpaRepositories("ru.kpfu.itis.group11501.smartmuseum.repository")
 @EnableTransactionManagement
+@EnableSpringDataWebSupport
 public class PersistenceConfig implements EnvironmentAware {
     private Environment env;
 

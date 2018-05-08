@@ -2,7 +2,7 @@ package ru.kpfu.itis.group11501.smartmuseum.util;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.springframework.context.annotation.Bean;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import ru.kpfu.itis.group11501.smartmuseum.model.Video;
@@ -37,10 +37,33 @@ public class FileUploader {
         }
 
         name = name + "." + FilenameUtils.getExtension(video.getOriginalFilename());
-        if (!video.isEmpty()) {
+        return uploadFile(video,name,videoPath);
+    }
+
+    public  String deleteVideo(Video video) {
+        return deleteFile(video.getName(),videoPath);
+    }
+
+    public String uploadImage(MultipartFile image) {
+        if(image == null || image.getSize() <= 0) {
+            return null;
+        }
+
+        String name = RandomStringUtils.randomAlphanumeric(8) + "." + FilenameUtils.getExtension(image.getOriginalFilename());
+        return uploadFile(image,name,imagePath);
+    }
+
+    public  String deleteImage(String name) {
+        return deleteFile(name,imagePath);
+    }
+
+
+    private String uploadFile(MultipartFile file, String name, String path) {
+
+        if (!file.isEmpty()) {
             try {
-                byte[] bytes = video.getBytes();
-                File uploadedFile = new File(videoPath + name );
+                byte[] bytes = file.getBytes();
+                File uploadedFile = new File(path + name );
                 BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(uploadedFile));
                 stream.write(bytes);
                 stream.flush();
@@ -55,11 +78,10 @@ public class FileUploader {
         }
     }
 
-    public  String deleteVideo(Video video) {
+    private  String deleteFile(String name,String path) {
         try {
-            FileUtils.forceDelete(FileUtils.getFile(videoPath,video.getName()));
+            FileUtils.forceDelete(FileUtils.getFile(path,name));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             return null;
         }
         return "";

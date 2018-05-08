@@ -1,8 +1,10 @@
 package ru.kpfu.itis.group11501.smartmuseum.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import ru.kpfu.itis.group11501.smartmuseum.model.interfaces.GettingId;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**

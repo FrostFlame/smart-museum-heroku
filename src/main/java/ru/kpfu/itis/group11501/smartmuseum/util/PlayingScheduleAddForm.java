@@ -1,33 +1,33 @@
 package ru.kpfu.itis.group11501.smartmuseum.util;
 
-import com.sun.istack.NotNull;
 import org.hibernate.annotations.Check;
-import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.ScriptAssert;
 import org.springframework.format.annotation.DateTimeFormat;
 
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
 /**
  * Created by volkov on 13.04.2018.
  */
+
 public class PlayingScheduleAddForm {
 
-
     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME,pattern = "HH:mm")
-    @NotNull
+    @NotNull(message = "Введите время")
     private Date beginTime;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME,pattern = "HH:mm")
-    @NotNull
+    @NotNull(message = "Введите время")
     private Date endTime;
 
-    @NotEmpty
+    @NotEmpty(message = "Выберите дни недели")
     private List<String> weekDaysId;
 
-    @NotEmpty
+    @NotEmpty(message = "Выберите проектора")
     private List<String> projectorsId;
 
     public Date getBeginTime() {
