@@ -21,6 +21,14 @@ public class FileUploader {
 
     private String imagePath="";
 
+    public String getVideoPath() {
+        return videoPath;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
     public void setVideoPath(String videoPath) {
         if(! new File(videoPath).exists()) new File(videoPath).mkdirs();
         this.videoPath = videoPath;

@@ -14,6 +14,7 @@ import ru.kpfu.itis.group11501.smartmuseum.service.PositionService;
 import ru.kpfu.itis.group11501.smartmuseum.service.RoleService;
 import ru.kpfu.itis.group11501.smartmuseum.service.UserService;
 import ru.kpfu.itis.group11501.smartmuseum.util.EditProfileForm;
+import ru.kpfu.itis.group11501.smartmuseum.util.FileUploader;
 import ru.kpfu.itis.group11501.smartmuseum.util.Helpers;
 
 import java.util.*;
@@ -27,12 +28,15 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private RoleService roleService;
     private PositionService positionService;
+    private FileUploader fileUploader;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleService roleService, PositionService positionService) {
+    public UserServiceImpl(UserRepository userRepository, RoleService roleService,
+                           PositionService positionService, FileUploader fileUploader) {
         this.roleService = roleService;
         this.userRepository = userRepository;
         this.positionService = positionService;
+        this.fileUploader = fileUploader;
     }
 
     @Override
@@ -84,8 +88,24 @@ public class UserServiceImpl implements UserService {
         editableUser.setSurname(editProfileForm.getSurname());
         editableUser.setThirdName(editProfileForm.getThirdName());
         editableUser.setLogin(editProfileForm.getLogin());
-        editableUser.setPhoto(editProfileForm.getPhoto());
-        editableUser.setPassword(Helpers.getEncoder().encode(editProfileForm.getNewPassword()));
+
+        String name = fileUploader.uploadImage(editProfileForm.getPhotoFile());
+        if (name == null ) {
+            System.out.println("Не удалось добавить фото");
+        }
+        else{
+            System.out.println(name);
+            if (fileUploader.deleteImage(editableUser.getPhoto()) == null){
+                System.out.println("Не удалось удалить фото");
+            }
+            else {
+                System.out.println("Фото удалено");
+            }
+            editableUser.setPhoto(name);
+        }
+        if(!(editProfileForm.getNewPassword().equals("") && editProfileForm.getNewPasswordConf().equals(""))){
+            editableUser.setPassword(Helpers.getEncoder().encode(editProfileForm.getNewPassword()));
+        }
     }
 
     @Override

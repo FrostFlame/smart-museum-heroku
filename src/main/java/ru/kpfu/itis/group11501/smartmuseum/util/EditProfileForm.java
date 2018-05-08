@@ -1,18 +1,23 @@
 package ru.kpfu.itis.group11501.smartmuseum.util;
 
 import javafx.geometry.Pos;
+import org.springframework.web.multipart.MultipartFile;
 import ru.kpfu.itis.group11501.smartmuseum.model.Position;
 import ru.kpfu.itis.group11501.smartmuseum.model.Role;
+
+import java.io.File;
 
 /**
  * Created by Amir Kadyrov
  * Date: 27.04.2018
  */
 public class EditProfileForm {
+    private Long id;
     private String login;
     private String name;
     private String surname;
     private String thirdName;
+    private MultipartFile photoFile;
     private String photo;
     private Long position;
     private Long role;
@@ -23,7 +28,8 @@ public class EditProfileForm {
     public EditProfileForm() {
     }
 
-    public EditProfileForm(String login, String name, String surname, String thirdName, String photo, Long position, Long role) {
+    public EditProfileForm(Long id, String login, String name, String surname, String thirdName, String photo, Long position, Long role) {
+        this.id = id;
         this.login = login;
         this.name = name;
         this.surname = surname;
@@ -33,12 +39,21 @@ public class EditProfileForm {
         this.role = role;
     }
 
-    public EditProfileForm(String login, String name, String surname, String thirdName, String photo) {
+    public EditProfileForm(Long id, String login, String name, String surname, String thirdName, String photo) {
+        this.id = id;
         this.login = login;
         this.name = name;
         this.surname = surname;
         this.thirdName = thirdName;
         this.photo = photo;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getLogin() {
@@ -119,5 +134,13 @@ public class EditProfileForm {
 
     public void setRole(Long role) {
         this.role = role;
+    }
+
+    public MultipartFile getPhotoFile() {
+        return photoFile;
+    }
+
+    public void setPhotoFile(MultipartFile photoFile) {
+        this.photoFile = photoFile;
     }
 }
