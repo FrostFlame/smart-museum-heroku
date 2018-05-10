@@ -5,9 +5,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.kpfu.itis.group11501.smartmuseum.model.Position;
 import ru.kpfu.itis.group11501.smartmuseum.model.Role;
 import ru.kpfu.itis.group11501.smartmuseum.model.User;
@@ -38,20 +40,11 @@ public class SignInController {
     }
 
     @RequestMapping(value = "/sign_in", method = RequestMethod.GET)
-    public String getSignIn(Model model) {
+    public String getSignIn(@RequestParam(value = "error", required = false) Boolean error, Model model) {
+        if (Boolean.TRUE.equals(error)) {
+            model.addAttribute("error", error);
+        }
         model.addAttribute("authForm", new AuthForm());
-        return "sign_in";
-    }
-
-    @RequestMapping(value = "/create_user")
-    public String createUser() {
-        PasswordEncoder encoder = new BCryptPasswordEncoder();
-        Role role = roleRepository.getOne(2L);
-        String password = encoder.encode("manager");
-        Position position = positionRepository.getOne(2L);
-        System.out.println(password);
-        User u = new User(password, "manager", "Вова", "Иванов", "", "", true, role, position, new Date());
-        userRepository.save(u);
         return "sign_in";
     }
 
