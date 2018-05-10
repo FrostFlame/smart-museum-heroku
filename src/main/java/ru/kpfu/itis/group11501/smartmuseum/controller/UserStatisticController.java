@@ -45,19 +45,19 @@ public class UserStatisticController {
     @ModelAttribute("actions")
     public List<ActionType> actionsName() {
         List<ActionType> actionTypes = actionTypeService.findAll();
-        for (ActionType actionType: actionTypes){
+        for (ActionType actionType : actionTypes) {
             actionType.setName(ActionTypeName.valueOf(actionType.getName()).getRusName());
         }
-        return  actionTypes;
+        return actionTypes;
     }
 
     @ModelAttribute("entities")
     public List<TableName> entitiesName() {
         List<TableName> tableNames = tableNameService.findAll();
-        for (TableName tableName: tableNames){
+        for (TableName tableName : tableNames) {
             tableName.setName(EntityName.valueOf(tableName.getName()).getRusName());
         }
-        return  tableNames;
+        return tableNames;
     }
 
     @ModelAttribute("users")
@@ -65,22 +65,22 @@ public class UserStatisticController {
         return userService.getAllUsers();
     }
 
-    @RequestMapping( method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public String userStatisticSearch(Model model,
                                       @RequestParam(value = "page", required = false) String page,
                                       @RequestParam(value = "searchField", required = false) String searchField,
-                                      @RequestParam(value = "actions", required = false)  List<Long> actions,
-                                      @RequestParam(value = "entities", required = false)  List<Long> entities,
-                                      @RequestParam(value = "users", required = false)  List<Long> users,
+                                      @RequestParam(value = "actions", required = false) List<Long> actions,
+                                      @RequestParam(value = "entities", required = false) List<Long> entities,
+                                      @RequestParam(value = "users", required = false) List<Long> users,
                                       HttpSession httpSession) {
 
         Long currentPage = 0L;
         if (page != null) currentPage = Long.valueOf(page);
-        Long lastPage = userStatisticService.getLastPage(users,actions,entities,searchField);
-        List<Long> pages = Helpers.getListPages(currentPage,lastPage,4L);
+        Long lastPage = userStatisticService.getLastPage(users, actions, entities, searchField);
+        List<Long> pages = Helpers.getListPages(currentPage, lastPage, 4L);
 
 
-        List<UserStatistic> userStatistics = userStatisticService.findByParameter(users,actions,entities,searchField,currentPage);
+        List<UserStatistic> userStatistics = userStatisticService.findByParameter(users, actions, entities, searchField, currentPage);
         if (userStatistics == null) return "user_statistic";
         userStatistics = userStatisticService.setRussianNames(userStatistics);
 
@@ -106,7 +106,7 @@ public class UserStatisticController {
         redirectAttributes.addAttribute("entities", httpSession.getAttribute("entities"));
         redirectAttributes.addAttribute("users", httpSession.getAttribute("users"));
         redirectAttributes.addAttribute("page", page);
-        return  "redirect:/user_statistic";
+        return "redirect:/user_statistic";
     }
 
 }

@@ -23,6 +23,14 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
+    public List<Video> getAllVideo(String searchField) {
+        if (searchField != null && searchField != "")
+            return videoRepository.findByNameContainsAllIgnoreCaseOrderByNameAsc(searchField);
+        else
+            return videoRepository.findAllByOrderByNameAsc();
+    }
+
+    @Override
     public List<Video> getAllVideo() {
         return videoRepository.findAllByOrderByNameAsc();
     }
@@ -34,12 +42,12 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public Video findOneById(Long videoId){
+    public Video findOneById(Long videoId) {
         return videoRepository.findOne(videoId);
     }
 
     @Override
-    public Video findOneByName(String name){
+    public Video findOneByName(String name) {
         return videoRepository.findOneByName(name);
     }
 

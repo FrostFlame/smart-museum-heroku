@@ -46,7 +46,7 @@ public class EditUserController {
     }
 
     @ModelAttribute("editForm")
-    public EditProfileForm getNewEditForm(){
+    public EditProfileForm getNewEditForm() {
         return new EditProfileForm();
     }
 
@@ -56,7 +56,7 @@ public class EditUserController {
                                       @ModelAttribute("error") String error,
                                       @ModelAttribute("editForm") EditProfileForm editProfileForm) {
         User editableUser = userService.getUser(id);
-        if (error != null && !error.equals("")){
+        if (error != null && !error.equals("")) {
             model.addAttribute("error", error);
         }
         editProfileForm = new EditProfileForm(editableUser.getId(), editableUser.getLogin(), editableUser.getName(),
@@ -75,7 +75,7 @@ public class EditUserController {
     public String getNormalEditProfile(Model model, @ModelAttribute("error") String error,
                                        @ModelAttribute("editForm") EditProfileForm editProfileForm) {
         User editableUser = Helpers.getCurrentUser();
-        if (error != null && !error.equals("")){
+        if (error != null && !error.equals("")) {
             model.addAttribute("error", error);
         }
         editProfileForm = new EditProfileForm(editableUser.getId(), editableUser.getLogin(), editableUser.getName(),
@@ -100,7 +100,7 @@ public class EditUserController {
             redirectAttributes.addFlashAttribute("error", "Введите верное подтверждение нового пароля.");
             return "redirect:/profile/edit";
         }
-        if (Helpers.getCurrentUser().getRole().getName().equals("ADMIN")){
+        if (Helpers.getCurrentUser().getRole().getName().equals("ADMIN")) {
             userService.adminEditProfileAndSave(userService.getUser(editProfileForm.getId()), editProfileForm);
             // TODO redirect to existing URL
             return "redirect:/admin/users";

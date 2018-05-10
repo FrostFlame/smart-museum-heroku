@@ -20,7 +20,7 @@ import java.util.Collection;
 public class PrivatePageController {
 
     @RequestMapping(method = RequestMethod.GET)
-    public String get(Model model){
+    public String get(Model model) {
         User user = Helpers.getCurrentUser();
         model.addAttribute("u", user);
         return "private_page";
