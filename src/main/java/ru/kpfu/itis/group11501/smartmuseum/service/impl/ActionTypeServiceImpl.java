@@ -18,12 +18,12 @@ public class ActionTypeServiceImpl implements ActionTypeService {
     private ActionTypeRepository actionTypeRepository;
 
     @Override
-    public ActionType getOneByName(String name){
-        return  actionTypeRepository.findOneByName(name);
+    public ActionType getOneByName(String name) {
+        return actionTypeRepository.findOneByName(name);
     }
 
     @Override
-    public List<ActionType> findAll(){
+    public List<ActionType> findAll() {
         return actionTypeRepository.findAll();
     }
 }

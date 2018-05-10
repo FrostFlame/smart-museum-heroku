@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.kpfu.itis.group11501.smartmuseum.model.Exposition;
 import ru.kpfu.itis.group11501.smartmuseum.model.Projector;
-import ru.kpfu.itis.group11501.smartmuseum.model.ProjectorsVideos;
 import ru.kpfu.itis.group11501.smartmuseum.model.Video;
 import ru.kpfu.itis.group11501.smartmuseum.service.ExpositionService;
 import ru.kpfu.itis.group11501.smartmuseum.service.ProjectorService;
@@ -52,16 +52,14 @@ public class ExpositionController {
     @RequestMapping(value = "/{id}/addVideo", method = RequestMethod.GET)
 
 
-    public String addVideo(Model model,
-                           @ModelAttribute("exposition") Exposition exposition,
+    public String addVideo(Model model, @ModelAttribute("exposition") Exposition exposition,
                            @ModelAttribute("error") String error) {
-
-        if (error != null && !error.equals("")) {
-            return "add_video";
-        }
 
         if (exposition == null) {
             return "404_not_found";
+        }
+        if (error != null && !error.equals("")) {
+            model.addAttribute("error", error);
         }
 
 
@@ -75,7 +73,12 @@ public class ExpositionController {
     @RequestMapping(value = "/{id}/addVideo", method = RequestMethod.POST)
     public String addVideo(@ModelAttribute("exposition") Exposition exposition,
                            @RequestParam(value = "projectors_id", required = false)  List<String> projectorsId,
-                           @RequestParam(value = "videos_id", required = false)  List<String> videosId) {
+                           @RequestParam(value = "videos_id", required = false)  List<String> videosId,
+                           RedirectAttributes redirectAttributes) {
+        if (projectorsId==null || videosId==null || projectorsId.size()==0 || videosId.size() == 0){
+            redirectAttributes.addAttribute("error","Выберите проектор и видео");
+            return  "redirect:/expositions/"+exposition.getId()+"/addVideo";
+        }
         projectorsVideosService.addProjectorsVideosList(projectorsId,videosId);
         return  "redirect:/expositions/"+exposition.getId();
     }

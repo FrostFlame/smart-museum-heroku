@@ -66,8 +66,8 @@ public class ExpositionServiceImpl implements ExpositionService {
         List<Projector> willDelete = new ArrayList<>();
         if (deleteProjectors != null) {
             for (String projectorId : deleteProjectors) {
-                for(Projector projector: projectors){
-                    if (Long.valueOf(projectorId).equals(projector.getId())){
+                for (Projector projector : projectors) {
+                    if (Long.valueOf(projectorId).equals(projector.getId())) {
                         willDelete.add(projector);
                     }
                 }
@@ -85,7 +85,7 @@ public class ExpositionServiceImpl implements ExpositionService {
 
     @Override
     @Action(name = ActionTypeName.UPDATE)
-    public void editExposition(Exposition exposition){
+    public void editExposition(Exposition exposition) {
         expositionRepository.save(exposition);
     }
 
