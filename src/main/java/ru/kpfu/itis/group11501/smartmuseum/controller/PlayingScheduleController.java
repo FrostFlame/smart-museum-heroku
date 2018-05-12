@@ -27,7 +27,7 @@ public class PlayingScheduleController {
     private WeekDayService weekDayService;
     private PlayingScheduleAddValidator playingScheduleAddValidator;
 
-    public PlayingScheduleController(PlayingScheduleService playingScheduleService, ExpositionService expositionService, WeekDayService weekDayService,  PlayingScheduleAddValidator playingScheduleAddValidator) {
+    public PlayingScheduleController(PlayingScheduleService playingScheduleService, ExpositionService expositionService, WeekDayService weekDayService, PlayingScheduleAddValidator playingScheduleAddValidator) {
         this.playingScheduleService = playingScheduleService;
         this.expositionService = expositionService;
         this.weekDayService = weekDayService;
@@ -45,14 +45,14 @@ public class PlayingScheduleController {
     }
 
     @ModelAttribute("exposition")
-    public Exposition exposition(@PathVariable(value = "exposition_id",required = false) Long expositionId) {
+    public Exposition exposition(@PathVariable(value = "exposition_id", required = false) Long expositionId) {
         if (expositionId == null) return null;
         return expositionService.getExpositionById(expositionId);
     }
 
     @ModelAttribute("projectors")
     public List<Projector> projectors(@ModelAttribute("exposition") Exposition exposition) {
-        if (exposition!= null )return exposition.getProjectors();
+        if (exposition != null) return exposition.getProjectors();
         return null;
     }
 
@@ -60,41 +60,40 @@ public class PlayingScheduleController {
     public String getPlayingSchedule() {
         Exposition exposition = expositionService.getFirstExposition();
         if (exposition == null) {
-            return  "expositions_not_found";
-        }
-        else return  "redirect:/playing_schedule/"+exposition.getId();
+            return "expositions_not_found";
+        } else return "redirect:/playing_schedule/" + exposition.getId();
     }
 
 
     @RequestMapping(value = "/{exposition_id}", method = RequestMethod.GET)
     public String getPlayingSchedule(Model model, @ModelAttribute("exposition") Exposition exposition,
                                      @ModelAttribute("error") String error,
-                                     @RequestParam(value = "weekDays_id", required = false)  List<Long> weekDaysId,
-                                     @RequestParam(value = "projectors_id", required = false)  List<Long> projectorsId,
-                                     @RequestParam(value = "sort", required = false)  String sort,
+                                     @RequestParam(value = "weekDays_id", required = false) List<Long> weekDaysId,
+                                     @RequestParam(value = "projectors_id", required = false) List<Long> projectorsId,
+                                     @RequestParam(value = "sort", required = false) String sort,
                                      @RequestParam(value = "page", required = false) String page,
                                      HttpSession httpSession) {
 
 
-        if (error != null && !error.equals("")){
+        if (error != null && !error.equals("")) {
             return "playing_schedule";
         }
 
-        if (exposition == null ) {
+        if (exposition == null) {
             model.addAttribute("error", "Экспозиция не найдена");
             return "playing_schedule";
         }
-        if (exposition.getProjectors().size()>0) {
-            if (projectorsId == null || projectorsId.size()==0) projectorsId = exposition.getProjectors()
+        if (exposition.getProjectors().size() > 0) {
+            if (projectorsId == null || projectorsId.size() == 0) projectorsId = exposition.getProjectors()
                     .stream()
                     .map(Projector::getId)
                     .collect(Collectors.toList());
 
             Long currentPage = 0L;
             if (page != null) currentPage = Long.valueOf(page);
-            Long lastPage = playingScheduleService.getLastPage(weekDaysId,projectorsId);
-            List<Long> pages = Helpers.getListPages(currentPage,lastPage,4L);
-            List<PlayingSchedule> playingSchedule = playingScheduleService.getPlayingScheduleByParameters(projectorsId,weekDaysId,sort,currentPage);
+            Long lastPage = playingScheduleService.getLastPage(weekDaysId, projectorsId);
+            List<Long> pages = Helpers.getListPages(currentPage, lastPage, 4L);
+            List<PlayingSchedule> playingSchedule = playingScheduleService.getPlayingScheduleByParameters(projectorsId, weekDaysId, sort, currentPage);
 
             model.addAttribute("playingSchedule", playingSchedule);
             model.addAttribute("pages", pages);
@@ -119,16 +118,15 @@ public class PlayingScheduleController {
         redirectAttributes.addAttribute("projectors_id", httpSession.getAttribute("projectors_id"));
         redirectAttributes.addAttribute("sort", httpSession.getAttribute("sort"));
         redirectAttributes.addAttribute("page", page);
-        return  "redirect:/playing_schedule/"+expositionId;
+        return "redirect:/playing_schedule/" + expositionId;
     }
 
     @RequestMapping(value = "/{exposition_id}/add", method = RequestMethod.GET)
     public String addPlayingSchedule(Model model,
                                      @ModelAttribute("exposition") Exposition exposition) {
-        if( exposition == null) {
+        if (exposition == null) {
             model.addAttribute("error", "Экспозиция не найдена");
-        }
-        else{
+        } else {
             if (!model.containsAttribute("form")) model.addAttribute("form", new PlayingScheduleAddForm());
         }
         return "add_playing_schedule";
@@ -140,15 +138,15 @@ public class PlayingScheduleController {
                                      @PathVariable("exposition_id") Long expositionId,
                                      RedirectAttributes redirectAttributes) {
 
-        playingScheduleAddValidator.validate(form,bindingResult);
-        if( bindingResult.hasErrors() ) {
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.form",  bindingResult);
+        playingScheduleAddValidator.validate(form, bindingResult);
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.form", bindingResult);
             redirectAttributes.addFlashAttribute("form", form);
-            return  "redirect:/playing_schedule/"+expositionId+"/add";
+            return "redirect:/playing_schedule/" + expositionId + "/add";
         }
 
-        playingScheduleService.addPlayingScheduleByParameters(form.getProjectorsId(),form.getWeekDaysId(),form.getBeginTime(),form.getEndTime());
-        return  "redirect:/playing_schedule/"+expositionId;
+        playingScheduleService.addPlayingScheduleByParameters(form.getProjectorsId(), form.getWeekDaysId(), form.getBeginTime(), form.getEndTime());
+        return "redirect:/playing_schedule/" + expositionId;
     }
 
 
@@ -164,7 +162,7 @@ public class PlayingScheduleController {
         redirectAttributes.addAttribute("projectors_id", httpSession.getAttribute("projectors_id"));
         redirectAttributes.addAttribute("sort", httpSession.getAttribute("sort"));
         redirectAttributes.addAttribute("page", page);
-        return  "redirect:/playing_schedule/"+expositionId;
+        return "redirect:/playing_schedule/" + expositionId;
     }
 
 

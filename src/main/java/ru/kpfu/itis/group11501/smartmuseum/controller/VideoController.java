@@ -34,45 +34,55 @@ public class VideoController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String getVideos(Model model,
-                                     @RequestParam(value = "error", required = false) String error) {
-        if (error != null){
+                            @RequestParam(value = "error", required = false) String error,
+                            @RequestParam(value = "searchField", required = false) String searchField) {
+        if (error != null) {
             model.addAttribute("error", error);
         }
-        model.addAttribute("videos",videoService.getAllVideo());
+        model.addAttribute("videos", videoService.getAllVideo(searchField));
         return "videos";
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String addVideos(@RequestParam(value = "name")  String name,
-                                     @RequestParam(value = "file") MultipartFile file,
-                                     RedirectAttributes redirectAttributes) {
+    @RequestMapping(value = "/new_video", method = RequestMethod.GET)
+    public String addVideo(Model model,
+                           @RequestParam(value = "error", required = false) String error) {
+        if (error != null) {
+            model.addAttribute("error", error);
+        }
+        return "new_video";
+    }
 
-        if (videoService.findOneByName(name) != null){
-            redirectAttributes.addAttribute("error",  "Видео с таким названием уже существует");
-            return  "redirect:/videos";
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public String addVideo(@RequestParam(value = "name") String name,
+                           @RequestParam(value = "file") MultipartFile file,
+                           RedirectAttributes redirectAttributes) {
+
+        if (videoService.findOneByName(name) != null) {
+            redirectAttributes.addAttribute("error", "Видео с таким названием уже существует");
+            return "redirect:/videos/new_video";
         }
-        name = fileUploader.uploadVideo(file,name);
-        if (name == null ) {
-            redirectAttributes.addAttribute("error",  "Не удалось добавить видео");
-        }
-        else{
+        name = fileUploader.uploadVideo(file, name);
+        if (name == null) {
+            redirectAttributes.addAttribute("error", "Не удалось добавить видео");
+            return "redirect:/videos/new_video";
+        } else {
             Video video = new Video(name);
             videoService.addVideo(video);
         }
 
-        return  "redirect:/videos";
+        return "redirect:/videos";
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public String deleteVideo(@RequestParam(value = "id") Long videoId,
                               RedirectAttributes redirectAttributes) {
 
-        if (fileUploader.deleteVideo(videoService.findOneById(videoId)) == null){
-            redirectAttributes.addAttribute("error",  "Не удалось удалить файл");
-            return  "redirect:/videos";
+        if (fileUploader.deleteVideo(videoService.findOneById(videoId)) == null) {
+            redirectAttributes.addAttribute("error", "Не удалось удалить файл");
+            return "redirect:/videos";
         }
         videoService.deleteById(videoId);
-        return  "redirect:/videos";
+        return "redirect:/videos";
     }
 
 

@@ -77,25 +77,25 @@ public class ProjectorController {
         return "redirect:/projector/all";
     }
 
-    @RequestMapping(value = "/{id}/deleteVideo",method = RequestMethod.POST)
+    @RequestMapping(value = "/{id}/deleteVideo", method = RequestMethod.POST)
     public String getProjector(@PathVariable(value = "id") Long projectorId,
                                @RequestParam(value = "video_id") Long videoId) {
-        projectorsVideosService.deleteByProjectorIdByVideoId(projectorId,videoId);
-        return "redirect:/projector/"+projectorId;
+        projectorsVideosService.deleteByProjectorIdByVideoId(projectorId, videoId);
+        return "redirect:/projector/" + projectorId;
     }
 
-    @RequestMapping(value = "/{id}/modifyVideo",method = RequestMethod.POST)
+    @RequestMapping(value = "/{id}/modifyVideo", method = RequestMethod.POST)
     public String getProjector(Model model,
                                @PathVariable(value = "id") Long projectorId,
                                @RequestParam(value = "video_id") Long videoId,
                                @RequestParam(value = "num") Long num) {
-        if (projectorsVideosService.getOneByProjectorIdWhereLastNum(projectorId).getNum()<num || 0>=num){
-            model.addAttribute("error","Номер указан не верно");
-            return "redirect:/projector/"+projectorId;
+        if (projectorsVideosService.getOneByProjectorIdWhereLastNum(projectorId).getNum() < num || 0 >= num) {
+            model.addAttribute("error", "Номер указан не верно");
+            return "redirect:/projector/" + projectorId;
         }
-        ProjectorsVideos projectorsVideos = projectorsVideosService.getOneByProjectorIdByVideoId(projectorId,videoId);
-        projectorsVideosService.updateNum(projectorsVideos,num);
-        return "redirect:/projector/"+projectorId;
+        ProjectorsVideos projectorsVideos = projectorsVideosService.getOneByProjectorIdByVideoId(projectorId, videoId);
+        projectorsVideosService.updateNum(projectorsVideos, num);
+        return "redirect:/projector/" + projectorId;
     }
 
 

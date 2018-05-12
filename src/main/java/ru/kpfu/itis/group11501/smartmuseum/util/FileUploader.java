@@ -43,8 +43,9 @@ public class FileUploader {
         if(video == null || video.getSize() <= 0) {
             return null;
         }
-
-        name = name + "." + FilenameUtils.getExtension(video.getOriginalFilename());
+        String extension =FilenameUtils.getExtension(video.getOriginalFilename());
+        if (!extension.equals("mp4") && !extension.equals("ogv") && !extension.equals("webm") && !extension.equals("avi")) return null;
+        name = name + "." + extension;
         return uploadFile(video,name,videoPath);
     }
 

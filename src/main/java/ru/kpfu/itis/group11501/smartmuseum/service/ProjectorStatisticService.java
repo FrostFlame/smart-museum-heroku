@@ -10,5 +10,11 @@ import java.util.List;
  */
 public interface ProjectorStatisticService {
 
-        List<ProjectorStatistic> getAllStatistic(Projector projector);
+    List<ProjectorStatistic> getAllStatistic(Projector projector);
+
+    void addStatistic(Projector projector);
+
+    ProjectorStatistic getLastStatistics(Projector projector);
+
+    Long addEndDate(Projector projector);
 }

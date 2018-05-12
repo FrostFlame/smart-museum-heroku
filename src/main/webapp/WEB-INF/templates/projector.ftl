@@ -3,19 +3,22 @@
 Проектор ${projector.getName()}
 </#macro>
 <#macro content>
-${projector.getName()}
-${projector.getStatus()}
+${projector.getName()}<br>
+Статус: ${projector.getStatus()}
 <br/>
 <#if error?has_content>
 <b style="color: red">Error: ${error}</b>
 <br/>
 </#if>
+<#if projector.getStatus() = 'D'>
 <form action="/projector/${projector.getId()}/turn_on" method="post">
     <input type="submit" value="Включить">
 </form>
+<#else>
 <form action="/projector/${projector.getId()}/turn_off" method="post">
     <input type="submit" value="Выключить">
 </form>
+</#if>
 <#if projectorVideos?has_content>
     <#list projectorVideos as projectorVideo>
     ${projectorVideo.getVideo().getName()}
@@ -31,11 +34,16 @@ ${projector.getStatus()}
 <#else>
 У проектора нет видео
 </#if>
-Всего работает времени: ${projector.getSumTime()}
+<br>
+Всего работает времени: ${projector.getCustomSumTime()}<br>
 <#if projectorStatistics?has_content>
     <#list projectorStatistics as projectorStatistic>
     Включен: ${projectorStatistic.getBeginDate()}
-    Выключен: ${projectorStatistic.getEndDate()}
+        <#if projectorStatistic.getEndDate()?has_content>Выключен: ${projectorStatistic.getEndDate()}
+        <#else>
+        Еще работает
+    </#if>
+    <br>
     </#list>
 </#if>
 </#macro>

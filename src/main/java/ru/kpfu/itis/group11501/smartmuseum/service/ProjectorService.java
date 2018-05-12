@@ -28,4 +28,7 @@ public interface ProjectorService {
     void turnOn(Long id);
 
     void turnOff(Long id);
+
+    @Action(name = ActionTypeName.FAULT)
+    void projectorFault(Long id);
 }

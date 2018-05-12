@@ -66,12 +66,12 @@ public class UserServiceImpl implements UserService {
         } else {
             roles.add(roleService.getRole(Long.valueOf(role)));
         }
-        if (position.equals("all")){
+        if (position.equals("all")) {
             positions.addAll(positionService.getAllPositions());
         } else {
             positions.add(positionService.getPosition(Long.valueOf(position)));
         }
-        if (!status.equals("all")){
+        if (!status.equals("all")) {
             statuses.remove(!Boolean.valueOf(status));
         }
         System.out.println(searchField);
@@ -83,27 +83,25 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
-    public void editCommonInfo(User editableUser, EditProfileForm editProfileForm){
+    public void editCommonInfo(User editableUser, EditProfileForm editProfileForm) {
         editableUser.setName(editProfileForm.getName());
         editableUser.setSurname(editProfileForm.getSurname());
         editableUser.setThirdName(editProfileForm.getThirdName());
         editableUser.setLogin(editProfileForm.getLogin());
 
         String name = fileUploader.uploadImage(editProfileForm.getPhotoFile());
-        if (name == null ) {
+        if (name == null) {
             System.out.println("Не удалось добавить фото");
-        }
-        else{
+        } else {
             System.out.println(name);
-            if (fileUploader.deleteImage(editableUser.getPhoto()) == null){
+            if (fileUploader.deleteImage(editableUser.getPhoto()) == null) {
                 System.out.println("Не удалось удалить фото");
-            }
-            else {
+            } else {
                 System.out.println("Фото удалено");
             }
             editableUser.setPhoto(name);
         }
-        if(!(editProfileForm.getNewPassword().equals("") && editProfileForm.getNewPasswordConf().equals(""))){
+        if (!(editProfileForm.getNewPassword().equals("") && editProfileForm.getNewPasswordConf().equals(""))) {
             editableUser.setPassword(Helpers.getEncoder().encode(editProfileForm.getNewPassword()));
         }
     }

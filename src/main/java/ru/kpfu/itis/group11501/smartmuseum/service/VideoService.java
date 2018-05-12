@@ -13,6 +13,8 @@ import java.util.List;
  */
 @CoherentEntity(name = EntityName.VIDEO)
 public interface VideoService {
+    List<Video> getAllVideo(String searchField);
+
     List<Video> getAllVideo();
 
     @Action(name = ActionTypeName.ADD)

@@ -13,4 +13,6 @@ public interface VideoRepository  extends JpaRepository<Video, Long> {
     Video findOneByName(String name);
 
     List<Video> findAllByOrderByNameAsc();
+
+    List<Video> findByNameContainsAllIgnoreCaseOrderByNameAsc(String searchField);
 }
