@@ -94,11 +94,8 @@ public class PlayingScheduleServiceImpl implements PlayingScheduleService {
             pageRequest = new PageRequest(page.intValue(), size, Sort.Direction.ASC, "weekDay", "beginTime", "projector.name");
         }
 
-        if (weekDaysId == null || weekDaysId.size() == 0) {
-            return playingScheduleRepository.getPlayingScheduleByProjectors(projectorsId, pageRequest);
-        } else {
-            return playingScheduleRepository.getPlayingScheduleByProjectorsByWeekDay(projectorsId, weekDaysId, pageRequest);
-        }
+        return playingScheduleRepository.getPlayingScheduleByProjectorsByWeekDay(projectorsId, weekDaysId, pageRequest);
+
     }
 
     @Override
@@ -141,12 +138,7 @@ public class PlayingScheduleServiceImpl implements PlayingScheduleService {
 
     @Override
     public Long getLastPage(List<Long> weekDaysId, List<Long> projectorsId) {
-        Long rows;
-        if (weekDaysId == null || weekDaysId.size() == 0) {
-            rows = playingScheduleRepository.getCountRow(projectorsId);
-        } else {
-            rows = playingScheduleRepository.getCountRowByWeekDay(projectorsId, weekDaysId);
-        }
+        Long rows = playingScheduleRepository.getCountRow(projectorsId, weekDaysId);
         if (rows % size == 0) return rows / size - 1;
         else return rows / size;
     }
