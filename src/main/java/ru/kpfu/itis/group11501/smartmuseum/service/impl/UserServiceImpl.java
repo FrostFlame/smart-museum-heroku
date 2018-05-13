@@ -1,6 +1,10 @@
 package ru.kpfu.itis.group11501.smartmuseum.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -118,5 +122,12 @@ public class UserServiceImpl implements UserService {
         editableUser.setPosition(positionService.getPosition(editProfileForm.getPosition()));
         editableUser.setRole(roleService.getRole(editProfileForm.getRole()));
         addUser(editableUser);
+    }
+
+    @Override
+    public void updateCurrentSession(Long id){
+        UserDetails userDetails = this.getUser(id);
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()));
     }
 }

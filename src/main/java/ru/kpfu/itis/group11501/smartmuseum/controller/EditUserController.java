@@ -1,18 +1,17 @@
 package ru.kpfu.itis.group11501.smartmuseum.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.multipart.MultipartFile;
+
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ru.kpfu.itis.group11501.smartmuseum.model.Position;
 import ru.kpfu.itis.group11501.smartmuseum.model.User;
 import ru.kpfu.itis.group11501.smartmuseum.service.PositionService;
 import ru.kpfu.itis.group11501.smartmuseum.service.RoleService;
@@ -31,18 +30,15 @@ import javax.validation.Valid;
 @SessionAttributes("editForm")
 public class EditUserController {
     private UserService userService;
-    private EditProfileForm editProfileForm;
     private RoleService roleService;
     private PositionService positionService;
-    private FileUploader fileUploader;
+
 
     @Autowired
-    public EditUserController(UserService userService, RoleService roleService,
-                              PositionService positionService, FileUploader fileUploader) {
+    public EditUserController(UserService userService, RoleService roleService, PositionService positionService) {
         this.userService = userService;
         this.roleService = roleService;
         this.positionService = positionService;
-        this.fileUploader = fileUploader;
     }
 
     @ModelAttribute("editForm")
@@ -104,6 +100,9 @@ public class EditUserController {
         }
         if (Helpers.getCurrentUser().getRole().getName().equals("ADMIN")) {
             userService.adminEditProfileAndSave(userService.getUser(editProfileForm.getId()), editProfileForm);
+            if (Helpers.getCurrentUser().getId().equals( editProfileForm.getId())){
+                userService.updateCurrentSession(editProfileForm.getId());
+            }
             // TODO redirect to existing URL
             return "redirect:/admin/users";
         }
@@ -113,6 +112,7 @@ public class EditUserController {
             return "redirect:/profile/edit";
         }
         userService.normalEditProfileAndSave(editableUser, editProfileForm);
+        userService.updateCurrentSession(editProfileForm.getId());
         return "redirect:/profile";
     }
 

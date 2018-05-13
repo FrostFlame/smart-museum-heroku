@@ -47,7 +47,7 @@ public class FileUploader {
         if (video == null || video.getSize() <= 0) {
             return null;
         }
-        String extension = FilenameUtils.getExtension(video.getOriginalFilename());
+        String extension = FilenameUtils.getExtension(video.getOriginalFilename()).toLowerCase();
         if (!extension.equals("mp4") && !extension.equals("ogv") && !extension.equals("webm") && !extension.equals("avi"))
             return null;
         name = name + "." + extension;
@@ -62,7 +62,7 @@ public class FileUploader {
         if (image == null || image.getSize() <= 0) {
             return null;
         }
-        String extension = FilenameUtils.getExtension(image.getOriginalFilename());
+        String extension = FilenameUtils.getExtension(image.getOriginalFilename()).toLowerCase();
         if (!extension.equals("jpeg") && !extension.equals("jpg") && !extension.equals("png") && !extension.equals("webp"))
             return null;
         String name = RandomStringUtils.randomAlphanumeric(8) + "." + FilenameUtils.getExtension(image.getOriginalFilename());
