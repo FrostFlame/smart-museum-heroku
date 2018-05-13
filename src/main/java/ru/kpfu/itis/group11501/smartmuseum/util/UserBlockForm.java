@@ -3,6 +3,7 @@ package ru.kpfu.itis.group11501.smartmuseum.util;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by Amir Kadyrov
@@ -10,26 +11,20 @@ import java.util.Map;
  */
 public class UserBlockForm {
     private Long userID;
-    private int blockDate;
-    private Map blockDates;
+    private double blockDate;
 
     public UserBlockForm() {
     }
 
     public UserBlockForm(Long userID) {
         this.userID = userID;
-        this.blockDates = new HashMap();
-        blockDates.put("30 минут", 0.5);
-        blockDates.put("1 час", 1);
-        blockDates.put("24 часа", 24);
-        blockDates.put("Навсегда", Integer.MAX_VALUE);
     }
 
-    public int getBlockDate() {
+    public double getBlockDate() {
         return blockDate;
     }
 
-    public void setBlockDate(int blockDate) {
+    public void setBlockDate(double blockDate) {
         this.blockDate = blockDate;
     }
 
@@ -39,13 +34,5 @@ public class UserBlockForm {
 
     public void setUserID(Long userID) {
         this.userID = userID;
-    }
-
-    public Map getBlockDates() {
-        return blockDates;
-    }
-
-    public void setBlockDates(Map blockDates) {
-        this.blockDates = blockDates;
     }
 }

@@ -119,4 +119,26 @@ public class UserServiceImpl implements UserService {
         editableUser.setRole(roleService.getRole(editProfileForm.getRole()));
         addUser(editableUser);
     }
+
+    @Override
+    public void blockUser(long id, double blockTime) {
+        Calendar calendar = Calendar.getInstance();
+        if (blockTime < 1){
+            calendar.add(Calendar.MINUTE, (int) (blockTime * 60));
+        }
+        else if (blockTime <= 24){
+            calendar.add(Calendar.HOUR_OF_DAY, (int) blockTime);
+        }
+        else {
+            calendar.add(Calendar.YEAR, 1000);
+        }
+
+        Date blockDate = calendar.getTime();
+
+        User blockedUser = getUser(id);
+        blockedUser.setBlockDate(blockDate);
+        blockedUser.setStatus(false);
+
+        addUser(blockedUser);
+    }
 }

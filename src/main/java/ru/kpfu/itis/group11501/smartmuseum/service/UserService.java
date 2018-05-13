@@ -28,4 +28,6 @@ public interface UserService {
     void normalEditProfileAndSave(User editableUser, EditProfileForm editProfileForm);
 
     void adminEditProfileAndSave(User editableUser, EditProfileForm editProfileForm);
+
+    void blockUser(long id, double blockTime);
 }
