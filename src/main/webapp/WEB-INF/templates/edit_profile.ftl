@@ -16,7 +16,7 @@
         <@sf.input path="thirdName" placeholder="Введите отчество" value="${editForm.thirdName!''}"/>
         <@sf.errors path="thirdName" cssClass="help-block"/>
         <#if editForm.photo?has_content>
-        <img src="${imagePath}${editForm.photo}">
+        <img src="/image/${editForm.photo!''}">
         </#if>
         <@sf.input path="photoFile" type="file" placeholder="Фото"/>
         <@sf.errors path="photoFile" cssClass="help-block"/>

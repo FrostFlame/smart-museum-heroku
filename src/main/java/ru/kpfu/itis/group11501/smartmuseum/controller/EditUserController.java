@@ -64,17 +64,19 @@ public class EditUserController {
                 editableUser.getPosition().getId(), editableUser.getRole().getId());
         model.addAttribute("editForm", editProfileForm);
         model.addAttribute("positions", positionService.getAllPositions());
-        model.addAttribute("imagePath", fileUploader.getImagePath().replace("/", "\\"));
         model.addAttribute("roles", roleService.getAllRoles());
         model.addAttribute("u", Helpers.getCurrentUser());
         return "edit_profile";
     }
 
     @RequestMapping(value = "/profile/edit", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_NORMAL', 'ROLE_MANAGER')")
+    @PreAuthorize("hasRole('ROLE_NORMAL', 'ROLE_MANAGER', 'ROLE_ADMIN')")
     public String getNormalEditProfile(Model model, @ModelAttribute("error") String error,
                                        @ModelAttribute("editForm") EditProfileForm editProfileForm) {
         User editableUser = Helpers.getCurrentUser();
+        if (editableUser.getRole().getName().equals("ADMIN")) {
+            return "redirect:/profile/"+ editableUser.getId()+"/edit";
+        }
         if (error != null && !error.equals("")) {
             model.addAttribute("error", error);
         }
