@@ -29,5 +29,9 @@ public interface UserService {
 
     void adminEditProfileAndSave(User editableUser, EditProfileForm editProfileForm);
 
+
     void updateCurrentSession(Long id);
+
+    void blockUser(long id, double blockTime);
+
 }

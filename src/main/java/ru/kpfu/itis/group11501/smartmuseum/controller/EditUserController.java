@@ -47,7 +47,6 @@ public class EditUserController {
     }
 
     @RequestMapping(value = "/profile/{id}/edit", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String getAdminEditProfile(Model model, @PathVariable(value = "id", required = true) Long id,
                                       @ModelAttribute("error") String error,
                                       @ModelAttribute("editForm") EditProfileForm editProfileForm) {
@@ -66,7 +65,6 @@ public class EditUserController {
     }
 
     @RequestMapping(value = "/profile/edit", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_NORMAL', 'ROLE_MANAGER', 'ROLE_ADMIN')")
     public String getNormalEditProfile(Model model, @ModelAttribute("error") String error,
                                        @ModelAttribute("editForm") EditProfileForm editProfileForm) {
         User editableUser = Helpers.getCurrentUser();
@@ -85,7 +83,6 @@ public class EditUserController {
     }
 
     @RequestMapping(value = "/edit_profile", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_NORMAL', 'ROLE_MANAGER', 'ROLE_ADMIN')")
     public String postEditProfile(Model model, @ModelAttribute("editForm") @Valid EditProfileForm editProfileForm,
                                   BindingResult bindingResult,
                                   RedirectAttributes redirectAttributes) {
@@ -103,7 +100,7 @@ public class EditUserController {
             if (Helpers.getCurrentUser().getId().equals( editProfileForm.getId())){
                 userService.updateCurrentSession(editProfileForm.getId());
             }
-            // TODO redirect to existing URL
+
             return "redirect:/admin/users";
         }
         User editableUser = Helpers.getCurrentUser();
