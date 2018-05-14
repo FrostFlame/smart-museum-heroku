@@ -45,7 +45,7 @@ public class SearchUsersController {
     @ModelAttribute("userBlockForm")
     public UserBlockForm getNewUserBlockForm(){return new UserBlockForm();}
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public String getSearchUsersPage(Model model) {
         model.addAttribute("users", userService.getAllUsers());
         model.addAttribute("roles", roleService.getAllRoles());
