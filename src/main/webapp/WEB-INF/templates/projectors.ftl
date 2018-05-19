@@ -16,6 +16,9 @@
     <form action="/projector/${projector.getId()}/delete" method="post">
         <input type="submit" value="Удалить">
     </form>
+    <form action="/projector/${projector.id}/fault" method="post">
+        <input type="submit" <#if projector.status == 'F'>value="Исправен"<#else>value="Неисправен"</#if>>
+    </form>
     </#list>
 <#else>
 Нет проекторов

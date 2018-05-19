@@ -14,6 +14,7 @@ import ru.kpfu.itis.group11501.smartmuseum.service.ProjectorsVideosService;
 import ru.kpfu.itis.group11501.smartmuseum.util.ProjectorAddForm;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -109,6 +110,20 @@ public class ProjectorController {
     @RequestMapping(value = "/{id}/turn_off", method = RequestMethod.POST)
     public String turnOff(@PathVariable(value = "id") Long id, HttpServletRequest request) {
         projectorService.turnOff(id);
+        return "redirect:" + request.getHeader("Referer");
+    }
+
+    @RequestMapping(value = "/{id}/fault", method = RequestMethod.POST)
+    public String brokenProjector(@PathVariable(value = "id") Long id,
+                                  HttpServletRequest request){
+        Projector projector = projectorService.getOneById(id);
+        if (projector.getStatus() == 'F'){
+            projector.setStatus('D');
+        }
+        else {
+            projector.setStatus('F');
+        }
+        projectorService.add(projector);
         return "redirect:" + request.getHeader("Referer");
     }
 }

@@ -4,20 +4,32 @@
 </#macro>
 <#macro content>
 ${projector.getName()}<br>
-Статус: ${projector.getStatus()}
+Статус: <#if projector.status == 'D'>Выключен
+<#elseif projector.status == 'E'>Включен
+<#elseif projector.status == 'F'>Неисправен
+</#if>
 <br/>
 <#if error?has_content>
 <b style="color: red">Error: ${error}</b>
 <br/>
 </#if>
-<#if projector.getStatus() = 'D'>
-<form action="/projector/${projector.getId()}/turn_on" method="post">
-    <input type="submit" value="Включить">
+<#if projector.getStatus() = 'F'>
+<form action="/projector/${projector.id}/fault" method="post">
+    <input type="submit" value="Исправен">
 </form>
 <#else>
+<form action="/projector/${projector.id}/fault" method="post">
+    <input type="submit" value="Неисправен">
+</form>
+<#if projector.status == 'E'>
 <form action="/projector/${projector.getId()}/turn_off" method="post">
     <input type="submit" value="Выключить">
 </form>
+<#elseif projector.status == 'D'>
+<form action="/projector/${projector.getId()}/turn_on" method="post">
+    <input type="submit" value="Включить">
+</form>
+</#if>
 </#if>
 <#if projectorVideos?has_content>
     <#list projectorVideos as projectorVideo>
