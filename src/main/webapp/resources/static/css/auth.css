@@ -11,11 +11,11 @@ h1 {
 #auth-form {
   position: absolute;
   height: 275px;
-  width: 400px;
+  width: 300px;
   top: 30%;
   left: 50%;
   margin-top: -100px;
-  margin-left: -200px;
+  margin-left: -150px;
   padding: 0;
 }
 #auth-form .form-group {margin-bottom: 10px;}

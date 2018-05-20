@@ -5,3 +5,30 @@
 #active-tasks-panel {
     margin-top: 25px;
 }
+
+#add-task-panel {
+    position: relative;
+    height: 275px;
+    width: 60%;
+    margin: auto;
+}
+
+.add-task-button {
+    margin: auto;
+}
+
+.delete-task-button {
+    margin-top: -7px;
+}
+
+.schedule-form {
+    margin-top: 0;
+}
+
+.add-task-form {
+    font-size: medium;
+    margin-top: 0;
+}
+
+.add-task-row {
+}

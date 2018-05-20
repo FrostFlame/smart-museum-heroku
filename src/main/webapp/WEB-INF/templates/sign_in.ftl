@@ -36,9 +36,12 @@
                     </div>
                     <span class="help-block">&nbsp;</span>
                 </div>
-                <div class="input-group"><input type="checkbox"> Запомнить меня</div>
-                <button type="submit" class="btn btn-default">Войти</button>
-                <div class="error">
+
+                <div class="row">
+                    <div class="col-xs-8 col-md-8"><div class="input-group"><input type="checkbox"> Запомнить меня</div></div>
+                    <div class="col-xs-4 col-md-4"><button type="submit" class="btn btn-default">Войти</button></div>
+                </div>
+                <div class="panel-body error">
                     <#if error??><p>${SPRING_SECURITY_LAST_EXCEPTION.message}</p>
                     <#else><p>&nbsp;</p>
                     </#if>
