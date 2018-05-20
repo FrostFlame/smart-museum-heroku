@@ -1,3 +1,107 @@
+<#include "base.ftl">
+<#macro title>Расписание</#macro>
+<#macro content>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<div class="row" id="schedule-content">
+    <div class="col-xs-3 col-md-3">
+        <div class="panel panel-default">
+            <div class="panel-heading">Экспозиции</div>
+            <ul class="nav flex-column">
+                <#if expositions?has_content>
+                    <#list expositions as e>
+                        <div class="panel-body"><a href="/playing_schedule/${e.id}"><span class="glyphicon glyphicon-blackboard"></span>&nbsp;${e.name}</a><br></div>
+                    </#list>
+                <#else><p>Нет доступных экспозиций</p>
+                </#if>
+            </ul>
+        </div>
+    </div>
+    <div class="col-xs-9 col-md-9">
+        <div class="panel-group">
+            <#if projectors?has_content>
+                <div class="panel panel-default">
+                <div class="panel-heading">Опции сортировки</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-3 col-xs-3">
+                            <select class="form-control selectpicker" id="projectorsId" name="projectors_id">
+                                <option value="" selected disabled>Проектор</option>
+                                <#list projectors as p>
+                                    <option value="${p.id}">${p.name}</option>
+                                </#list>
+                            </select>
+                        </div>
+                        <div class="col-md-3 col-xs-3">
+                            <select class="form-control selectpicker" id="weekDaysId" name="weekDays_id">
+                                <option value="" selected disabled>День недели</option>
+                                <#list weekDays as w>
+                                    <option value="${w.id}">${w.name}</option>
+                                </#list>
+                            </select>
+                        </div>
+                        <div class="col-md-3 col-xs-3">
+                            <select class="form-control selectpicker">
+                                <option value="" selected disabled>Сортировка по</option>
+                                <#if  (sort!"") = "projectors" >
+                                    <option  value="projectors">Проекторы</option>
+                                    <option  value="dayWeeks">Дни недели</option>
+                                <#else>
+                                    <option  value="dayWeeks">Дни недели</option>
+                                    <option  value="projectors">Проекторы</option>
+                                </#if>
+                            </select>
+                        </div>
+                        <div class="col-md-3 col-xs-3">
+                            <button class="btn btn-default" type="button">Применить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </#if>
+            <div class="panel panel-default" id="active-tasks-panel">
+                <div class="panel-heading">Активные задачи</div>
+                <div class="panel-body">
+                    <form action="/playing_schedule/${exposition.id}/add" method="get">
+                        <button class="btn btn-default" type="submit">Добавить задачу</button>
+                    </form>
+                </div>
+                <#if playingSchedule?has_content>
+                    <div class="panel-body">
+                        <div class="row" align="center">
+                            <div class="col-md-2 col-xs-2"><b>Проектор</b></div>
+                            <div class="col-md-2 col-xs-2"><b>День недели</b></div>
+                            <div class="col-md-3 col-xs-3"><b>Время включения</b></div>
+                            <div class="col-md-3 col-xs-3"><b>Время выключения</b></div>
+                            <div class="col-md-2 col-xs-2"><b>Удаление</b></div>
+                        </div>
+                    </div>
+                    <#list playingSchedule as p>
+                        <div class="panel-body">
+                            <div class="row" align="center">
+                                <div class="col-md-2 col-xs-2"><a href="/projector/${p.projector.id}" >${p.projector.name}</a></div>
+                                <div class="col-md-2 col-xs-2">${p.weekDay.name}</div>
+                                <div class="col-md-3 col-xs-3">${p.beginTime}</div>
+                                <div class="col-md-3 col-xs-3">${p.endTime}</div>
+                                <div class="col-md-2 col-xs-2">
+                                    <form action="/playing_schedule/${exposition.id}/delete?id=${p.id}&page=${page}" method="post">
+                                        <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-trash"></span> Удалить</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </#list>
+                <#else>
+                    <div class="panel-body">
+                        <p>Нет активных задач</p>
+                    </div>
+                </#if>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
+</#macro>
+
 
 <#if error?has_content>
 <b style="color: red">Error: ${error}</b><br/>
