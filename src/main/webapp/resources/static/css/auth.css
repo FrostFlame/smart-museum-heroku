@@ -1,14 +1,22 @@
 div#main-container {
 }
+h1 {
+    text-align: center;
+}
+
+.error {
+    color: red;
+}
+
 #auth-form {
   position: absolute;
-  height: 200px;
-  width: 400px;
-  top: 50%;
+  height: 275px;
+  width: 300px;
+  top: 30%;
   left: 50%;
   margin-top: -100px;
-  margin-left: -200px;
+  margin-left: -150px;
   padding: 0;
 }
-#auth-form .input-group {margin-bottom: 10px;}
+#auth-form .form-group {margin-bottom: 10px;}
 #auth-form .panel-body {text-align: center;}
