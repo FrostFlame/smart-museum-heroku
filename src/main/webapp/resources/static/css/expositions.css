@@ -65,3 +65,11 @@ form {
 .list-group {
     font-size: Large;
 }
+
+.text {
+    text-align: center;
+}
+
+.text p {
+    font-size: large;
+}
