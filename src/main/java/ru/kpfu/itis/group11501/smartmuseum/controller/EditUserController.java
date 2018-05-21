@@ -8,7 +8,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -16,10 +18,12 @@ import ru.kpfu.itis.group11501.smartmuseum.model.User;
 import ru.kpfu.itis.group11501.smartmuseum.service.PositionService;
 import ru.kpfu.itis.group11501.smartmuseum.service.RoleService;
 import ru.kpfu.itis.group11501.smartmuseum.service.UserService;
-import ru.kpfu.itis.group11501.smartmuseum.util.EditProfileForm;
-import ru.kpfu.itis.group11501.smartmuseum.util.FileUploader;
-import ru.kpfu.itis.group11501.smartmuseum.util.Helpers;
+import ru.kpfu.itis.group11501.smartmuseum.util.*;
+import ru.kpfu.itis.group11501.smartmuseum.util.Transoformers.EditProfileFormToUserTransformer;
+import ru.kpfu.itis.group11501.smartmuseum.validator.ChangePasswordFormValidator;
+import ru.kpfu.itis.group11501.smartmuseum.validator.EditProfileFormValidator;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 /**
@@ -27,90 +31,150 @@ import javax.validation.Valid;
  * Date: 27.04.2018
  */
 @Controller
-@SessionAttributes("editForm")
 public class EditUserController {
     private UserService userService;
     private RoleService roleService;
     private PositionService positionService;
-
+    private EditProfileFormToUserTransformer transformer;
+    private EditProfileFormValidator editProfileFormValidator;
+    private ChangePasswordFormValidator changePasswordFormValidator;
 
     @Autowired
-    public EditUserController(UserService userService, RoleService roleService, PositionService positionService) {
+    public EditUserController(UserService userService, RoleService roleService, PositionService positionService,
+                              EditProfileFormToUserTransformer transformer, EditProfileFormValidator editProfileFormValidator,
+                              ChangePasswordFormValidator changePasswordFormValidator) {
         this.userService = userService;
         this.roleService = roleService;
         this.positionService = positionService;
+        this.transformer = transformer;
+        this.editProfileFormValidator = editProfileFormValidator;
+        this.changePasswordFormValidator = changePasswordFormValidator;
     }
 
-    @ModelAttribute("editForm")
-    public EditProfileForm getNewEditForm() {
-        return new EditProfileForm();
-    }
 
-    @RequestMapping(value = "/profile/{id}/edit", method = RequestMethod.GET)
-    public String getAdminEditProfile(Model model, @PathVariable(value = "id", required = true) Long id,
-                                      @ModelAttribute("error") String error,
-                                      @ModelAttribute("editForm") EditProfileForm editProfileForm) {
-        User editableUser = userService.getUser(id);
-        if (error != null && !error.equals("")) {
-            model.addAttribute("error", error);
+    @RequestMapping(value = "/profile/edit", method = RequestMethod.GET)
+    public String getNormalEditProfile(Model model) {
+
+        User editableUser = Helpers.getCurrentUser();
+        if (editableUser.getRole().getName().equals("ADMIN")) {
+            return "redirect:/admin/users/" + editableUser.getId() + "/edit";
         }
-        editProfileForm = new EditProfileForm(editableUser.getId(), editableUser.getLogin(), editableUser.getName(),
-                editableUser.getSurname(), editableUser.getThirdName(), editableUser.getPhoto(),
-                editableUser.getPosition().getId(), editableUser.getRole().getId());
-        model.addAttribute("editForm", editProfileForm);
+        if (!model.containsAttribute("editForm")) {
+            EditProfileForm editProfileForm = new EditProfileForm(editableUser.getId(), editableUser.getLogin(), editableUser.getName(),
+                    editableUser.getSurname(), editableUser.getThirdName(), editableUser.getPhoto());
+            model.addAttribute("editForm", editProfileForm);
+        }
+        if (!model.containsAttribute("changePasswordForm")) {
+            model.addAttribute("changePasswordForm", new ChangePasswordForm());
+        }
+        model.addAttribute("u", Helpers.getCurrentUser());
+        return "edit_profile";
+    }
+
+    @RequestMapping(value = "/edit_profile", method = RequestMethod.POST)
+    public String postEditProfile(@ModelAttribute("editForm") @Valid EditProfileForm editProfileForm,
+                                  BindingResult bindingResult,
+                                  RedirectAttributes redirectAttributes) {
+        editProfileFormValidator.validate(editProfileForm, bindingResult);
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.editForm", bindingResult);
+            redirectAttributes.addFlashAttribute("editForm", editProfileForm);
+            return "redirect:/profile/edit";
+        }
+
+        User editableUser = transformer.apply(editProfileForm);
+        userService.updateUser(editableUser);
+        userService.updateCurrentSession();
+        return "redirect:/profile";
+    }
+
+    @RequestMapping(value = "/change_password", method = RequestMethod.POST)
+    public String changePassword(@ModelAttribute("changePasswordForm") @Valid ChangePasswordForm changePasswordForm,
+                                 BindingResult bindingResult,
+                                 RedirectAttributes redirectAttributes) {
+        changePasswordFormValidator.validate(changePasswordForm, bindingResult);
+        if (bindingResult.hasErrors()) {
+            BeanPropertyBindingResult result = new BeanPropertyBindingResult(changePasswordForm,bindingResult.getObjectName());
+            for (FieldError error: bindingResult.getFieldErrors()){
+                result.addError(new FieldError(error.getObjectName(),error.getField(),null,error.isBindingFailure(),error.getCodes(),error.getArguments(),error.getDefaultMessage()));
+            }
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.changePasswordForm", result);
+            redirectAttributes.addFlashAttribute("changePasswordForm", new ChangePasswordForm());
+            return "redirect:/profile/edit";
+        }
+
+        userService.changePassword(changePasswordForm.getNewPassword(), Helpers.getCurrentUser().getId());
+        userService.updateCurrentSession();
+        return "redirect:/profile";
+    }
+
+    @RequestMapping(value = "/admin/users/{id}/edit", method = RequestMethod.GET)
+    public String getAdminEditProfile(Model model, @PathVariable(value = "id", required = true) Long id) {
+        User editableUser = userService.getUser(id);
+
+
+        if (!model.containsAttribute("editForm")) {
+            AdminEditProfileForm editProfileForm = new AdminEditProfileForm(editableUser.getId(), editableUser.getLogin(), editableUser.getName(),
+                    editableUser.getSurname(), editableUser.getThirdName(), editableUser.getPhoto(),
+                    editableUser.getPosition().getId(), editableUser.getRole().getId());
+            model.addAttribute("editForm", editProfileForm);
+        }
+        if (!model.containsAttribute("changePasswordForm")) {
+            model.addAttribute("changePasswordForm", new ChangePasswordForm());
+        }
         model.addAttribute("positions", positionService.getAllPositions());
         model.addAttribute("roles", roleService.getAllRoles());
         model.addAttribute("u", Helpers.getCurrentUser());
         return "edit_profile";
     }
 
-    @RequestMapping(value = "/profile/edit", method = RequestMethod.GET)
-    public String getNormalEditProfile(Model model, @ModelAttribute("error") String error,
-                                       @ModelAttribute("editForm") EditProfileForm editProfileForm) {
-        User editableUser = Helpers.getCurrentUser();
-        if (editableUser.getRole().getName().equals("ADMIN")) {
-            return "redirect:/profile/"+ editableUser.getId()+"/edit";
-        }
-        if (error != null && !error.equals("")) {
-            model.addAttribute("error", error);
-        }
-        editProfileForm = new EditProfileForm(editableUser.getId(), editableUser.getLogin(), editableUser.getName(),
-                editableUser.getSurname(), editableUser.getThirdName(), editableUser.getPhoto());
-        model.addAttribute("editForm", editProfileForm);
-        model.addAttribute("editProfileID", editableUser.getId());
-        model.addAttribute("u", Helpers.getCurrentUser());
-        return "edit_profile";
-    }
-
-    @RequestMapping(value = "/edit_profile", method = RequestMethod.POST)
-    public String postEditProfile(Model model, @ModelAttribute("editForm") @Valid EditProfileForm editProfileForm,
-                                  BindingResult bindingResult,
-                                  RedirectAttributes redirectAttributes) {
+    @RequestMapping(value = "/admin/users/{id}/edit_profile", method = RequestMethod.POST)
+    public String postAdminEditProfile(@PathVariable("id") Long id,
+                                       @ModelAttribute("editForm") @Valid AdminEditProfileForm editProfileForm,
+                                       BindingResult bindingResult,
+                                       RedirectAttributes redirectAttributes) {
+        editProfileFormValidator.validate(editProfileForm, bindingResult);
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("error", bindingResult);
-            return "redirect:/profile/edit";
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.editForm", bindingResult);
+            redirectAttributes.addFlashAttribute("editForm", editProfileForm);
+            return "redirect:/admin/users/" + id + "/edit";
         }
-        if (!editProfileForm.getNewPassword().equals(editProfileForm.getNewPasswordConf()) &&
-                !editProfileForm.getNewPassword().equals("")) {
-            redirectAttributes.addFlashAttribute("error", "Введите верное подтверждение нового пароля.");
-            return "redirect:/profile/edit";
-        }
-        if (Helpers.getCurrentUser().getRole().getName().equals("ADMIN")) {
-            userService.adminEditProfileAndSave(userService.getUser(editProfileForm.getId()), editProfileForm);
-            if (Helpers.getCurrentUser().getId().equals( editProfileForm.getId())){
-                userService.updateCurrentSession(editProfileForm.getId());
-            }
 
-            return "redirect:/admin/users";
+        User editableUser = transformer.apply(editProfileForm);
+        userService.updateUser(editableUser);
+
+        if (editProfileForm.getId().equals(Helpers.getCurrentUser().getId())) {
+            userService.updateCurrentSession();
         }
-        User editableUser = Helpers.getCurrentUser();
-        if (!Helpers.getEncoder().matches(editProfileForm.getCurrentPassword(), editableUser.getPassword())) {
-            redirectAttributes.addFlashAttribute("error", "Неверный текущий пароль.");
-            return "redirect:/profile/edit";
-        }
-        userService.normalEditProfileAndSave(editableUser, editProfileForm);
-        userService.updateCurrentSession(editProfileForm.getId());
-        return "redirect:/profile";
+        return "redirect:/admin/users";
     }
 
+
+    @RequestMapping(value = "/admin/users/{id}/change_password", method = RequestMethod.POST)
+    public String changePasswordAdmin(@PathVariable("id") Long id,
+                                      @ModelAttribute("changePasswordForm") @Valid ChangePasswordForm changePasswordForm,
+                                      BindingResult bindingResult,
+                                      RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            BeanPropertyBindingResult result = new BeanPropertyBindingResult(changePasswordForm,bindingResult.getObjectName());
+            for (FieldError error: bindingResult.getFieldErrors()){
+                result.addError(new FieldError(error.getObjectName(),error.getField(),null,error.isBindingFailure(),error.getCodes(),error.getArguments(),error.getDefaultMessage()));
+            }
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.changePasswordForm", result);
+            redirectAttributes.addFlashAttribute("changePasswordForm", new ChangePasswordForm());
+            return "redirect:/admin/users/" + id + "/edit";
+        }
+
+        userService.changePassword(changePasswordForm.getNewPassword(), id);
+        if (id.equals(Helpers.getCurrentUser().getId())) {
+            userService.updateCurrentSession();
+        }
+        return "redirect:/admin/users";
+    }
+
+    @RequestMapping(value = "/admin/users/{id}/delete", method = RequestMethod.GET)
+    public String deleteUser(@PathVariable(value = "id", required = true) Long id) {
+        userService.deleteUser(id);
+        return "redirect:/admin/users";
+    }
 }

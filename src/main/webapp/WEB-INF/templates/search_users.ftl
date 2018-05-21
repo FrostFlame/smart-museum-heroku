@@ -33,7 +33,7 @@
 </form>
 
 <#list users as u>
-<h3><a href="#">${u.fullName}</a></h3>
+<h3><a href="/admin/users/${u.id}">${u.fullName}</a></h3>
 <h3>Role: ${u.role.name}</h3>
 <h3>Position: ${u.position.name}</h3>
 <h3>Login: ${u.login}</h3>
@@ -42,6 +42,16 @@
 <#else>
     <h3>Status: заблокирован</h3>
 </#if>
+<a href="/admin/users/${u.id}/edit">
+    <button type="button" class="btn btn-default">
+        Редактирвоать
+    </button>
+</a>
+<a href="/admin/users/${u.id}/delete">
+    <button type="button" class="btn btn-default">
+        Удалить
+    </button>
+</a>
 <hr>
 <#else>
 Нет пользователей

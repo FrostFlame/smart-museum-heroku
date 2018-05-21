@@ -17,6 +17,7 @@ import ru.kpfu.itis.group11501.smartmuseum.repository.UserRepository;
 import ru.kpfu.itis.group11501.smartmuseum.service.PositionService;
 import ru.kpfu.itis.group11501.smartmuseum.service.RoleService;
 import ru.kpfu.itis.group11501.smartmuseum.service.UserService;
+import ru.kpfu.itis.group11501.smartmuseum.util.AdminEditProfileForm;
 import ru.kpfu.itis.group11501.smartmuseum.util.EditProfileForm;
 import ru.kpfu.itis.group11501.smartmuseum.util.FileUploader;
 import ru.kpfu.itis.group11501.smartmuseum.util.Helpers;
@@ -32,15 +33,14 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private RoleService roleService;
     private PositionService positionService;
-    private FileUploader fileUploader;
+    @Autowired
+    private UserService userService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleService roleService,
-                           PositionService positionService, FileUploader fileUploader) {
+    public UserServiceImpl(UserRepository userRepository, RoleService roleService, PositionService positionService) {
         this.roleService = roleService;
         this.userRepository = userRepository;
         this.positionService = positionService;
-        this.fileUploader = fileUploader;
     }
 
     @Override
@@ -56,6 +56,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Action(name = ActionTypeName.ADD)
     public User addUser(User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
+    @Action(name = ActionTypeName.UPDATE)
+    public User updateUser(User user) {
         return userRepository.save(user);
     }
 
@@ -87,46 +93,9 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
-    public void editCommonInfo(User editableUser, EditProfileForm editProfileForm) {
-        editableUser.setName(editProfileForm.getName());
-        editableUser.setSurname(editProfileForm.getSurname());
-        editableUser.setThirdName(editProfileForm.getThirdName());
-        editableUser.setLogin(editProfileForm.getLogin());
-
-        String name = fileUploader.uploadImage(editProfileForm.getPhotoFile());
-        if (name == null) {
-            System.out.println("Не удалось добавить фото");
-        } else {
-            System.out.println(name);
-            if (fileUploader.deleteImage(editableUser.getPhoto()) == null) {
-                System.out.println("Не удалось удалить фото");
-            } else {
-                System.out.println("Фото удалено");
-            }
-            editableUser.setPhoto(name);
-        }
-        if (!(editProfileForm.getNewPassword().equals("") && editProfileForm.getNewPasswordConf().equals(""))) {
-            editableUser.setPassword(Helpers.getEncoder().encode(editProfileForm.getNewPassword()));
-        }
-    }
-
     @Override
-    public void normalEditProfileAndSave(User editableUser, EditProfileForm editProfileForm) {
-        editCommonInfo(editableUser, editProfileForm);
-        addUser(editableUser);
-    }
-
-    @Override
-    public void adminEditProfileAndSave(User editableUser, EditProfileForm editProfileForm) {
-        editCommonInfo(editableUser, editProfileForm);
-        editableUser.setPosition(positionService.getPosition(editProfileForm.getPosition()));
-        editableUser.setRole(roleService.getRole(editProfileForm.getRole()));
-        addUser(editableUser);
-    }
-
-    @Override
-    public void updateCurrentSession(Long id) {
-        UserDetails userDetails = this.getUser(id);
+    public void updateCurrentSession() {
+        UserDetails userDetails = this.getUser(Helpers.getCurrentUser().getId());
         SecurityContext securityContext = SecurityContextHolder.getContext();
         securityContext.setAuthentication(new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()));
     }
@@ -151,5 +120,18 @@ public class UserServiceImpl implements UserService {
         blockedUser.setStatus(false);
 
         addUser(blockedUser);
+    }
+
+    @Override
+    public void changePassword(String newPassword, Long id) {
+        User editableUser = getUser(id);
+        editableUser.setPassword(Helpers.getEncoder().encode(newPassword));
+        userService.updateUser(editableUser);
+    }
+
+    @Override
+    @Action(name = ActionTypeName.DELETE)
+    public void deleteUser(Long id) {
+        userRepository.delete(id);
     }
 }

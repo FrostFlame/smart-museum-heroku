@@ -110,9 +110,11 @@ public class FileUploader {
     }
 
     private String deleteFile(String name, String path) {
+        if (name == null || name.equals("")) return null;
         try {
             FileUtils.forceDelete(FileUtils.getFile(path, name));
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return null;
         }
         return "";

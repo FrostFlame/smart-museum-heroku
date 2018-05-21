@@ -21,17 +21,18 @@ public interface UserService {
     @Action(name = ActionTypeName.ADD)
     User addUser(User user);
 
+    @Action(name = ActionTypeName.UPDATE)
+    User updateUser(User user);
+
     List<User> getUsersByParameters(String searchField, String role, String position, String status);
 
     List<User> getAllUsers();
 
-    void normalEditProfileAndSave(User editableUser, EditProfileForm editProfileForm);
-
-    void adminEditProfileAndSave(User editableUser, EditProfileForm editProfileForm);
-
-
-    void updateCurrentSession(Long id);
+    void updateCurrentSession();
 
     void blockUser(long id, double blockTime);
 
+    void changePassword(String newPassword, Long id);
+
+    void deleteUser(Long id);
 }
