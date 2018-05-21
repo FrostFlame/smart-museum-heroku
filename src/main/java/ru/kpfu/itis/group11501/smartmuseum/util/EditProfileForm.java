@@ -1,6 +1,6 @@
 package ru.kpfu.itis.group11501.smartmuseum.util;
 
-import javafx.geometry.Pos;
+//import javafx.geometry.Pos;
 import org.springframework.web.multipart.MultipartFile;
 import ru.kpfu.itis.group11501.smartmuseum.model.Position;
 import ru.kpfu.itis.group11501.smartmuseum.model.Role;
