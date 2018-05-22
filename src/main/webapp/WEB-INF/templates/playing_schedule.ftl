@@ -25,7 +25,7 @@
                     <form class="schedule-form" action="/playing_schedule/${exposition.id}" method="get">
                         <div class="row">
                             <div class="col-md-3 col-xs-3">
-                                <select class="form-control selectpicker" id="projectorsId" name="projectors_id">
+                                <select multiple class="form-control selectpicker" id="projectorsId" name="projectors_id">
                                     <option value="" selected disabled>Проектор</option>
                                     <#list projectors as p>
                                         <option value="${p.id}">${p.name}</option>
@@ -33,7 +33,7 @@
                                 </select>
                             </div>
                             <div class="col-md-3 col-xs-3">
-                                <select class="form-control selectpicker" id="weekDaysId" name="weekDays_id">
+                                <select multiple class="form-control selectpicker" id="weekDaysId" name="weekDays_id">
                                     <option value="" selected disabled>День недели</option>
                                     <#list weekDays as w>
                                         <option value="${w.id}">${w.name}</option>
@@ -41,7 +41,7 @@
                                 </select>
                             </div>
                             <div class="col-md-3 col-xs-3">
-                                <select class="form-control selectpicker">
+                                <select class="form-control selectpicker" id="sort" name="sort">
                                     <option value="" selected disabled>Сортировка по</option>
                                     <#if  (sort!"") = "projectors" >
                                         <option  value="projectors">Проекторы</option>
@@ -63,9 +63,7 @@
             <div class="panel panel-default" id="active-tasks-panel">
                 <div class="panel-heading">Активные задачи</div>
                 <div class="panel-body">
-                    <form action="/playing_schedule/${exposition.id}/add" method="get">
-                        <button class="btn btn-default" type="submit">Добавить задачу</button>
-                    </form>
+                    <button href="/playing_schedule/${exposition.id}/add" class="btn btn-default" type="submit">Добавить задачу</button>
                 </div>
                 <#if playingSchedule?has_content>
                     <div class="panel-body">

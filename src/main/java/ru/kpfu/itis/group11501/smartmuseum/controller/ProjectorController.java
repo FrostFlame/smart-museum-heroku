@@ -118,12 +118,11 @@ public class ProjectorController {
                                   HttpServletRequest request){
         Projector projector = projectorService.getOneById(id);
         if (projector.getStatus() == 'F'){
-            projector.setStatus('D');
+            projectorService.turnOff(id);
         }
         else {
-            projector.setStatus('F');
+            projectorService.projectorFault(id);
         }
-        projectorService.add(projector);
         return "redirect:" + request.getHeader("Referer");
     }
 }

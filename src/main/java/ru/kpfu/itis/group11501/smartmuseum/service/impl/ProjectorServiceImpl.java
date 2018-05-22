@@ -31,7 +31,7 @@ public class ProjectorServiceImpl implements ProjectorService {
     }
 
     @Override
-    public Projector getOneById(Long projectorId){
+    public Projector getOneById(Long projectorId) {
         return projectorRepository.findOne(projectorId);
     }
 
@@ -61,18 +61,22 @@ public class ProjectorServiceImpl implements ProjectorService {
     @Override
     @Action(name = ActionTypeName.TURNOFF)
     public void turnOff(Long id) {
-        projectorRepository.changeStatus(id, 'D');
         Projector projector = getOneById(id);
-        projector.setSumTime(projectorStatisticService.addEndDate(projector));
+        if (projector.getStatus() == 'E') {
+            projector.setSumTime(projectorStatisticService.addEndDate(projector));
+        }
+        projector.setStatus('D');
         projectorRepository.save(projector);
     }
 
     @Override
     @Action(name = ActionTypeName.FAULT)
     public void projectorFault(Long id) {
-        projectorRepository.changeStatus(id, 'F');
         Projector projector = getOneById(id);
-        projector.setSumTime(projectorStatisticService.addEndDate(projector));
+        if (projector.getStatus() == 'E') {
+            projector.setSumTime(projectorStatisticService.addEndDate(projector));
+        }
+        projector.setStatus('F');
         projectorRepository.save(projector);
     }
 
