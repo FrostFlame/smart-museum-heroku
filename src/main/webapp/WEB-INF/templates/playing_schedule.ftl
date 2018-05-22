@@ -62,9 +62,11 @@
             </#if>
             <div class="panel panel-default" id="active-tasks-panel">
                 <div class="panel-heading">Активные задачи</div>
+                <@security.authorize access="hasRole('ADMIN')">
                 <div class="panel-body">
-                    <button href="/playing_schedule/${exposition.id}/add" class="btn btn-default" type="submit">Добавить задачу</button>
+                    <a href="/playing_schedule/${exposition.id}/add" class="btn btn-default" type="submit">Добавить задачу</a>
                 </div>
+                </@security.authorize>
                 <#if playingSchedule?has_content>
                     <div class="panel-body">
                         <div class="row" align="center">
@@ -72,7 +74,9 @@
                             <div class="col-md-2 col-xs-2"><b>День недели</b></div>
                             <div class="col-md-3 col-xs-3"><b>Время включения</b></div>
                             <div class="col-md-3 col-xs-3"><b>Время выключения</b></div>
+                            <@security.authorize access="hasRole('ADMIN')">
                             <div class="col-md-2 col-xs-2"><b>Удаление</b></div>
+                            </@security.authorize>
                         </div>
                     </div>
                     <#list playingSchedule as p>
@@ -82,11 +86,13 @@
                                 <div class="col-md-2 col-xs-2">${p.weekDay.name}</div>
                                 <div class="col-md-3 col-xs-3">${p.beginTime}</div>
                                 <div class="col-md-3 col-xs-3">${p.endTime}</div>
+                                <@security.authorize access="hasRole('ADMIN')">
                                 <div class="col-md-2 col-xs-2">
                                     <form class="delete-task-button" action="/playing_schedule/${exposition.id}/delete?id=${p.id}&page=${page}" method="post">
                                         <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-trash"></span> Удалить</button>
                                     </form>
                                 </div>
+                                </@security.authorize>
                             </div>
                         </div>
                     </#list>

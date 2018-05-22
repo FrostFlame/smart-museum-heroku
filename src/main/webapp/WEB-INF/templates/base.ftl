@@ -1,3 +1,4 @@
+<#assign security=JspTaglibs["http://www.springframework.org/security/tags"] />
 <!doctype html>
 <html lang="en">
 <head>
@@ -33,6 +34,9 @@
             <li><a href="/projector/all"><span class="glyphicon glyphicon-blackboard"></span> Проекторы</a></li>
             <li id="schedule"><a href="/playing_schedule"><span class="glyphicon glyphicon-calendar"></span> Расписание</a></li>
             <li><a href="/admin/users"><span class="glyphicon glyphicon-list-alt"></span> Пользователи</a></li>
+            <@security.authorize access="hasRole('ADMIN')">
+            <li><a href="/user_statistic"><span class="glyphicon glyphicon-list-alt"></span> Статистика</a></li>
+            </@security.authorize>
             <li><a href="/profile"><span class="glyphicon glyphicon-user"></span> <b>Личный кабинет</b></a></li>
         </ul>
     </div>

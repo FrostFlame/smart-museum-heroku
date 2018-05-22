@@ -10,6 +10,7 @@
             <b style="color: red">Error: ${error}</b>
         </#if>
     </div>
+    <@security.authorize access="hasRole('ADMIN')">
     <div class="col-md-1 col-xs-1">
         <div class="btn-group">
             <a href="/videos/new_video">
@@ -19,6 +20,7 @@
             </a>
         </div>
     </div>
+    </@security.authorize>
 </div>
 <div class="col-md-12 col-xs-12">
     <form role="search" method="GET" action="/videos">
@@ -38,7 +40,9 @@
         <tr>
             <th>Название</th>
             <th></th>
+            <@security.authorize access="hasAnyRole('MANAGER','ADMIN')">
             <th>Удаление</th>
+            </@security.authorize>
         </tr>
         </thead>
         <tbody>
@@ -47,12 +51,14 @@
                 <td>${v.name}</td>
                 <td>
                 </td>
+                <@security.authorize access="hasAnyRole('MANAGER','ADMIN')">
                 <td>
                     <a class="btn btn-danger" href="#ModalDelete1" data-toggle="modal" onclick="addId(${v.id})"><span
                             class="glyphicon glyphicon-remove"></span>
                         Удалить
                     </a>
                 </td>
+                </@security.authorize>
             </tr>
             <#else>
             Видео не найдено

@@ -34,13 +34,16 @@ ${projector.getName()}<br>
 <#if projectorVideos?has_content>
     <#list projectorVideos as projectorVideo>
     ${projectorVideo.getVideo().getName()}
-    <form action="/projector/${projector.id}/modifyVideo?video_id=${projectorVideo.video.id}" method="post">
-        <input type="text"  id="num" name="num" value="${projectorVideo.num}" />
-        <input type="submit"  value="Изменить" />
-    </form>
-    <form action="/projector/${projector.id}/deleteVideo?video_id=${projectorVideo.video.id}" method="post">
-        <input type="submit"  value="Удалить" />
-    </form>
+        <@security.authorize access="hasAnyRole('MANAGER','ADMIN')">
+            <form action="/projector/${projector.id}/modifyVideo?video_id=${projectorVideo.video.id}" method="post">
+                <input type="text"  id="num" name="num" value="${projectorVideo.num}" />
+                <input type="submit"  value="Изменить" />
+            </form>
+
+            <form action="/projector/${projector.id}/deleteVideo?video_id=${projectorVideo.video.id}" method="post">
+                <input type="submit"  value="Удалить" />
+            </form>
+        </@security.authorize>
     <br/>
     </#list>
 <#else>
