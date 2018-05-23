@@ -1,6 +1,6 @@
 package ru.kpfu.itis.group11501.smartmuseum.service.impl;
 
-import javafx.util.Pair;
+//import javafx.util.Pair;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -159,7 +159,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public Pair<User, String> registerNewUserAccount(UserDto accountDto) {
+    public AbstractMap.SimpleEntry<User, String> registerNewUserAccount(UserDto accountDto) {
 //            throws EmailExistsException {
 
         if (emailExist(accountDto.getLogin())) {
@@ -176,7 +176,7 @@ public class UserServiceImpl implements UserService {
         String password = generatePassword();
         user.setPassword(passwordEncoder.encode(password));
         user.setPosition(positionService.getPosition(accountDto.getPosition()));
-        return new Pair<User, String>(userRepository.save(user), password);
+        return new AbstractMap.SimpleEntry<User, String>(userRepository.save(user), password);
     }
 
     String generatePassword(){

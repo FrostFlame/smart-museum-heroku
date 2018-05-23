@@ -1,6 +1,5 @@
 package ru.kpfu.itis.group11501.smartmuseum.controller;
 
-import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -25,6 +24,7 @@ import ru.kpfu.itis.group11501.smartmuseum.util.Helpers;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.List;
 
@@ -70,7 +70,7 @@ public class UserController {
             (@ModelAttribute("user") @Valid UserDto accountDto,
              BindingResult result, WebRequest request, Errors errors) throws NoSuchFieldException {
         User registered = new User();
-        Pair<User, String> pair = null;
+        AbstractMap.SimpleEntry<User, String> pair = null;
         String passwd = "";
         if (!result.hasErrors()) {
             pair = createUserAccount(accountDto, result);
@@ -88,8 +88,8 @@ public class UserController {
         }
     }
 
-    private Pair<User, String> createUserAccount(UserDto accountDto, BindingResult result) {
-        Pair<User, String> registered = null;
+    private AbstractMap.SimpleEntry<User, String> createUserAccount(UserDto accountDto, BindingResult result) {
+        AbstractMap.SimpleEntry<User, String> registered = null;
 //        try {
             registered = userService.registerNewUserAccount(accountDto);
 //        } catch (EmailExistsException e) {
