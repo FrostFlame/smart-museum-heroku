@@ -1,5 +1,7 @@
 package ru.kpfu.itis.group11501.smartmuseum.service.impl;
 
+import javafx.util.Pair;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
@@ -8,9 +10,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kpfu.itis.group11501.smartmuseum.model.Position;
 import ru.kpfu.itis.group11501.smartmuseum.model.Role;
 import ru.kpfu.itis.group11501.smartmuseum.model.User;
+import ru.kpfu.itis.group11501.smartmuseum.model.UserDto;
 import ru.kpfu.itis.group11501.smartmuseum.model.annotation.Action;
 import ru.kpfu.itis.group11501.smartmuseum.model.enums.ActionTypeName;
 import ru.kpfu.itis.group11501.smartmuseum.repository.UserRepository;
@@ -33,6 +37,7 @@ public class UserServiceImpl implements UserService {
     private RoleService roleService;
     private PositionService positionService;
     private FileUploader fileUploader;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, RoleService roleService,
@@ -41,6 +46,7 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
         this.positionService = positionService;
         this.fileUploader = fileUploader;
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     @Override
@@ -134,13 +140,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void blockUser(long id, double blockTime) {
         Calendar calendar = Calendar.getInstance();
-        if (blockTime < 1){
+        if (blockTime < 1) {
             calendar.add(Calendar.MINUTE, (int) (blockTime * 60));
-        }
-        else if (blockTime <= 24){
+        } else if (blockTime <= 24) {
             calendar.add(Calendar.HOUR_OF_DAY, (int) blockTime);
-        }
-        else {
+        } else {
             calendar.add(Calendar.YEAR, 1000);
         }
 
@@ -151,5 +155,39 @@ public class UserServiceImpl implements UserService {
         blockedUser.setStatus(false);
 
         addUser(blockedUser);
+    }
+
+    @Transactional
+    @Override
+    public Pair<User, String> registerNewUserAccount(UserDto accountDto) {
+//            throws EmailExistsException {
+
+        if (emailExist(accountDto.getLogin())) {
+//            throw new EmailExistsException(
+//                    "There is an account with that email address:  + accountDto.getEmail());
+            return null;
+        }
+        User user = new User();
+        user.setName(accountDto.getName());
+        user.setSurname(accountDto.getSurName());
+        user.setThirdName(accountDto.getThirdName());
+        user.setLogin(accountDto.getLogin());
+        user.setRole(roleService.getRole("NORMAL"));
+        String password = generatePassword();
+        user.setPassword(passwordEncoder.encode(password));
+        user.setPosition(positionService.getPosition(accountDto.getPosition()));
+        return new Pair<User, String>(userRepository.save(user), password);
+    }
+
+    String generatePassword(){
+        return RandomStringUtils.randomAlphanumeric(7);
+    }
+
+    private boolean emailExist(String email) {
+        User user = userRepository.findOneByLogin(email);
+        if (user != null) {
+            return true;
+        }
+        return false;
     }
 }
