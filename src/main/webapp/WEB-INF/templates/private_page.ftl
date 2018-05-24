@@ -14,7 +14,7 @@
     <div class="btn-group">
         <a href="/profile/edit">
             <button type="button" class="btn btn-default">
-                Редактирвоать профиль
+                Редактировать профиль
             </button>
         </a>
     </div>
