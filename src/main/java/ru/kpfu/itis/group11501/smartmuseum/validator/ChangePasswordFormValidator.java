@@ -21,7 +21,7 @@ public class ChangePasswordFormValidator implements Validator {
         ChangePasswordForm form = (ChangePasswordForm) target;
         if (errors.hasErrors()) return;
         if(!Helpers.getEncoder().matches(form.getCurrentPassword(), Helpers.getCurrentUser().getPassword()))
-            errors.rejectValue("currentPassword","passwordWrong","Не верный пароль");
+            errors.rejectValue("currentPassword","passwordWrong","Неверный пароль");
         if(!form.getNewPassword().equals(form.getNewPasswordConf()))
             errors.rejectValue("newPasswordConf","passwordsNotEquals","Пароли не совпадают");
     }
