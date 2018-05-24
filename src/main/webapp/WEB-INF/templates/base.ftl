@@ -8,13 +8,15 @@
     <link rel="stylesheet" href="/css/common.css">
     <link rel="stylesheet" href="/css/expositions.css">
     <link rel="stylesheet" href="/resources/static/css/schedule.css">
+    <link rel="stylesheet" href="/resources/static/css/edit_profile.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-formhelpers/2.3.0/css/bootstrap-formhelpers.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="http://bootstraptema.ru/plugins/2015/b-multiselect/bootstrap-multiselect.css"
           type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script type="text/javascript"
             src="http://bootstraptema.ru/plugins/2015/b-multiselect/bootstrap-multiselect.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-formhelpers/2.3.0/js/bootstrap-formhelpers.js"></script>
@@ -37,7 +39,7 @@
             <@security.authorize access="hasRole('ADMIN')">
             <li><a href="/user_statistic"><span class="glyphicon glyphicon-list-alt"></span> Статистика</a></li>
             </@security.authorize>
-            <li><a href="/profile"><span class="glyphicon glyphicon-user"></span> <b>Личный кабинет</b></a></li>
+            <li id="profile"><a href="/profile"><span class="glyphicon glyphicon-user"></span> <b>Личный кабинет</b></a></li>
         </ul>
     </div>
 <@content/>
