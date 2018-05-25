@@ -98,12 +98,12 @@
                     <div class="text-center">
                         <ul class = "pagination justify-content-center">
                             <li class="page-item <#if page == 0>disabled</#if>">
-                                <a class="page-link" href="<#if page == 0>#<#else>/playing_schedule/${exposition.id}/goToAnotherPage?page=0</#if>">
+                                <a class="page-link" <#if page != 0>href="/playing_schedule/${exposition.id}/goToAnotherPage?page=0"</#if>>
                                     Первая
                                 </a>
                             </li>
                             <li class="page-item <#if (page-1) lt 0>disabled</#if>">
-                                <a class="page-link" href="<#if (page-1) lt 0>#<#else>/playing_schedule/${exposition.id}/goToAnotherPage?page=${page-1}</#if>" aria-label="Предыдущая">
+                                <a class="page-link" <#if (page-1) gte 0>href="/playing_schedule/${exposition.id}/goToAnotherPage?page=${page-1}"</#if> aria-label="Предыдущая">
                                     <span aria-hidden="true">«</span>
                                     <span class="sr-only">Предыдущая</span>
                                 </a>
@@ -115,13 +115,13 @@
                                 </li>
                             </#list>
                             <li class="page-item  <#if (page+1) gt lastPage>disabled</#if>">
-                                <a class="page-link" href="<#if (page+1) gt lastPage>#<#else>/playing_schedule/${exposition.id}/goToAnotherPage?page=${page+1}</#if>" aria-label="Следующая">
+                                <a class="page-link" <#if (page+1) lte lastPage>href="/playing_schedule/${exposition.id}/goToAnotherPage?page=${page+1}"</#if> aria-label="Следующая">
                                     <span aria-hidden="true">»</span>
                                     <span class="sr-only">Следующая</span>
                                 </a>
                             </li>
                             <li class="page-item <#if page == lastPage>disabled</#if>">
-                                <a class="page-link" href="<#if page == lastPage>#<#else>/playing_schedule/${exposition.id}/goToAnotherPage?page=${lastPage}</#if>">
+                                <a class="page-link" <#if page != lastPage>href="/playing_schedule/${exposition.id}/goToAnotherPage?page=${lastPage}"</#if>>
                                     Последняя
                                 </a>
                             </li>
