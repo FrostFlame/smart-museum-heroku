@@ -19,4 +19,6 @@ public interface ProjectorRepository  extends JpaRepository<Projector, Long> {
     @Modifying
     @Query("update Projector set status=:status where id=:id")
     void changeStatus(@Param("id") Long id, @Param("status") Character status);
+
+    Projector findOneByName(String name);
 }

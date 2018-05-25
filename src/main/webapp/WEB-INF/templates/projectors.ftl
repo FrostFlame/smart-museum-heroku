@@ -6,7 +6,11 @@
 <#assign sf=JspTaglibs["http://www.springframework.org/tags/form"]>
 <#assign c=JspTaglibs["http://www.springframework.org/security/tags"]>
 <@sf.form action="/projector/create" method="post" modelAttribute="projectorForm">
-    <@sf.input path="name" type="text" placeholder="Введите название"/>
+    <@sf.input path="name" type="text" placeholder="Введите название" required="true"/>
+    <#if error?has_content>
+    <b style="color: red">Error: ${error}</b>
+    <br/>
+    </#if>
     <@sf.errors path="name" cssClass="help-block"/>
 <input type="submit" value="Создать">
 </@sf.form>

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.kpfu.itis.group11501.smartmuseum.model.Projector;
 import ru.kpfu.itis.group11501.smartmuseum.model.ProjectorStatistic;
 import ru.kpfu.itis.group11501.smartmuseum.model.ProjectorsVideos;
@@ -38,9 +39,11 @@ public class ProjectorController {
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String addProjector(@ModelAttribute("projectorForm") @Valid ProjectorAddForm form,
-                               BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "redirect:/";
+                               BindingResult bindingResult,
+                               RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors() || projectorService.findOneByName(form.getName()) != null) {
+            redirectAttributes.addAttribute("error", "Неправильное название");
+            return "redirect:/projector/all";
         }
         Projector projector = new Projector();
         projector.setName(form.getName());
@@ -51,7 +54,10 @@ public class ProjectorController {
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public String allProjectors(Model model) {
+    public String allProjectors(Model model,@RequestParam(value = "error", required = false) String error) {
+        if (error != null) {
+            model.addAttribute("error", error);
+        }
         List<Projector> projectors = projectorService.getAllProjectors();
         model.addAttribute("projectors", projectors);
         model.addAttribute("projectorForm", new ProjectorAddForm());

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="210420182211_1" author="volkov">
+        <addUniqueConstraint tableName="videos" columnNames="name"/>
+    </changeSet>
+    <changeSet id="210420182211_2" author="volkov">
+        <addUniqueConstraint tableName="projectors" columnNames="name"/>
+    </changeSet>
+    <changeSet id="210420182211_3" author="volkov">
+        <addUniqueConstraint tableName="expositions" columnNames="name"/>
+    </changeSet>
+</databaseChangeLog>

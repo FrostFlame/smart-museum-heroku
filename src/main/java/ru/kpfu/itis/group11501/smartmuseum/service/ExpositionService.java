@@ -29,4 +29,6 @@ public interface ExpositionService {
 
     @Action(name = ActionTypeName.DELETE)
     void deleteExposition(Long id);
+
+    Exposition findOneByName(String name);
 }

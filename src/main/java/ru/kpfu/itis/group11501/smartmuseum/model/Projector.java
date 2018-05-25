@@ -36,7 +36,7 @@ public class Projector implements GettingId {
     public Projector() {
     }
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false)

@@ -10,4 +10,6 @@ import ru.kpfu.itis.group11501.smartmuseum.model.Exposition;
 public interface ExpositionRepository extends JpaRepository<Exposition, Long> {
     @Query("select e from Exposition as e where e.id = (select min(e2.id) from Exposition e2 ) ")
     Exposition getFirstExposition();
+
+    Exposition findOneByName(String name);
 }

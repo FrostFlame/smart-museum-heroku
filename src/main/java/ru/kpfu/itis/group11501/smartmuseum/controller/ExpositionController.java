@@ -3,6 +3,7 @@ package ru.kpfu.itis.group11501.smartmuseum.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.kpfu.itis.group11501.smartmuseum.model.Exposition;
@@ -84,14 +85,26 @@ public class ExpositionController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public String getAddExpositionPage(Model model) {
+    public String getAddExpositionPage(Model model,@RequestParam(value = "error", required = false) String error) {
+        if (error != null) {
+            model.addAttribute("error", error);
+        }
         model.addAttribute("form", new ExpositionForm());
         model.addAttribute("projectors", projectorService.getFreeProjectors());
         return "add_exposition";
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String addExposition(@ModelAttribute("form") @Valid ExpositionForm expositionForm) {
+    public String addExposition(@ModelAttribute("form") @Valid ExpositionForm expositionForm,
+                                BindingResult bindingResult,
+                                RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors() || expositionService.findOneByName(expositionForm.getName()) != null) {
+            redirectAttributes.addAttribute("error", "Неправильное название");
+            if (bindingResult.hasFieldErrors("projectorsId")){
+                redirectAttributes.addAttribute("error", "Выберите проектор");
+            }
+            return "redirect:/expositions/add";
+        }
         Exposition exposition = expositionService.save(expositionForm.getName(), expositionForm.getProjectorsId());
         return "redirect:/expositions/" + exposition.getId();
     }
