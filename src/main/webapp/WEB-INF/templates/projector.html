@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Проектор</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../resources/static/css/common.css">
+    <link rel="stylesheet" href="../../resources/static/css/expositions.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="header-smart col-xs-12">
+            <h1>Smart museum</h1>
+        </div>
+    </div>
+    <div class="row" role="main">
+        <div class="col-xs-12 col-md-12">
+            <ul class="nav nav-tabs">
+                <li><a href="#"><span class="glyphicon glyphicon-home"></span> Главная</a></li>
+                <li><a href="/expositions"><span class="glyphicon glyphicon-th"></span> Экспозиции</a>
+                </li>
+                <li><a href="/videos"><span class="glyphicon glyphicon-film"></span> Видео</a></li>
+                <li class="active"><a href="/projector/all"><span class="glyphicon glyphicon-blackboard"></span>
+                    Проекторы</a></li>
+                <li><a href="/admin/users/"><span class="glyphicon glyphicon-list-alt"></span> Пользователи</a></li>
+                <li><a href="#"><span class="glyphicon glyphicon-user"></span> <b>Личный кабинет</b></a></li>
+            </ul>
+        </div>
+        <div class="page-header col-md-12 col-xs-12">
+            <div class="col-md-10 col-xs-10">
+                <h2><b>Название проектора</b></h2>
+            </div>
+            <div class="col-md-1 col-xs-1">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default">
+                        Назад
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-xs-12">
+            <div class="row">
+                <div class="col-xs-12 col-sm-4 text">
+                    <h4><b>Статус</b></h4>
+                    <p>
+                    <div class="btn-group" data-toggle="buttons">
+                        <label class="btn  btn-default active">
+                            <input type="radio" name="options" autocomplete="off" checked> Вкл
+                        </label>
+                        <label class="btn  btn-default">
+                            <input type="radio" name="options" autocomplete="off"> Выкл
+                        </label>
+                    </div>
+                    </p>
+                </div>
+                <div class="col-xs-12 col-sm-4 text">
+                    <h4><b>Время работы</b></h4>
+                    <p>
+                        <b>120</b> ч <b>15</b> мин <b>44</b> с
+                    </p>
+                </div>
+                <div class="col-xs-12 col-sm-4 text">
+                    <h4><b>Исправность</b></h4>
+                    <p>
+                        <button type="button" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span>
+                            Исправен
+                        </button>
+                        <!-- Для неисправного
+                            <button type="button" class="btn btn-warning"><span class="glyphicon glyphicon-exclamation-sign"></span>
+                                Неисправен
+                            </button>
+                        -->
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <h3>Список видеоклипов</h3>
+                <!--
+                <div class="list-group">
+                    <a class="list-group-item list-group-item-action">Нет видеоклипов, прикрепленных к проектору</a>
+                </div>
+                -->
+                <div class="list-group">
+                    <a class="list-group-item list-group-item-action">Видео 1</a>
+                    <a class="list-group-item list-group-item-action">Видео 2</a>
+                    <a class="list-group-item list-group-item-action">Видео 3</a>
+                    <a class="list-group-item list-group-item-action">Видео 4</a>
+                    <a class="list-group-item list-group-item-action">Видео 5</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>
