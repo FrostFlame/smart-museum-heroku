@@ -43,14 +43,30 @@ public class UserServiceImpl implements UserService {
         this.positionService = positionService;
     }
 
+    private User updateIfBlockDate(User user) {
+        if (user.getBlockDate() != null && user.getBlockDate().compareTo(new Date()) < 0) {
+            user.setStatus(true);
+            user.setBlockDate(null);
+            userRepository.save(user);
+        }
+        return user;
+    }
+
+    private List<User> updateAllIfBlockDate(List<User> users) {
+        for (User user : users) {
+            updateIfBlockDate(user);
+        }
+        return users;
+    }
+
     @Override
     public User getUser(String login) {
-        return userRepository.findOneByLogin(login);
+        return updateIfBlockDate(userRepository.findOneByLogin(login));
     }
 
     @Override
     public User getUser(Long id) {
-        return userRepository.findOneById(id);
+        return updateIfBlockDate(userRepository.findOneById(id));
     }
 
     @Override
@@ -70,7 +86,6 @@ public class UserServiceImpl implements UserService {
         Collection<Role> roles = new ArrayList<>();
         Collection<Position> positions = new ArrayList<>();
         Collection<Boolean> statuses = new ArrayList<>(Arrays.asList(Boolean.TRUE, Boolean.FALSE));
-        Set<User> resultUsers = new HashSet<>();
         if (role.equals("all")) {
             roles.addAll(roleService.getAllRoles());
         } else {
@@ -84,13 +99,14 @@ public class UserServiceImpl implements UserService {
         if (!status.equals("all")) {
             statuses.remove(!Boolean.valueOf(status));
         }
-        System.out.println(searchField);
-        return userRepository.getFilterUsers(roles, positions, statuses, "%" + searchField.toLowerCase() + "%");
+        List<User> users = userRepository.getFilterUsers(roles, positions, statuses, "%" + searchField.toLowerCase() + "%");
+        return updateAllIfBlockDate(users);
     }
 
     @Override
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        List<User> users = userRepository.findAll();
+        return updateAllIfBlockDate(users);
     }
 
     @Override
@@ -133,5 +149,13 @@ public class UserServiceImpl implements UserService {
     @Action(name = ActionTypeName.DELETE)
     public void deleteUser(Long id) {
         userRepository.delete(id);
+    }
+
+    @Override
+    public void unblockUser(Long id) {
+        User user = userRepository.findOneById(id);
+        user.setBlockDate(null);
+        user.setStatus(true);
+        userRepository.save(user);
     }
 }

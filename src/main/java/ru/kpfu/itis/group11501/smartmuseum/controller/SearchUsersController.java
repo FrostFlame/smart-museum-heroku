@@ -64,17 +64,7 @@ public class SearchUsersController {
         return "search_users";
     }
 
-    @RequestMapping(value = "/profile/{id}/block", method = RequestMethod.GET)
-    public String getBlockUser(Model model, @PathVariable("id") Long id,
-                               @ModelAttribute("error") String error) throws IOException, TemplateException {
-        if (error != null && !error.equals("")) {
-            model.addAttribute("error", error);
-        }
-        model.addAttribute("userBlockForm", new UserBlockForm(id));
-        return "block_user";
-    }
-
-    @RequestMapping(value = "/profile/block", method = RequestMethod.POST)
+    @RequestMapping(value = "/block", method = RequestMethod.POST)
     public String postBlockUser(Model model, @ModelAttribute("userBlockForm") @Valid UserBlockForm userBlockForm,
                                 BindingResult bindingResult,
                                 RedirectAttributes redirectAttributes){
@@ -85,4 +75,11 @@ public class SearchUsersController {
         userService.blockUser(userBlockForm.getUserID(), userBlockForm.getBlockDate());
         return "redirect:/admin/users";
     }
+
+    @RequestMapping(value = "/{id}/unblock", method = RequestMethod.POST)
+    public String postUnblockUser(@PathVariable Long id){
+        userService.unblockUser(id);
+        return "redirect:/admin/users";
+    }
+
 }
