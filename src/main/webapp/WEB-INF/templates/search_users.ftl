@@ -44,7 +44,7 @@
 </#if>
 <a href="/admin/users/${u.id}/edit">
     <button type="button" class="btn btn-default">
-        Редактирвоать
+        Редактировать
     </button>
 </a>
 <a href="/admin/users/${u.id}/delete">
