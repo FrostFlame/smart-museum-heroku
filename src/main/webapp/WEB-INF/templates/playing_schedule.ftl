@@ -1,7 +1,6 @@
 <#include "base.ftl">
 <#macro title>Расписание</#macro>
 <#macro content>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
 <div class="row" id="schedule-content">
     <div class="col-xs-3 col-md-3">
         <div class="panel panel-default">
@@ -59,7 +58,7 @@
                     </form>
                 </div>
             </div>
-            </#if>
+
             <div class="panel panel-default" id="active-tasks-panel">
                 <div class="panel-heading">Активные задачи</div>
                 <@security.authorize access="hasRole('ADMIN')">
@@ -96,139 +95,51 @@
                             </div>
                         </div>
                     </#list>
+                    <div class="text-center">
+                        <ul class = "pagination justify-content-center">
+                            <li class="page-item <#if page == 0>disabled</#if>">
+                                <a class="page-link" href="<#if page == 0>#<#else>/playing_schedule/${exposition.id}/goToAnotherPage?page=0</#if>">
+                                    Первая
+                                </a>
+                            </li>
+                            <li class="page-item <#if (page-1) lt 0>disabled</#if>">
+                                <a class="page-link" href="<#if (page-1) lt 0>#<#else>/playing_schedule/${exposition.id}/goToAnotherPage?page=${page-1}</#if>" aria-label="Предыдущая">
+                                    <span aria-hidden="true">«</span>
+                                    <span class="sr-only">Предыдущая</span>
+                                </a>
+                            </li>
+
+                            <#list pages as p>
+                                <li class="page-item <#if page == p>active</#if>">
+                                    <a class="page-link"  href="/playing_schedule/${exposition.id}/goToAnotherPage?page=${p}">${p}</a>
+                                </li>
+                            </#list>
+                            <li class="page-item  <#if (page+1) gt lastPage>disabled</#if>">
+                                <a class="page-link" href="<#if (page+1) gt lastPage>#<#else>/playing_schedule/${exposition.id}/goToAnotherPage?page=${page+1}</#if>" aria-label="Следующая">
+                                    <span aria-hidden="true">»</span>
+                                    <span class="sr-only">Следующая</span>
+                                </a>
+                            </li>
+                            <li class="page-item <#if page == lastPage>disabled</#if>">
+                                <a class="page-link" href="<#if page == lastPage>#<#else>/playing_schedule/${exposition.id}/goToAnotherPage?page=${lastPage}</#if>">
+                                    Последняя
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 <#else>
                     <div class="panel-body">
                         <p>Нет активных задач</p>
                     </div>
                 </#if>
             </div>
+            <#else>
+            <h3><a href="/expositions/${exposition.id}/edit">Добавьте проекторы в эксозицию</a></h3>
+            </#if>
         </div>
     </div>
 </div>
-</html>
 </#macro>
-
-
-<#--<#if error?has_content>-->
-<#--<b style="color: red">Error: ${error}</b><br/>-->
-<#--<#else>-->
-    <#--<#if expositions?has_content>-->
-    <#--<b>Экспозиции</b><br>-->
-    <#--<#list expositions as e>-->
-    <#--<b><a href="/playing_schedule/${e.id}">${e.name}</a></b>-->
-    <#--<br>-->
-    <#--</#list>-->
-    <#--</#if>-->
-
-
-
-    <#--<#if projectors?has_content>-->
-    <#--<form action="/playing_schedule/${exposition.id}/add" method="get">-->
-        <#--<input type="submit"  value="Добавить новое расписание" />-->
-    <#--</form>-->
-    <#--<form  action="/playing_schedule/${exposition.id}" method="get" >-->
-
-            <#--<label class=" control-label">Проектор</label>-->
-            <#--<select multiple size="10" id="projectorsId" name="projectors_id">-->
-                <#--<#list projectors as p>-->
-                    <#--<option value="${p.id}">${p.name}</option>-->
-                <#--</#list>-->
-            <#--</select>-->
-
-
-
-            <#--<label class=" control-label">День недели</label>-->
-            <#--<select multiple size="7" id="weekDaysId" name="weekDays_id">-->
-                <#--<#list weekDays as w>-->
-                    <#--<option value="${w.id}">${w.name}</option>-->
-                <#--</#list>-->
-            <#--</select>-->
-
-
-        <#--<label class=" control-label">Сортировка по:</label>-->
-        <#--<select id="sort" name="sort" class="form-control">-->
-            <#--<#if  (sort!"") = "projectors" >-->
-                <#--<option  value="projectors">Проекторы</option>-->
-                <#--<option  value="dayWeeks">Дни недели</option>-->
-            <#--<#else>-->
-                <#--<option  value="dayWeeks">Дни недели</option>-->
-                <#--<option  value="projectors">Проекторы</option>-->
-            <#--</#if>-->
-
-        <#--</select>-->
-
-
-            <#--<button  type="submit">Применить</button>-->
-
-    <#--</form>-->
-
-
-    <#--<table>-->
-    <#--<thead>-->
-        <#--<tr>-->
-            <#--<th>-->
-                <#--Проектор-->
-            <#--</th>-->
-            <#--<th>-->
-                <#--День недели-->
-            <#--</th>-->
-            <#--<th>-->
-                <#--Время включения-->
-            <#--</th>-->
-            <#--<th>-->
-                <#--Время выключения-->
-            <#--</th>-->
-            <#--<th>-->
-                <#--Удалить-->
-            <#--</th>-->
-        <#--</tr>-->
-    <#--</thead>-->
-    <#--<#list playingSchedule as p>-->
-    <#--<tbody>-->
-        <#--<tr>-->
-            <#--<td><a href="/projector/${p.projector.id}" >${p.projector.name}</a></td>-->
-            <#--<td>${p.weekDay.name}</td>-->
-            <#--<td>${p.beginTime}</td>-->
-            <#--<td>${p.endTime}</td>-->
-            <#--<td><form action="/playing_schedule/${exposition.id}/delete?id=${p.id}&page=${page}" method="post">-->
-                <#--<input type="submit"  value="Удалить" /></td>-->
-                <#--</form>-->
-            <#--</td>-->
-        <#--</tr>-->
-    <#--</tbody>-->
-    <#--<#else>-->
-    <#--Не нашлось ни одного расписания-->
-    <#--</#list>-->
-    <#--</table>-->
-
-    <#--<div class = "pagination">-->
-        <#--<a href="/playing_schedule/${exposition.id}/goToAnotherPage?page=0" >&lt;</a>-->
-        <#--<#if (page-1) gte 0>-->
-            <#--<a href="/playing_schedule/${exposition.id}/goToAnotherPage?page=${page-1}">&laquo;</a>-->
-        <#--<#else>-->
-            <#--<a href="#" >&laquo;</a>-->
-        <#--</#if>-->
-
-        <#--<#list pages as p>-->
-            <#--<#if page == p>-->
-                <#--<a href="/playing_schedule/${exposition.id}/goToAnotherPage?page=${p}" class = "active">${p}</a>-->
-            <#--<#else>-->
-                <#--<a href="/playing_schedule/${exposition.id}/goToAnotherPage?page=${p}">${p}</a>-->
-            <#--</#if>-->
-        <#--</#list>-->
-
-        <#--<#if (page+1) lte lastPage>-->
-            <#--<a href="/playing_schedule/${exposition.id}/goToAnotherPage?page=${page+1}" >&raquo;</a>-->
-        <#--<#else>-->
-            <#--<a href="#">&raquo;</a>-->
-        <#--</#if>-->
-        <#--<a href="/playing_schedule/${exposition.id}/goToAnotherPage?page=${lastPage}" >&gt;</a>-->
-    <#--</div>-->
-
-    <#--<#else>-->
-    <#--<h3><a href="/expositions/${exposition.id}/edit">Добавьте проекторы в эксозицию</a></h3>-->
-    <#--</#if>-->
-<#--</#if>-->
 
 <script>
     $(document).ready(function () {

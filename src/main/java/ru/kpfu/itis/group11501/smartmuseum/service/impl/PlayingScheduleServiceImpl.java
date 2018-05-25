@@ -27,7 +27,7 @@ public class PlayingScheduleServiceImpl implements PlayingScheduleService {
     private PlayingScheduleRepository playingScheduleRepository;
     private ProjectorService projectorService;
     private WeekDayService weekDayService;
-    private static int size = 5;
+    private static int size = 10;
 
     @Autowired
     private PlayingScheduleService playingScheduleService;
