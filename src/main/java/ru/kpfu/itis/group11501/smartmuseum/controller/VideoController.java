@@ -1,6 +1,7 @@
 package ru.kpfu.itis.group11501.smartmuseum.controller;
 
 import com.sun.net.httpserver.HttpServer;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -56,8 +57,8 @@ public class VideoController {
     public String addVideo(@RequestParam(value = "name") String name,
                            @RequestParam(value = "file") MultipartFile file,
                            RedirectAttributes redirectAttributes) {
-
-        if (videoService.findOneByName(name) != null) {
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename()).toLowerCase();
+        if (videoService.findOneByName(name + "." + extension) != null) {
             redirectAttributes.addAttribute("error", "Видео с таким названием уже существует");
             return "redirect:/videos/new_video";
         }

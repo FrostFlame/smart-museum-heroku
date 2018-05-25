@@ -27,7 +27,7 @@ public class Video implements GettingId {
     @OneToMany(targetEntity = ProjectorsVideos.class,fetch = FetchType.EAGER,mappedBy = "projector")
     private List<Projector> projectors;
 
-    @Column( nullable = false)
+    @Column( nullable = false , unique = true)
     private String name;
 
     public Long getId() {

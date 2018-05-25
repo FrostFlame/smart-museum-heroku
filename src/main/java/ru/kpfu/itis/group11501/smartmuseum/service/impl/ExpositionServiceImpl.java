@@ -98,4 +98,9 @@ public class ExpositionServiceImpl implements ExpositionService {
         expositionRepository.delete(exposition);
     }
 
+    @Override
+    public Exposition findOneByName(String name) {
+        return expositionRepository.findOneByName(name);
+    }
+
 }

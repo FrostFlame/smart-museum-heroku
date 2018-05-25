@@ -19,7 +19,11 @@
           <div class="form-group">
               <label for="formControlInput1">Название экспозиции</label>
     <@sf.input type="text" path="name" class="form-control" id="formControlInput1"
-    placeholder="Например, экспозиция №1"/>
+    placeholder="Например, экспозиция №1" required="true"/>
+              <#if error?has_content>
+                  <b style="color: red">Error: ${error}</b>
+                  <br/>
+              </#if>
           </div>
           <div class="form-group">
               <label for="boot-multiselect-demo">Выберите проекторы, которые входят в экспозицию</label><br>

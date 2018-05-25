@@ -31,4 +31,6 @@ public interface ProjectorService {
 
     @Action(name = ActionTypeName.FAULT)
     void projectorFault(Long id);
+
+    Projector findOneByName(String name);
 }

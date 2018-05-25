@@ -49,4 +49,10 @@
             <column name="id" type="numeric"/>
         </loadUpdateData>
     </changeSet>
+
+    <changeSet id="mock_data_9" author="volkov">
+        <loadUpdateData tableName="users" primaryKey="id" file="db/mock_data/users3.csv">
+            <column name="id" type="numeric"/>
+        </loadUpdateData>
+    </changeSet>
 </databaseChangeLog>

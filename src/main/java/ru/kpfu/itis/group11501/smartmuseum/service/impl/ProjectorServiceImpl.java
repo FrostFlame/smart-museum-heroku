@@ -80,6 +80,11 @@ public class ProjectorServiceImpl implements ProjectorService {
         projectorRepository.save(projector);
     }
 
+    @Override
+    public Projector findOneByName(String name) {
+        return projectorRepository.findOneByName(name);
+    }
+
 
     @Action(name = ActionTypeName.ADD)
     public Projector add(Projector projector) {
