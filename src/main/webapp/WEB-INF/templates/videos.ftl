@@ -27,7 +27,7 @@
         <div class="input-group">
             <input type="text" class="form-control" name="searchField" placeholder="Найти видеоклип">
                         <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">
+                            <button class="btn btn-default" type="submit">
                                 <i class="glyphicon glyphicon-search"></i>
                             </button>
                         </span>

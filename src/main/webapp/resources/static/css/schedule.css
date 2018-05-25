@@ -32,3 +32,6 @@
 
 .add-task-row {
 }
+.panel-body.active{
+    background-color: #c4c5c4;
+}

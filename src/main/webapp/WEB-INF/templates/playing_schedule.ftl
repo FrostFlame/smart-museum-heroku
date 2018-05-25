@@ -9,7 +9,7 @@
             <ul class="nav flex-column">
                 <#if expositions?has_content>
                     <#list expositions as e>
-                        <div class="panel-body"><a href="/playing_schedule/${e.id}"><span class="glyphicon glyphicon-blackboard"></span>&nbsp;${e.name}</a><br></div>
+                            <div class="panel-body <#if exposition.id==e.id>active</#if>"><a  href="/playing_schedule/${e.id}"><span class="glyphicon glyphicon-blackboard"></span>&nbsp;${e.name}</a><br></div>
                     </#list>
                 <#else><p>Нет доступных экспозиций</p>
                 </#if>
@@ -232,7 +232,6 @@
 
 <script>
     $(document).ready(function () {
-        $("li.active").removeClass('active');
         $("#schedule").addClass('active');
     })
 </script>
