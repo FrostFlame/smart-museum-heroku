@@ -115,6 +115,6 @@
 
 <script>
     $(document).ready(function () {
-        $("#schedule").addClass('active');
+        $("#statistic").addClass('active');
     })
 </script>
