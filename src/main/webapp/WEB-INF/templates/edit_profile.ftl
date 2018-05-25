@@ -172,9 +172,3 @@
     <#--</@sf.form>-->
 <#--</#macro>-->
 
-<script>
-    $(document).ready(function () {
-        $("li.active").removeClass('active');
-        $("#profile").addClass('active');
-    })
-</script>

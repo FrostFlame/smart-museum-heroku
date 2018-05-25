@@ -31,13 +31,13 @@
     <div class="col-xs-12 col-md-12">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#"><span class="glyphicon glyphicon-home"></span> Главная</a></li>
-            <li><a href="/expositions"><span class="glyphicon glyphicon-th"></span> Экспозиции</a></li>
-            <li><a href="/videos"><span class="glyphicon glyphicon-film"></span> Видео</a></li>
-            <li><a href="/projector/all"><span class="glyphicon glyphicon-blackboard"></span> Проекторы</a></li>
+            <li id="expositions"><a href="/expositions"><span class="glyphicon glyphicon-th"></span> Экспозиции</a></li>
+            <li id="videos"><a href="/videos"><span class="glyphicon glyphicon-film"></span> Видео</a></li>
+            <li id="projectors"><a href="/projector/all"><span class="glyphicon glyphicon-blackboard"></span> Проекторы</a></li>
             <li id="schedule"><a href="/playing_schedule"><span class="glyphicon glyphicon-calendar"></span> Расписание</a></li>
-            <li><a href="/admin/users"><span class="glyphicon glyphicon-list-alt"></span> Пользователи</a></li>
             <@security.authorize access="hasRole('ADMIN')">
-            <li><a href="/user_statistic"><span class="glyphicon glyphicon-list-alt"></span> Статистика</a></li>
+            <li id="users"><a href="/admin/users"><span class="glyphicon glyphicon-list-alt"></span> Пользователи</a></li>
+            <li id="statistic"><a href="/user_statistic"><span class="glyphicon glyphicon-list-alt"></span> Статистика</a></li>
             </@security.authorize>
             <li id="profile"><a href="/profile"><span class="glyphicon glyphicon-user"></span> <b>Личный кабинет</b></a></li>
         </ul>

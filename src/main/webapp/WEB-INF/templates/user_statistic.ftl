@@ -117,5 +117,12 @@
     </#if>
         <a href="/user_statistic/goToAnotherPage?page=${lastPage}" >&gt;</a>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $("li.active").removeClass('active');
+        $("#statistic").addClass('active');
+    })
+</script>
 </body>
 </html>

@@ -24,3 +24,10 @@
 Нет проекторов
 </#if>
 </#macro>
+
+<script>
+    $(document).ready(function () {
+        $("li.active").removeClass('active');
+        $("#projectors").addClass('active');
+    })
+</script>

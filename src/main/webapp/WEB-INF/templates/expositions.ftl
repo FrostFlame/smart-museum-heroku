@@ -17,3 +17,10 @@
     <h4>Экспозиций не найдено</h4>
 </#if>
 </#macro>
+
+<script>
+    $(document).ready(function () {
+        $("li.active").removeClass('active');
+        $("#expositions").addClass('active');
+    })
+</script>

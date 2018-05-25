@@ -57,3 +57,10 @@
 Нет пользователей
 </#list>
 </#macro>
+
+<script>
+    $(document).ready(function () {
+        $("li.active").removeClass('active');
+        $("#users").addClass('active');
+    })
+</script>

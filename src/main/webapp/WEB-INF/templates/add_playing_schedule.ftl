@@ -100,9 +100,4 @@
     <#--</fieldset>-->
     <#--</@sf.form>-->
 
-<script>
-    $(document).ready(function () {
-        $("li.active").removeClass('active');
-        $("#schedule").addClass('active');
-    })
-</script>
+

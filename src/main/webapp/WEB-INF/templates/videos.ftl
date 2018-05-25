@@ -102,3 +102,11 @@
 
 </script>
 </#macro>
+
+
+<script>
+    $(document).ready(function () {
+        $("li.active").removeClass('active');
+        $("#videos").addClass('active');
+    })
+</script>
