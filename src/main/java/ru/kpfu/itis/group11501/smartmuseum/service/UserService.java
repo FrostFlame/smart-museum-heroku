@@ -1,12 +1,15 @@
 package ru.kpfu.itis.group11501.smartmuseum.service;
 
+//import javafx.util.Pair;
 import ru.kpfu.itis.group11501.smartmuseum.model.User;
+import ru.kpfu.itis.group11501.smartmuseum.model.UserDto;
 import ru.kpfu.itis.group11501.smartmuseum.model.annotation.Action;
 import ru.kpfu.itis.group11501.smartmuseum.model.annotation.CoherentEntity;
 import ru.kpfu.itis.group11501.smartmuseum.model.enums.ActionTypeName;
 import ru.kpfu.itis.group11501.smartmuseum.model.enums.EntityName;
 import ru.kpfu.itis.group11501.smartmuseum.util.EditProfileForm;
 
+import java.util.AbstractMap;
 import java.util.List;
 
 /**
@@ -14,6 +17,9 @@ import java.util.List;
  */
 @CoherentEntity(name = EntityName.USER)
 public interface UserService {
+    AbstractMap.SimpleEntry<User, String> registerNewUserAccount(UserDto accountDto);
+//            throws EmailExistsException;
+
     User getUser(String login);
 
     User getUser(Long id);

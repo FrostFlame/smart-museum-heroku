@@ -1,25 +1,25 @@
 package ru.kpfu.itis.group11501.smartmuseum.service.impl;
 
+//import javafx.util.Pair;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kpfu.itis.group11501.smartmuseum.model.Position;
 import ru.kpfu.itis.group11501.smartmuseum.model.Role;
 import ru.kpfu.itis.group11501.smartmuseum.model.User;
+import ru.kpfu.itis.group11501.smartmuseum.model.UserDto;
 import ru.kpfu.itis.group11501.smartmuseum.model.annotation.Action;
 import ru.kpfu.itis.group11501.smartmuseum.model.enums.ActionTypeName;
 import ru.kpfu.itis.group11501.smartmuseum.repository.UserRepository;
 import ru.kpfu.itis.group11501.smartmuseum.service.PositionService;
 import ru.kpfu.itis.group11501.smartmuseum.service.RoleService;
 import ru.kpfu.itis.group11501.smartmuseum.service.UserService;
-import ru.kpfu.itis.group11501.smartmuseum.util.AdminEditProfileForm;
-import ru.kpfu.itis.group11501.smartmuseum.util.EditProfileForm;
-import ru.kpfu.itis.group11501.smartmuseum.util.FileUploader;
 import ru.kpfu.itis.group11501.smartmuseum.util.Helpers;
 
 import java.util.*;
@@ -35,12 +35,14 @@ public class UserServiceImpl implements UserService {
     private PositionService positionService;
     @Autowired
     private UserService userService;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, RoleService roleService, PositionService positionService) {
         this.roleService = roleService;
         this.userRepository = userRepository;
         this.positionService = positionService;
+        this.passwordEncoder = Helpers.getEncoder();
     }
 
     private User updateIfBlockDate(User user) {
@@ -119,13 +121,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void blockUser(long id, double blockTime) {
         Calendar calendar = Calendar.getInstance();
-        if (blockTime < 1){
+        if (blockTime < 1) {
             calendar.add(Calendar.MINUTE, (int) (blockTime * 60));
-        }
-        else if (blockTime <= 24){
+        } else if (blockTime <= 24) {
             calendar.add(Calendar.HOUR_OF_DAY, (int) blockTime);
-        }
-        else {
+        } else {
             calendar.add(Calendar.YEAR, 1000);
         }
 
@@ -157,5 +157,37 @@ public class UserServiceImpl implements UserService {
         user.setBlockDate(null);
         user.setStatus(true);
         userRepository.save(user);
+    }
+    @Transactional
+    @Override
+    public AbstractMap.SimpleEntry<User, String> registerNewUserAccount(UserDto accountDto) {
+
+        if (loginExists(accountDto.getLogin())) {
+//            throw new EmailExistsException(
+//                    "There is an account with that email address:  + accountDto.getEmail());
+            return null;
+        }
+        User user = new User();
+        user.setName(accountDto.getName());
+        user.setSurname(accountDto.getSurName());
+        user.setThirdName(accountDto.getThirdName());
+        user.setLogin(accountDto.getLogin());
+        user.setRole(roleService.getRole("NORMAL"));
+        String password = generatePassword();
+        user.setPassword(passwordEncoder.encode(password));
+        user.setPosition(positionService.getPosition(accountDto.getPosition()));
+        return new AbstractMap.SimpleEntry<User, String>(userRepository.save(user), password);
+    }
+
+    private String generatePassword(){
+        return RandomStringUtils.randomAlphanumeric(7);
+    }
+
+    private boolean loginExists(String login) {
+        User user = userRepository.findOneByLogin(login);
+        if (user != null) {
+            return true;
+        }
+        return false;
     }
 }
