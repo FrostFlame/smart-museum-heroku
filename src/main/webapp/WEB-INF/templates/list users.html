@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Список пользователей</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/expositions.css">
+    <link rel="stylesheet" href="css/user.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/F1F66AE6-0914-774F-9F7B-9DEA4850F4E4/main.js" charset="UTF-8"></script><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="http://bootstraptema.ru/plugins/2015/b-multiselect/bootstrap-multiselect.css"
+          type="text/css">
+    <script type="text/javascript"
+            src="http://bootstraptema.ru/plugins/2015/b-multiselect/bootstrap-multiselect.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="header-smart col-xs-12">
+            <h1>Smart museum</h1>
+        </div>
+    </div>
+    <div class="row" role="main">
+        <div class="col-xs-12 col-md-12">
+            <ul class="nav nav-tabs">
+                <li><a href="#"><span class="glyphicon glyphicon-home"></span> Главная</a></li>
+                <li><a href="/expositions"><span class="glyphicon glyphicon-th"></span> Экспозиции</a>
+                </li>
+                <li><a href="/videos"><span class="glyphicon glyphicon-film"></span> Видео</a></li>
+                <li><a href="/projector/all"><span class="glyphicon glyphicon-blackboard"></span> Проекторы</a></li>
+                <li class="active"><a href="/admin/users/"><span class="glyphicon glyphicon-list-alt"></span> Пользователи</a></li>
+                <li><a href="#"><span class="glyphicon glyphicon-user"></span> <b>Личный кабинет</b></a></li>
+            </ul>
+        </div>
+        <div class="page-header col-md-12 col-xs-12">
+            <div class="col-md-11 col-xs-11">
+                <h2><b>Список пользователей</b></h2>
+            </div>
+            <!-- Если нужно кнопка добавления пользователя
+            <div class="col-md-1 col-xs-1">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default">
+                        Добавить пользователя
+                    </button>
+                </div>
+            </div>
+            -->
+        </div>
+        <div class="col-md-12">
+            <form role="search">
+                <div class="input-group col-md-12">
+                    <input type="text" class="form-control" placeholder="Найти пользователя">
+                    <span class="input-group-btn">
+    	                <button class="btn btn-default" type="button">
+	      	                <i class="glyphicon glyphicon-search"></i>
+                        </button>
+	                </span>
+                </div>
+                <div class="form-group col-md-4">
+                    <select id="boot-multiselect1" multiple="multiple">
+                        <option value="p1">1</option>
+                        <option value="p2">2</option>
+                        <option value="p3">3</option>
+                        <option value="p4">4</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <select id="boot-multiselect2" multiple="multiple">
+                        <option value="p1">1</option>
+                        <option value="p2">2</option>
+                        <option value="p3">3</option>
+                        <option value="p4">4</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <select id="boot-multiselect3" multiple="multiple">
+                        <option value="p1">1</option>
+                        <option value="p2">2</option>
+                        <option value="p3">3</option>
+                        <option value="p4">4</option>
+                    </select>
+                </div>
+            </form>
+            <table class="table table-hover users">
+                <thead>
+                <tr>
+                    <th>ФИ</th>
+                    <th>Логин</th>
+                    <th>Статус</th>
+                    <th>Роль</th>
+                    <th>Должность</th>
+                    <th>Изменение</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><a href="#">Иванов Иван</a></td>
+                    <td>Ivanov</td>
+                    <td>
+                        <a type="button" class="btn btn-success" href="#ModalBlock" data-toggle="modal"></span>
+                            Активен
+                        </a>
+                        <!-- Для неисправного
+                            <button type="button" class="btn btn-warning"></span>
+                                Заблокирован
+                            </button>
+                        -->
+                    </td>
+                    <td>Admin</td>
+                    <td>Директор</td>
+                    <td>
+                        <button type="button" class="btn btn-info"><span class="glyphicon glyphicon-pencil"></span>
+                        </button>
+                        <a class="btn btn-danger" href="#ModalDelete1" data-toggle="modal"><span
+                                class="glyphicon glyphicon-remove"></span>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div id="ModalDelete1" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
+                            </button>
+                            <h4 class="modal-title">Удаление пользователя</h4>
+                        </div>
+                        <div class="modal-body">
+                            Вы действительно хотите удалить этого пользователя?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default">Да</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Отмена
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="ModalBlock" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
+                            </button>
+                            <h3 class="modal-title">Блокировка пользователя</h3>
+                        </div>
+                        <div class="modal-body">
+                            <h4>Время блокировки пользователя</h4>
+                            <form style="font-size: medium">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="time" id="t30" value="30">
+                                    <label class="form-check-label" for="t30">
+                                        30 мин
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="time" id="t12" value="12">
+                                    <label class="form-check-label" for="t12">
+                                        12 часов
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="time" id="t24" value="24">
+                                    <label class="form-check-label" for="t24">
+                                        24 часа
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="time" id="tFull" value="full" checked>
+                                    <label class="form-check-label" for="tFull">
+                                        Все время
+                                    </label>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default">OK</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Отмена
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('#boot-multiselect1').multiselect({
+                    includeSelectAllOption: true,
+                    buttonWidth: 300,
+                    dropRight: true,
+                    nonSelectedText: 'Выбрать',
+                    maxHeight: 150
+                });
+            });
+            $(document).ready(function() {
+                $('#boot-multiselect2').multiselect({
+                    includeSelectAllOption: true,
+                    buttonWidth: 300,
+                    dropRight: true,
+                    nonSelectedText: 'Выбрать',
+                    maxHeight: 150
+                });
+            });
+            $(document).ready(function() {
+                $('#boot-multiselect3').multiselect({
+                    includeSelectAllOption: true,
+                    buttonWidth: 300,
+                    dropRight: true,
+                    nonSelectedText: 'Выбрать',
+                    maxHeight: 150
+                });
+            });
+        </script>
+    </div>
+</div>
+</body>
+</html>
