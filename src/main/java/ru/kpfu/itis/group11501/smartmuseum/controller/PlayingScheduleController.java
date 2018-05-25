@@ -67,21 +67,14 @@ public class PlayingScheduleController {
 
     @RequestMapping(value = "/{exposition_id}", method = RequestMethod.GET)
     public String getPlayingSchedule(Model model, @ModelAttribute("exposition") Exposition exposition,
-                                     @ModelAttribute("error") String error,
                                      @RequestParam(value = "weekDays_id", required = false) List<Long> weekDaysId,
                                      @RequestParam(value = "projectors_id", required = false) List<Long> projectorsId,
                                      @RequestParam(value = "sort", required = false) String sort,
                                      @RequestParam(value = "page", required = false) String page,
                                      HttpSession httpSession) {
 
-
-        if (error != null && !error.equals("")) {
-            return "playing_schedule";
-        }
-
         if (exposition == null) {
-            model.addAttribute("error", "Экспозиция не найдена");
-            return "playing_schedule";
+            return "404_not_found";
         }
         if (exposition.getProjectors().size() > 0) {
             if (projectorsId == null || projectorsId.size() == 0) projectorsId = exposition.getProjectors()
@@ -125,7 +118,7 @@ public class PlayingScheduleController {
     public String addPlayingSchedule(Model model,
                                      @ModelAttribute("exposition") Exposition exposition) {
         if (exposition == null) {
-            model.addAttribute("error", "Экспозиция не найдена");
+            return "404_not_found";
         } else {
             if (!model.containsAttribute("form")) model.addAttribute("form", new PlayingScheduleAddForm());
         }
