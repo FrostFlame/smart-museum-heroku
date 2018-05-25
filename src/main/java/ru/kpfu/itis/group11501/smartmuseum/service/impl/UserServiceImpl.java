@@ -1,25 +1,25 @@
 package ru.kpfu.itis.group11501.smartmuseum.service.impl;
 
+//import javafx.util.Pair;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kpfu.itis.group11501.smartmuseum.model.Position;
 import ru.kpfu.itis.group11501.smartmuseum.model.Role;
 import ru.kpfu.itis.group11501.smartmuseum.model.User;
+import ru.kpfu.itis.group11501.smartmuseum.model.UserDto;
 import ru.kpfu.itis.group11501.smartmuseum.model.annotation.Action;
 import ru.kpfu.itis.group11501.smartmuseum.model.enums.ActionTypeName;
 import ru.kpfu.itis.group11501.smartmuseum.repository.UserRepository;
 import ru.kpfu.itis.group11501.smartmuseum.service.PositionService;
 import ru.kpfu.itis.group11501.smartmuseum.service.RoleService;
 import ru.kpfu.itis.group11501.smartmuseum.service.UserService;
-import ru.kpfu.itis.group11501.smartmuseum.util.AdminEditProfileForm;
-import ru.kpfu.itis.group11501.smartmuseum.util.EditProfileForm;
-import ru.kpfu.itis.group11501.smartmuseum.util.FileUploader;
 import ru.kpfu.itis.group11501.smartmuseum.util.Helpers;
 
 import java.util.*;
@@ -35,22 +35,40 @@ public class UserServiceImpl implements UserService {
     private PositionService positionService;
     @Autowired
     private UserService userService;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, RoleService roleService, PositionService positionService) {
         this.roleService = roleService;
         this.userRepository = userRepository;
         this.positionService = positionService;
+        this.passwordEncoder = Helpers.getEncoder();
+    }
+
+    private User updateIfBlockDate(User user) {
+        if (user.getBlockDate() != null && user.getBlockDate().compareTo(new Date()) < 0) {
+            user.setStatus(true);
+            user.setBlockDate(null);
+            userRepository.save(user);
+        }
+        return user;
+    }
+
+    private List<User> updateAllIfBlockDate(List<User> users) {
+        for (User user : users) {
+            updateIfBlockDate(user);
+        }
+        return users;
     }
 
     @Override
     public User getUser(String login) {
-        return userRepository.findOneByLogin(login);
+        return updateIfBlockDate(userRepository.findOneByLogin(login));
     }
 
     @Override
     public User getUser(Long id) {
-        return userRepository.findOneById(id);
+        return updateIfBlockDate(userRepository.findOneById(id));
     }
 
     @Override
@@ -70,7 +88,6 @@ public class UserServiceImpl implements UserService {
         Collection<Role> roles = new ArrayList<>();
         Collection<Position> positions = new ArrayList<>();
         Collection<Boolean> statuses = new ArrayList<>(Arrays.asList(Boolean.TRUE, Boolean.FALSE));
-        Set<User> resultUsers = new HashSet<>();
         if (role.equals("all")) {
             roles.addAll(roleService.getAllRoles());
         } else {
@@ -84,13 +101,14 @@ public class UserServiceImpl implements UserService {
         if (!status.equals("all")) {
             statuses.remove(!Boolean.valueOf(status));
         }
-        System.out.println(searchField);
-        return userRepository.getFilterUsers(roles, positions, statuses, "%" + searchField.toLowerCase() + "%");
+        List<User> users = userRepository.getFilterUsers(roles, positions, statuses, "%" + searchField.toLowerCase() + "%");
+        return updateAllIfBlockDate(users);
     }
 
     @Override
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        List<User> users = userRepository.findAll();
+        return updateAllIfBlockDate(users);
     }
 
     @Override
@@ -103,13 +121,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void blockUser(long id, double blockTime) {
         Calendar calendar = Calendar.getInstance();
-        if (blockTime < 1){
+        if (blockTime < 1) {
             calendar.add(Calendar.MINUTE, (int) (blockTime * 60));
-        }
-        else if (blockTime <= 24){
+        } else if (blockTime <= 24) {
             calendar.add(Calendar.HOUR_OF_DAY, (int) blockTime);
-        }
-        else {
+        } else {
             calendar.add(Calendar.YEAR, 1000);
         }
 
@@ -133,5 +149,45 @@ public class UserServiceImpl implements UserService {
     @Action(name = ActionTypeName.DELETE)
     public void deleteUser(Long id) {
         userRepository.delete(id);
+    }
+
+    @Override
+    public void unblockUser(Long id) {
+        User user = userRepository.findOneById(id);
+        user.setBlockDate(null);
+        user.setStatus(true);
+        userRepository.save(user);
+    }
+    @Transactional
+    @Override
+    public AbstractMap.SimpleEntry<User, String> registerNewUserAccount(UserDto accountDto) {
+
+        if (loginExists(accountDto.getLogin())) {
+//            throw new EmailExistsException(
+//                    "There is an account with that email address:  + accountDto.getEmail());
+            return null;
+        }
+        User user = new User();
+        user.setName(accountDto.getName());
+        user.setSurname(accountDto.getSurName());
+        user.setThirdName(accountDto.getThirdName());
+        user.setLogin(accountDto.getLogin());
+        user.setRole(roleService.getRole("NORMAL"));
+        String password = generatePassword();
+        user.setPassword(passwordEncoder.encode(password));
+        user.setPosition(positionService.getPosition(accountDto.getPosition()));
+        return new AbstractMap.SimpleEntry<User, String>(userRepository.save(user), password);
+    }
+
+    private String generatePassword(){
+        return RandomStringUtils.randomAlphanumeric(7);
+    }
+
+    private boolean loginExists(String login) {
+        User user = userRepository.findOneByLogin(login);
+        if (user != null) {
+            return true;
+        }
+        return false;
     }
 }

@@ -31,7 +31,7 @@ import javax.validation.Valid;
  * Date: 27.04.2018
  */
 @Controller
-public class EditUserController {
+public class UserController {
     private UserService userService;
     private RoleService roleService;
     private PositionService positionService;
@@ -40,9 +40,9 @@ public class EditUserController {
     private ChangePasswordFormValidator changePasswordFormValidator;
 
     @Autowired
-    public EditUserController(UserService userService, RoleService roleService, PositionService positionService,
-                              EditProfileFormToUserTransformer transformer, EditProfileFormValidator editProfileFormValidator,
-                              ChangePasswordFormValidator changePasswordFormValidator) {
+    public UserController(UserService userService, RoleService roleService, PositionService positionService,
+                          EditProfileFormToUserTransformer transformer, EditProfileFormValidator editProfileFormValidator,
+                          ChangePasswordFormValidator changePasswordFormValidator) {
         this.userService = userService;
         this.roleService = roleService;
         this.positionService = positionService;
@@ -176,5 +176,12 @@ public class EditUserController {
     public String deleteUser(@PathVariable(value = "id", required = true) Long id) {
         userService.deleteUser(id);
         return "redirect:/admin/users";
+    }
+
+    @RequestMapping(path = "/profile", method = RequestMethod.GET)
+    public String get(Model model) {
+        User user = Helpers.getCurrentUser();
+        model.addAttribute("u", user);
+        return "private_page";
     }
 }

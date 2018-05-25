@@ -36,9 +36,13 @@ public class VideoController {
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String getVideos(Model model,
                             @RequestParam(value = "error", required = false) String error,
+                            @RequestParam(value = "success", required = false) String success,
                             @RequestParam(value = "searchField", required = false) String searchField) {
         if (error != null) {
             model.addAttribute("error", error);
+        }
+        if (success != null) {
+            model.addAttribute("success", success);
         }
         model.addAttribute("videos", videoService.getAllVideo(searchField));
         return "videos";
@@ -70,7 +74,7 @@ public class VideoController {
             Video video = new Video(name);
             videoService.addVideo(video);
         }
-
+        redirectAttributes.addAttribute("success", "Видео успешно добавлено");
         return "redirect:/videos";
     }
 
@@ -83,6 +87,7 @@ public class VideoController {
             return "redirect:/videos";
         }
         videoService.deleteById(videoId);
+        redirectAttributes.addAttribute("success", "Видео удалено");
         return "redirect:/videos";
     }
 

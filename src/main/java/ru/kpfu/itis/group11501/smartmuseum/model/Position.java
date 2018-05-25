@@ -38,4 +38,6 @@ public class Position implements GettingId {
     public Position(String name) {
         this.name = name;
     }
+
+
 }
