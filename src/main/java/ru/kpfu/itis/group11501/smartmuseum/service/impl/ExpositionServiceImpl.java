@@ -92,7 +92,10 @@ public class ExpositionServiceImpl implements ExpositionService {
     @Override
     @Action(name = ActionTypeName.DELETE)
     public void deleteExposition(Long id) {
-        expositionRepository.delete(id);
+        Exposition exposition = expositionRepository.findOne(id);
+        exposition.setProjectors(null);
+        expositionRepository.save(exposition);
+        expositionRepository.delete(exposition);
     }
 
 }

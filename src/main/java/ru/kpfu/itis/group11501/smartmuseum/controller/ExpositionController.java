@@ -123,7 +123,7 @@ public class ExpositionController {
         return "redirect:/expositions/" + id;
     }
 
-    @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
+    @RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
     public String deleteExposition(@PathVariable("id") String id){
         expositionService.deleteExposition(Long.valueOf(id));
         return "redirect:/expositions/";
