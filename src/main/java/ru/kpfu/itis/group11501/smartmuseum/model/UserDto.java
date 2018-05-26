@@ -1,30 +1,23 @@
 package ru.kpfu.itis.group11501.smartmuseum.model;
 
-import org.hibernate.validator.constraints.NotEmpty;
-import ru.kpfu.itis.group11501.smartmuseum.model.annotation.ValidEmail;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 
 public class UserDto {
-    @NotNull
-    @NotEmpty
+
+    @NotBlank(message = "Введите Имя")
     private String name;
 
-    @NotNull
-    @NotEmpty
+    @NotBlank(message = "Введите Фамилию")
     private String surName;
 
-    @NotNull
-    @NotEmpty
     private String thirdName;
 
-    @NotNull
-    @NotEmpty
-    @ValidEmail
+    @NotBlank(message = "Введите Логин")
     private String login;
 
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "Выберите должность")
     private Long position;
 
     public String getName() {
@@ -67,5 +60,4 @@ public class UserDto {
         this.position = position;
     }
 
-    // standard getters and setters
 }

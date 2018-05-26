@@ -32,41 +32,50 @@
                             <div class="col-md-6 profile-info form-group" style="margin-top: -15px">
                                 <div><@sf.input path="id" type="text"  value="${editForm.id}" hidden="true"/></div>
                                 <div class="input-group input-elem">
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-list"></span></span>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+
+                                    <div class="form-group col-12"><@sf.input path="login" type="text" class="form-control" placeholder="Введите логин" value="${u.login!''}"/></div>
+                                </div>
+                                <div>&nbsp;<@sf.errors path="login" cssClass="help-block-edit-form"/></div>
+                                <div class="input-group input-elem">
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-ok-circle"></span></span>
                                     <div class="form-group col-12"><@sf.input path="surname" type="text" class="form-control" placeholder="Введите фамилию" value="${editForm.surname}"/></div>
                                 </div>
                                 <div>&nbsp;<@sf.errors path="surname" cssClass="help-block-edit-form"/></div>
                                 <div class="input-group input-elem">
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-list"></span></span>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-ok-circle"></span></span>
                                     <div class="form-group col-12"><@sf.input path="name" class="form-control" type="text" placeholder="Введите имя" value="${editForm.name}"/></div>
                                 </div>
                                 <div>&nbsp;<@sf.errors path="name" cssClass="help-block-edit-form"/></div>
                                 <div class="input-group input-elem">
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-list"></span></span>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-ok-circle"></span></span>
                                     <div class="form-group col-12"><@sf.input path="thirdName" class="form-control" placeholder="Введите отчество" value="${editForm.thirdName!''}"/></div>
                                 </div>
                                 <div>&nbsp;<@sf.errors path="thirdName" cssClass="help-block-edit-form"/></div>
-                                <div class="input-group input-elem">
-                                    <#if u.role.name == "ADMIN">
-                                        <#if positions?has_content>
-                                        <select name="position">
-                                            <#list positions as position>
-                                                <option value="${position.id}" <#if position.id == editForm.position>selected="selected"</#if>>${position.name}</option>
-                                            </#list>
-                                        </select>
-                                                                </#if>
-                                                                <#if roles?has_content>
-                                        <select name="role">
-                                            <#list roles as role>
-                                                <option value="${role.id}" <#if role.id == editForm.role>selected="selected"</#if>>${role.name}</option>
-                                            </#list>
-                                        </select>
-                                                                </#if>
-                                                            </#if>
-                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                        <@sf.input path="login" type="text" class="form-control" placeholder="Введите логин" value="${editForm.login}"/>
-                                </div>
-                                <div>&nbsp;<@sf.errors path="login" cssClass="help-block-edit-form"/></div>
+                                <#if u.role.name == "ADMIN">
+                                    <div class="input-group input-elem">
+                                    <#if positions?has_content>
+                                        <div class="form-group col-12">
+                                            <select id="boot-select" name="position">
+                                                <#list positions as position>
+                                                    <option value="${position.id}" <#if position.id == editForm.position>selected="selected"</#if>>${position.name}</option>
+                                                </#list>
+                                            </select>
+                                        </div>
+                                    </#if>
+                                    </div>
+                                    <div class="input-group input-elem">
+                                        <#if roles?has_content>
+                                        <div class="form-group col-12">
+                                            <select id="boot-select2" name="role">
+                                                <#list roles as role>
+                                                    <option value="${role.id}" <#if role.id == editForm.role>selected="selected"</#if>>${role.name}</option>
+                                                </#list>
+                                            </select>
+                                        </div>
+                                        </#if>
+                                    </div>
+                                </#if>
                                 <div><input class="btn btn-default" type="submit" value="Сохранить"></div>
                             </div>
                         </div>
@@ -74,6 +83,7 @@
                     </@sf.form>
                 </div>
         </div>
+
 
         <div class="panel panel-default edit-profile-form" style="margin-top: 0">
             <div class="panel panel-heading">Изменить пароль</div>
@@ -115,60 +125,21 @@
     </div>
 </#macro>
 
-    <#--<@sf.form action= "${link}" method="post" modelAttribute="editForm" enctype="multipart/form-data">-->
-        <#--<@sf.input path="id" type="text"  value="${editForm.id}" hidden="true"/>-->
-        <#--<@sf.input path="surname" type="text" placeholder="Введите фамилию" value="${editForm.surname}"/>-->
-        <#--<@sf.errors path="surname" cssClass="help-block"/>-->
-        <#--<@sf.input path="name" type="text" placeholder="Введите имя" value="${editForm.name}"/>-->
-        <#--<@sf.errors path="name" cssClass="help-block"/>-->
-        <#--<@sf.input path="thirdName" placeholder="Введите отчество" value="${editForm.thirdName!''}"/>-->
-        <#--<@sf.errors path="thirdName" cssClass="help-block"/>-->
-        <#--<#if editForm.photo?has_content>-->
-            <#--<@sf.input path="photo" type="text"  value="${editForm.photo}" hidden="true"/>-->
-            <#--<img src="/image/${editForm.photo!''}">-->
-        <#--</#if>-->
-        <#--<@sf.input path="photoFile" type="file" placeholder="Фото"/>-->
-        <#--<@sf.errors path="photoFile" cssClass="help-block"/>-->
-        <#--<#if u.role.name == "ADMIN">-->
-            <#--<#if positions?has_content>-->
-            <#--<select name="position">-->
-                <#--<#list positions as position>-->
-                    <#--<option value="${position.id}" <#if position.id == editForm.position>selected="selected"</#if>>${position.name}</option>-->
-                <#--</#list>-->
-            <#--</select>-->
-            <#--</#if>-->
-            <#--<#if roles?has_content>-->
-            <#--<select name="role">-->
-                <#--<#list roles as role>-->
-                    <#--<option value="${role.id}" <#if role.id == editForm.role>selected="selected"</#if>>${role.name}</option>-->
-                <#--</#list>-->
-            <#--</select>-->
-            <#--</#if>-->
-        <#--</#if>-->
-        <#--<@sf.input path="login" type="text" placeholder="Введите логин" value="${editForm.login}"/>-->
-        <#--<@sf.errors path="login" cssClass="help-block"/>-->
-    <#--<input type="submit" value="Сохранить">-->
-    <#--</@sf.form>-->
-
-    <#--<p>Смена пароля</p><br>-->
-    <#--<#if u.role.name == "ADMIN">-->
-        <#--<#assign link2 = "/admin/users/${editForm.id}/change_password" >-->
-    <#--<#else>-->
-        <#--<#assign link2 = "/change_password">-->
-    <#--</#if>-->
-    <#--<@sf.form action= "${link2}" method="post" modelAttribute="changePasswordForm">-->
-
-        <#--<#if u.role.name != "ADMIN">-->
-            <#--<@sf.input path="currentPassword" type="password" placeholder="Введите текущий пароль"/>-->
-            <#--<@sf.errors path="currentPassword" cssClass="help-block"/>-->
-        <#--</#if>-->
-        <#--<@sf.input path="newPassword" type="password" placeholder="Введите новый пароль"/>-->
-        <#--<@sf.errors path="newPassword" cssClass="help-block"/>-->
-        <#--<#if u.role.name != "ADMIN">-->
-            <#--<@sf.input path="newPasswordConf" type="password" placeholder="Введите новый пароль ещё раз"/>-->
-            <#--<@sf.errors path="newPasswordConf" cssClass="help-block"/>-->
-        <#--</#if>-->
-        <#--<input type="submit" value="Изменить">-->
-    <#--</@sf.form>-->
-<#--</#macro>-->
-
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#boot-select').multiselect({
+            buttonWidth: 300,
+            dropRight: true,
+            nonSelectedText: 'Выбрать',
+            maxHeight: 150
+        });
+    });
+    $(document).ready(function() {
+        $('#boot-select2').multiselect({
+            buttonWidth: 300,
+            dropRight: true,
+            nonSelectedText: 'Выбрать',
+            maxHeight: 150
+        });
+    });
+</script>

@@ -43,4 +43,6 @@ public interface UserService {
     void deleteUser(Long id);
 
     void unblockUser(Long id);
+
+    boolean loginExists(String login);
 }

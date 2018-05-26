@@ -14,6 +14,7 @@ import ru.kpfu.itis.group11501.smartmuseum.service.RoleService;
 import ru.kpfu.itis.group11501.smartmuseum.service.UserService;
 import ru.kpfu.itis.group11501.smartmuseum.util.Helpers;
 import ru.kpfu.itis.group11501.smartmuseum.util.UserBlockForm;
+import ru.kpfu.itis.group11501.smartmuseum.validator.UserDtoValidator;
 
 import javax.validation.Valid;
 import java.util.*;
@@ -26,13 +27,15 @@ public class AdminController {
     private UserService userService;
     private RoleService roleService;
     private PositionService positionService;
-
+    private UserDtoValidator userDtoValidator;
     @Autowired
-    public AdminController(UserService userService, RoleService roleService, PositionService positionService) {
+    public AdminController(UserService userService, RoleService roleService, PositionService positionService, UserDtoValidator userDtoValidator) {
         this.userService = userService;
         this.roleService = roleService;
         this.positionService = positionService;
+        this.userDtoValidator = userDtoValidator;
     }
+
 
     @ModelAttribute("userBlockForm")
     public UserBlockForm getNewUserBlockForm(){return new UserBlockForm();}
@@ -76,33 +79,34 @@ public class AdminController {
 
     @RequestMapping(path = "/registration", method = RequestMethod.GET)
     public String registration_get(Model model){
-        UserDto userDto = new UserDto();
-        model.addAttribute("u", userDto);
+
+        if (!model.containsAttribute("u")) {
+            UserDto userDto = new UserDto();
+            model.addAttribute("u", userDto);
+        }
         model.addAttribute("positions", positionService.getAllPositions());
         return "registration";
     }
 
     @RequestMapping(path = "/registration", method = RequestMethod.POST)
-    public ModelAndView registerUserAccount
+    public String registerUserAccount
             (@ModelAttribute("user") @Valid UserDto accountDto,
-             BindingResult result) throws NoSuchFieldException {
-        User registered = new User();
-        AbstractMap.SimpleEntry<User, String> pair;
-        String passwd = "";
-        if (!result.hasErrors()) {
-            pair = createUserAccount(accountDto);
-            registered = pair.getKey();
-            passwd = pair.getValue();
-        }
-        if (registered == null) {
-            result.rejectValue("login", "Логин занят");
-        }
+             BindingResult result,
+             RedirectAttributes redirectAttributes)  {
+
+        userDtoValidator.validate(accountDto, result);
         if (result.hasErrors()) {
-            return new ModelAndView("registration", "user", accountDto);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.u", result);
+            redirectAttributes.addFlashAttribute("u", accountDto);
+            return "redirect:/admin/users/registration";
         }
-        else {
-            return new ModelAndView("password", "passwd", passwd);
-        }
+
+        AbstractMap.SimpleEntry<User, String> pair = createUserAccount(accountDto);
+        User registered = pair.getKey();
+        String passwd = pair.getValue();
+
+        redirectAttributes.addFlashAttribute("success", "Пользователь "+registered.getLogin()+" создан. Пароль: "+ passwd);
+        return "redirect:/admin/users";
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
