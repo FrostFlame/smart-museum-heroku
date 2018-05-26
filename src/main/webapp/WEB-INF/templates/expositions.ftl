@@ -22,6 +22,18 @@
      </div>
     </@security.authorize>
  </div>
+<div class="col-md-12 col-xs-12">
+    <form role="search" action="/expositions/search" method="get">
+        <div class="input-group">
+            <input name="searchField" type="text" class="form-control" placeholder="Найти экспозицию">
+            <span class="input-group-btn">
+    	                <button class="btn btn-default" type="submit">
+	      	                <i class="glyphicon glyphicon-search"></i>
+                        </button>
+	                </span>
+        </div>
+    </form>
+</div>
     <#if expositions?has_content>
 <div class="col-md-12 table">
             <table class="table table-hover">

@@ -35,4 +35,6 @@ public interface ExpositionService {
     void turnOn(Long id);
 
     void turnOff(Long id);
+
+    List<Exposition> getSearchExpositions(String searchField);
 }

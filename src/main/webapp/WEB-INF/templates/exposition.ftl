@@ -44,7 +44,18 @@
                 <#list exposition.projectors as projector>
                 <tr>
                     <td><a href="/projector/${projector.id}">${projector.name}</a></td>
-                    <td>${projector.status}</td>
+                    <td>
+                        <#if projector.status == 'F'>
+                            <button type="button" class="btn btn-warning"><span
+                                    class="glyphicon glyphicon-exclamation-sign"></span>
+                                Неисправен
+                            </button>
+                        <#else>
+                            <button type="button" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span>
+                                Исправен&nbsp;&nbsp;&nbsp;&nbsp;
+                            </button>
+                        </#if>
+                    </td>
                 </tr>
                 </#list>
             </tbody>

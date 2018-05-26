@@ -80,7 +80,11 @@ public class ExpositionServiceImpl implements ExpositionService {
             }
         }
         exposition.setProjectors(projectors);
-        expositionService.editExposition(exposition);
+        if (exposition.getProjectors().size() == 0) {
+            expositionRepository.delete(exposition);
+        } else {
+            expositionService.editExposition(exposition);
+        }
     }
 
     @Override
@@ -124,5 +128,11 @@ public class ExpositionServiceImpl implements ExpositionService {
             }
         }
     }
+
+    @Override
+    public List<Exposition> getSearchExpositions(String searchField) {
+        return expositionRepository.findByName("%" + searchField.toLowerCase() + "%");
+    }
+
 
 }

@@ -74,19 +74,19 @@ public class ExpositionController {
 
     @RequestMapping(value = "/{id}/addVideo", method = RequestMethod.POST)
     public String addVideo(@ModelAttribute("exposition") Exposition exposition,
-                           @RequestParam(value = "projectors_id", required = false)  List<String> projectorsId,
-                           @RequestParam(value = "videos_id", required = false)  List<String> videosId,
+                           @RequestParam(value = "projectors_id", required = false) List<String> projectorsId,
+                           @RequestParam(value = "videos_id", required = false) List<String> videosId,
                            RedirectAttributes redirectAttributes) {
-        if (projectorsId==null || videosId==null || projectorsId.size()==0 || videosId.size() == 0){
-            redirectAttributes.addAttribute("error","Выберите проектор и видео");
-            return  "redirect:/expositions/"+exposition.getId()+"/addVideo";
+        if (projectorsId == null || videosId == null || projectorsId.size() == 0 || videosId.size() == 0) {
+            redirectAttributes.addAttribute("error", "Выберите проектор и видео");
+            return "redirect:/expositions/" + exposition.getId() + "/addVideo";
         }
-        projectorsVideosService.addProjectorsVideosList(projectorsId,videosId);
-        return  "redirect:/expositions/"+exposition.getId();
+        projectorsVideosService.addProjectorsVideosList(projectorsId, videosId);
+        return "redirect:/expositions/" + exposition.getId();
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public String getAddExpositionPage(Model model,@RequestParam(value = "error", required = false) String error) {
+    public String getAddExpositionPage(Model model, @RequestParam(value = "error", required = false) String error) {
         if (error != null) {
             model.addAttribute("error", error);
         }
@@ -101,7 +101,7 @@ public class ExpositionController {
                                 RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors() || expositionService.findOneByName(expositionForm.getName()) != null) {
             redirectAttributes.addAttribute("error", "Неправильное название");
-            if (bindingResult.hasFieldErrors("projectorsId")){
+            if (bindingResult.hasFieldErrors("projectorsId")) {
                 redirectAttributes.addAttribute("error", "Выберите проектор");
             }
             return "redirect:/expositions/add";
@@ -113,7 +113,7 @@ public class ExpositionController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String getExpositionPage(Model model, @ModelAttribute("exposition") Exposition exposition) {
-        if (exposition == null){
+        if (exposition == null) {
             return "404_not_found";
         }
         return "exposition";
@@ -121,7 +121,7 @@ public class ExpositionController {
 
     @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
     public String getExpositionEditPage(Model model, @ModelAttribute("exposition") Exposition exposition) {
-        if (exposition == null){
+        if (exposition == null) {
             return "404_not_found";
         }
         model.addAttribute("projectors", projectorService.getFreeProjectors());
@@ -138,7 +138,7 @@ public class ExpositionController {
     }
 
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
-    public String deleteExposition(@PathVariable("id") String id){
+    public String deleteExposition(@PathVariable("id") String id) {
         expositionService.deleteExposition(Long.valueOf(id));
         return "redirect:/expositions/";
     }
@@ -153,5 +153,11 @@ public class ExpositionController {
     public String turnOffExposition(@PathVariable(value = "id") Long id, HttpServletRequest request) {
         expositionService.turnOff(id);
         return "redirect:" + request.getHeader("Referer");
+    }
+
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    public String searchExpositions(Model model, @RequestParam(name = "searchField") String searchField) {
+        model.addAttribute("expositions", expositionService.getSearchExpositions(searchField));
+        return "expositions";
     }
 }
