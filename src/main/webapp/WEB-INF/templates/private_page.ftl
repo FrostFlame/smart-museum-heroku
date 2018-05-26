@@ -25,7 +25,7 @@
             <table class="table user-data ">
                 <tbody>
                 <tr>
-                    <td class="active"><b>Фимилия</b></td>
+                    <td class="active"><b>Фамилия</b></td>
                     <td>${u.surname}</td>
                 </tr>
                 <tr>
