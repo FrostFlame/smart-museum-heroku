@@ -35,7 +35,9 @@
         <thead>
         <tr>
             <th>Название</th>
+    <@security.authorize access="hasRole('ADMIN')">
             <th>Удаление</th>
+    </@security.authorize>
             <th>Исправность</th>
         </tr>
         </thead>
@@ -44,12 +46,14 @@
             <#if projectors?has_content>
                 <#list projectors as projector>
                     <td><a href="/projector/${projector.getId()}">${projector.getName()}</a></td>
+                    <@security.authorize access="hasRole('ADMIN')">
                     <td>
                         <a class="btn btn-danger" href="#ModalDelete1" data-toggle="modal" onclick="addId(${projector.id})"><span
                                 class="glyphicon glyphicon-remove"></span>
                             Удалить
                         </a>
                     </td>
+                    </@security.authorize>
                     <td>
                         <#if projector.status == 'F'>
                             <button type="button" class="btn btn-warning"><span
