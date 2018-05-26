@@ -30,7 +30,7 @@
     </div>
     <#if success?has_content>
         <div class="alert alert-success" role="alert">
-        ${success}
+            ${success}
         </div>
     </#if>
     <div class="form-group col-md-4">
@@ -39,7 +39,11 @@
                 <option value="all">Все</option>
             </#if>
             <#list roles as role>
+                <#if role_filter == role.id?c>
+                <option value="${role.id}" selected>${role.name}</option>
+                <#else>
                 <option value="${role.id}">${role.name}</option>
+                </#if>
             <#else>
             </#list>
         </select>
@@ -50,16 +54,20 @@
                 <option value="all">Все</option>
             </#if>
             <#list positions as position>
+                <#if position_filter == position.id?c>
+                <option value="${position.id}" selected>${position.name}</option>
+                <#else>
                 <option value="${position.id}">${position.name}</option>
+                </#if>
             <#else>
             </#list>
         </select>
     </div>
     <div class="form-group col-md-4">
         <select name="status" id="boot-multiselect3">
-            <option value="all">Все</option>
-            <option value="true">Активные</option>
-            <option value="false">Заблокированные</option>
+            <option value="all" <#if status_filter == "all">selected</#if>>Все</option>
+            <option value="true" <#if status_filter == "true">selected</#if> >Активные</option>
+            <option value="false" <#if status_filter == "false">selected</#if>>Заблокированные</option>
         </select>
     </div>
 </form>
@@ -144,7 +152,7 @@
                             <input class="form-check-input" type="radio" name="blockDate" id="t${blockDates[key]}"
                                    value="${blockDates[key]}">
                             <label class="form-check-label" for="t${blockDates[key]}">
-                            ${key}
+                                ${key}
                             </label>
                         </div>
                     </#list>
@@ -189,6 +197,7 @@
 </script>
 <script type="text/javascript">
     var selectedId;
+
     function addId(id) {
         selectedId = id;
     }

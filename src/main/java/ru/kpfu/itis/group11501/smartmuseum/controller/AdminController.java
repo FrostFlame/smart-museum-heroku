@@ -45,6 +45,9 @@ public class AdminController {
         model.addAttribute("users", userService.getAllUsers());
         model.addAttribute("roles", roleService.getAllRoles());
         model.addAttribute("positions", positionService.getAllPositions());
+        model.addAttribute("role_filter", "all");
+        model.addAttribute("position_filter", "all");
+        model.addAttribute("status_filter", "all");
         return "search_users";
     }
 
@@ -56,6 +59,9 @@ public class AdminController {
         model.addAttribute("users", userService.getUsersByParameters(searchField, roleId, positionId, status));
         model.addAttribute("roles", roleService.getAllRoles());
         model.addAttribute("positions", positionService.getAllPositions());
+        model.addAttribute("role_filter", roleId);
+        model.addAttribute("position_filter", positionId);
+        model.addAttribute("status_filter", status);
         return "search_users";
     }
 
