@@ -22,6 +22,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-formhelpers/2.3.0/js/bootstrap-formhelpers.js"></script>
 </head>
 <body>
+<#assign authorities = Session["SPRING_SECURITY_CONTEXT"].authentication.authorities />
 <div class="container">
     <div class="row">
         <div class="header-smart col-xs-12 col-md-12">

@@ -172,8 +172,8 @@ public class UserController {
         return "redirect:/admin/users";
     }
 
-    @RequestMapping(value = "/admin/users/{id}/delete", method = RequestMethod.GET)
-    public String deleteUser(@PathVariable(value = "id", required = true) Long id) {
+    @RequestMapping(value = "/admin/users/delete", method = RequestMethod.POST)
+    public String deleteUser(@RequestParam(value = "id") Long id) {
         userService.deleteUser(id);
         return "redirect:/admin/users";
     }
