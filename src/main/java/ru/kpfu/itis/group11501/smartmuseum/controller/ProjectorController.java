@@ -50,13 +50,19 @@ public class ProjectorController {
         projector.setStatus('D');
         projector.setSumTime(0L);
         projectorService.add(projector);
+        redirectAttributes.addAttribute("success", "Новый проектор успешно добавлен");
         return "redirect:/projector/all";
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public String allProjectors(Model model,@RequestParam(value = "error", required = false) String error) {
+    public String allProjectors(Model model,
+                                @RequestParam(value = "error", required = false) String error,
+                                @RequestParam(value = "success", required = false) String success) {
         if (error != null) {
             model.addAttribute("error", error);
+        }
+        if (success != null) {
+            model.addAttribute("success", success);
         }
         List<Projector> projectors = projectorService.getAllProjectors();
         model.addAttribute("projectors", projectors);
@@ -78,9 +84,11 @@ public class ProjectorController {
         return "projector";
     }
 
-    @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
-    public String deleteProjector(@PathVariable(value = "id") Long id) {
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public String deleteProjector(@RequestParam(value = "id") Long id,
+                                  RedirectAttributes redirectAttributes) {
         projectorService.deleteProjector(id);
+        redirectAttributes.addAttribute("success", "Проектор успешно удален");
         return "redirect:/projector/all";
     }
 

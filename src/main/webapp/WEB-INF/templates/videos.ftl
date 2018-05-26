@@ -6,9 +6,6 @@
 <div class="page-header col-md-12 col-xs-12">
     <div class="col-md-10 col-xs-10">
         <h2><b>Видеоклипы</b></h2>
-        <#if error?has_content>
-            <b style="color: red">Error: ${error}</b>
-        </#if>
     </div>
     <@security.authorize access="hasRole('ADMIN')">
     <div class="col-md-1 col-xs-1">
@@ -23,6 +20,16 @@
     </@security.authorize>
 </div>
 <div class="col-md-12 col-xs-12">
+    <#if success?has_content>
+        <div class="alert alert-success" role="alert">
+        ${success}
+        </div>
+    </#if>
+    <#if error?has_content>
+        <div class="alert alert-danger" role="alert">
+        ${error}
+        </div>
+    </#if>
     <form role="search" method="GET" action="/videos">
         <div class="input-group">
             <input type="text" class="form-control" name="searchField" placeholder="Найти видеоклип">
