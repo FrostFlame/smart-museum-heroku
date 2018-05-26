@@ -95,7 +95,7 @@ public class AdminController {
             passwd = pair.getValue();
         }
         if (registered == null) {
-            result.rejectValue("login", "message.regError");
+            result.rejectValue("login", "Логин занят");
         }
         if (result.hasErrors()) {
             return new ModelAndView("registration", "user", accountDto);

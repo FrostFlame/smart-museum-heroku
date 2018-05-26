@@ -35,3 +35,20 @@
 .panel-body.active{
     background-color: #c4c5c4;
 }
+
+.pagination a {
+    colour: black;
+    float: left;
+    padding: 8px 16px;
+}
+.pagination a.active{
+    background-color: #c4c5c4;
+    colour:white;
+}
+.pagination a:hover:not(.active)
+{background-color: #ddd;}
+
+.pagination {
+    text-align: center;
+    display: inline-block
+}

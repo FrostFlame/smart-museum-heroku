@@ -135,7 +135,7 @@ public class UserServiceImpl implements UserService {
         blockedUser.setBlockDate(blockDate);
         blockedUser.setStatus(false);
 
-        addUser(blockedUser);
+        userService.updateUser(blockedUser);
     }
 
     @Override
@@ -156,15 +156,13 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findOneById(id);
         user.setBlockDate(null);
         user.setStatus(true);
-        userRepository.save(user);
+        userService.updateUser(user);
     }
     @Transactional
     @Override
     public AbstractMap.SimpleEntry<User, String> registerNewUserAccount(UserDto accountDto) {
 
         if (loginExists(accountDto.getLogin())) {
-//            throw new EmailExistsException(
-//                    "There is an account with that email address:  + accountDto.getEmail());
             return null;
         }
         User user = new User();
@@ -176,7 +174,7 @@ public class UserServiceImpl implements UserService {
         String password = generatePassword();
         user.setPassword(passwordEncoder.encode(password));
         user.setPosition(positionService.getPosition(accountDto.getPosition()));
-        return new AbstractMap.SimpleEntry<User, String>(userRepository.save(user), password);
+        return new AbstractMap.SimpleEntry<User, String>(userService.addUser(user), password);
     }
 
     private String generatePassword(){
