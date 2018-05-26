@@ -134,6 +134,10 @@ public class ExpositionController {
                                  @RequestParam(value = "delete_projector", required = false) List<String> deleteProjectors,
                                  @RequestParam(value = "new_projectors", required = false) List<String> newProjectors) {
         expositionService.editExposition(Long.valueOf(id), name, deleteProjectors, newProjectors);
+        Exposition exposition = expositionService.getExpositionById(Long.valueOf(id));
+        if (exposition == null) {
+            return "redirect:/expositions";
+        }
         return "redirect:/expositions/" + id;
     }
 
