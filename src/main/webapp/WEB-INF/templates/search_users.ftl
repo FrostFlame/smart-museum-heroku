@@ -19,11 +19,6 @@
         </div>
     </div>
 </div>
-    <#if success?has_content>
-    <div class="alert alert-success" role="alert">
-    ${success}
-    </div>
-    </#if>
 <form role="search" action="/admin/users/search">
     <div class="input-group col-md-12">
         <input name="searchField" type="text" class="form-control" placeholder="Найти пользователя">
@@ -33,6 +28,11 @@
                         </button>
 	                </span>
     </div>
+    <#if success?has_content>
+        <div class="alert alert-success" role="alert">
+        ${success}
+        </div>
+    </#if>
     <div class="form-group col-md-4">
         <select name="role" id="boot-multiselect1">
             <#if roles?size gt 1>
