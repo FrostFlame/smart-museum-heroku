@@ -134,7 +134,7 @@
                 </#if>
             </div>
             <#else>
-            <h3><a href="/expositions/${exposition.id}/edit">Добавьте проекторы в эксозицию</a></h3>
+            <h3><a href="/expositions/${exposition.id}/edit">Добавьте проекторы в экспозицию</a></h3>
             </#if>
         </div>
     </div>
