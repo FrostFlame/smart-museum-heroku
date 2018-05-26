@@ -105,7 +105,7 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(path = "/profile/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public String get(@PathVariable(value = "id") Long userId, Model model) {
         if (userId.equals(Helpers.getCurrentUser().getId())){
             return "forward:/profile";
