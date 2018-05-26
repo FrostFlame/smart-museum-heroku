@@ -31,4 +31,8 @@ public interface ExpositionService {
     void deleteExposition(Long id);
 
     Exposition findOneByName(String name);
+
+    void turnOn(Long id);
+
+    void turnOff(Long id);
 }

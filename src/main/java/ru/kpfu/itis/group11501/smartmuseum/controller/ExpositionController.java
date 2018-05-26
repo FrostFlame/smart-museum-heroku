@@ -15,6 +15,7 @@ import ru.kpfu.itis.group11501.smartmuseum.service.ProjectorsVideosService;
 import ru.kpfu.itis.group11501.smartmuseum.service.VideoService;
 import ru.kpfu.itis.group11501.smartmuseum.util.ExpositionForm;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -140,5 +141,17 @@ public class ExpositionController {
     public String deleteExposition(@PathVariable("id") String id){
         expositionService.deleteExposition(Long.valueOf(id));
         return "redirect:/expositions/";
+    }
+
+    @RequestMapping(value = "/{id}/turn_on")
+    public String turnOnExposition(@PathVariable(value = "id") Long id, HttpServletRequest request) {
+        expositionService.turnOn(id);
+        return "redirect:" + request.getHeader("Referer");
+    }
+
+    @RequestMapping(value = "/{id}/turn_off")
+    public String turnOffExposition(@PathVariable(value = "id") Long id, HttpServletRequest request) {
+        expositionService.turnOff(id);
+        return "redirect:" + request.getHeader("Referer");
     }
 }

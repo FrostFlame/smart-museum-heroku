@@ -161,10 +161,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public AbstractMap.SimpleEntry<User, String> registerNewUserAccount(UserDto accountDto) {
-
-        if (loginExists(accountDto.getLogin())) {
-            return null;
-        }
         User user = new User();
         user.setName(accountDto.getName());
         user.setSurname(accountDto.getSurName());
@@ -181,7 +177,8 @@ public class UserServiceImpl implements UserService {
         return RandomStringUtils.randomAlphanumeric(7);
     }
 
-    private boolean loginExists(String login) {
+    @Override
+    public boolean loginExists(String login) {
         User user = userRepository.findOneByLogin(login);
         if (user != null) {
             return true;

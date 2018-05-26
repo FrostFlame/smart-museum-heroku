@@ -66,7 +66,7 @@
                                     <div class="col-md-4 col-xs-4">${u.datetime}</div>
                                     <div class="col-md-2 col-xs-2">${u.actionType.name}</div>
                                     <div class="col-md-2 col-xs-2">${u.tableName.name}</div>
-                                    <#if u.link?has_content>
+                                    <#if u.link?has_content && u.actionType.name != 'Удаление'>
                                         <div class="col-md-2 col-xs-2"><a href="${u.link}${u.tableid}">${u.tableid}</a></div>
                                     <#else>
                                         <div class="col-md-2 col-xs-2">${u.tableid}</div>

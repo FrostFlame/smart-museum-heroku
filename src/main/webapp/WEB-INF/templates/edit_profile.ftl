@@ -86,7 +86,6 @@
                         </@sf.form>
                     </div>
             </div>
-
             <div class="panel panel-default edit-profile-form" style="margin-top: 0">
                 <div class="panel panel-heading" style="margin-bottom: 0">Изменить пароль</div>
                     <#if u.role.name == "ADMIN">
@@ -127,7 +126,6 @@
         </div>
     </div>
 </#macro>
-
 <script>
     $(document).ready(function () {
         $("#profile").addClass('active');
@@ -190,4 +188,21 @@
         <#--<input type="submit" value="Изменить">-->
     <#--</@sf.form>-->
 <#--</#macro>-->
-
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#boot-select').multiselect({
+            buttonWidth: 300,
+            dropRight: true,
+            nonSelectedText: 'Выбрать',
+            maxHeight: 150
+        });
+    });
+    $(document).ready(function() {
+        $('#boot-select2').multiselect({
+            buttonWidth: 300,
+            dropRight: true,
+            nonSelectedText: 'Выбрать',
+            maxHeight: 150
+        });
+    });
+</script>

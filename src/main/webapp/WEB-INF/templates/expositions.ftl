@@ -7,6 +7,7 @@
      <div class="col-md-11 col-xs-11">
          <h2><b>Экспозиции</b></h2>
      </div>
+    <@security.authorize access="hasRole('ADMIN')">
      <div class="col-md-1 col-xs-1">
          <div class="btn-group">
              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -19,6 +20,7 @@
              </ul>
          </div>
      </div>
+    </@security.authorize>
  </div>
     <#if expositions?has_content>
 <div class="col-md-12 table">
@@ -27,8 +29,11 @@
                 <tr>
                     <th>Название</th>
                     <#--<th>Состояние</th>-->
+
                     <th>Редактирование</th>
+                    <@security.authorize access="hasRole('ADMIN')">
                     <th>Удаление</th>
+                    </@security.authorize>
                 </tr>
                 </thead>
                 <tbody>
@@ -46,18 +51,21 @@
             <#--</label>-->
         <#--</div>-->
     <#--</td>-->
+
     <td>
         <a href="/expositions/${exposition.id}/edit" type="button" class="btn btn-info"><span
                 class="glyphicon glyphicon-pencil"></span>
             Редактировать
         </a>
     </td>
+    <@security.authorize access="hasRole('ADMIN')">
     <td>
         <a href="/expositions/${exposition.id}/delete" class="btn btn-danger" data-toggle="modal"><span
                 class="glyphicon glyphicon-remove"></span>
             Удалить
         </a>
     </td>
+    </@security.authorize>
 </tr>
 </#list>
                 </tbody>

@@ -103,4 +103,26 @@ public class ExpositionServiceImpl implements ExpositionService {
         return expositionRepository.findOneByName(name);
     }
 
+    @Override
+    public void turnOn(Long id) {
+        Exposition exposition = expositionService.getExpositionById(id);
+        List<Projector> projectors = exposition.getProjectors();
+        for (Projector projector : projectors) {
+            if (projector.getStatus() != 'F') {
+                projectorService.turnOn(projector.getId());
+            }
+        }
+    }
+
+    @Override
+    public void turnOff(Long id) {
+        Exposition exposition = expositionService.getExpositionById(id);
+        List<Projector> projectors = exposition.getProjectors();
+        for (Projector projector : projectors) {
+            if (projector.getStatus() != 'F') {
+                projectorService.turnOff(projector.getId());
+            }
+        }
+    }
+
 }
