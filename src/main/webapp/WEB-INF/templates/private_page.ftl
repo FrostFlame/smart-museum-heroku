@@ -1,28 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Private page</title>
-</head>
-<body>
-    <div>Имя: ${u.name}</div>
-    <div>Фамилия: ${u.surname}</div>
-    <div>Отчество: ${u.thirdName}</div>
-    <input  id = "role" type="text"  value="${u.role.name}" hidden="true"/>
-    <div>Роль: ${u.role.name}</div>
-    <div>Должность: ${u.position.name}</div>
-    <#if u.photo?has_content>
+<#include "base.ftl">
+<#macro title>Личная страница</#macro>
+<#macro content>
+<div class="page-header col-md-12 col-xs-12">
+    <div class="col-md-10 col-xs-10">
+        <h2><b>Личная страница</b></h2>
+    </div>
+</div>
+<div class="col-md-12 col-xs-12">
+    <div class="row">
+
+        <div class="col-xs-12 col-sm-4 text">
+<#if u.photo?has_content>
     <div>Фото:<img class="user-photo" src="/image/${u.photo!}"></div>
     <#else>
-    <div>Фото:<img class="user-photo" src="/resources/static/img/image_unavailable.jpg"></div>
+            <div><img src="/resources/static/img/image_unavailable.jpg" class="img-responsive img-circle center-block"></div>
     </#if>
-    <div class="btn-group">
-        <a href="/profile/edit">
-            <button type="button" class="btn btn-default">
-                Редактировать профиль
-            </button>
-        </a>
+        </div>
+        <div class="col-xs-12 col-sm-offset-1  col-sm-6 text">
+            <div class="col-sm-offset-6 button">
+                <a type="button" class="btn btn-info btn-lg" href="<#if authorities?seq_contains("ROLE_ADMIN")>/admin/users/${u.id}/edit<#else>/profile/edit</#if>"><span class="glyphicon glyphicon-pencil"></span>
+                    Редактировать профиль
+                </a>
+            </div>
+            <table class="table user-data ">
+                <tbody>
+                <tr>
+                    <td class="active"><b>Фимилия</b></td>
+                    <td>${u.surname}</td>
+                </tr>
+                <tr>
+                    <td class="active"><b>Имя</b></td>
+                    <td>${u.name}</td>
+                </tr>
+                <tr>
+                    <td class="active"><b>Отчество</b></td>
+                    <td>${u.thirdName}</td>
+                </tr>
+                <tr>
+                    <td class="active"><b>Роль</b></td>
+                    <td>${u.role.name}</td>
+                </tr>
+                <tr>
+                    <td class="active"><b>Должность</b></td>
+                    <td>${u.position.name}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
+</div>
+</div>
     <script>
         $(document).ready(function () {
             $("li.active").removeClass('active');
@@ -33,5 +60,4 @@
 
         })
     </script>
-</body>
-</html>
+</#macro>
