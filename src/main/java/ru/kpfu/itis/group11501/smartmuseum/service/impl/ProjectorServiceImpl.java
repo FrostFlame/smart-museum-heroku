@@ -3,15 +3,12 @@ package ru.kpfu.itis.group11501.smartmuseum.service.impl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kpfu.itis.group11501.smartmuseum.model.Projector;
-import ru.kpfu.itis.group11501.smartmuseum.model.ProjectorStatistic;
 import ru.kpfu.itis.group11501.smartmuseum.model.annotation.Action;
 import ru.kpfu.itis.group11501.smartmuseum.model.enums.ActionTypeName;
 import ru.kpfu.itis.group11501.smartmuseum.repository.ProjectorRepository;
 import ru.kpfu.itis.group11501.smartmuseum.service.ProjectorService;
 import ru.kpfu.itis.group11501.smartmuseum.service.ProjectorStatisticService;
 
-import java.time.Duration;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -54,8 +51,11 @@ public class ProjectorServiceImpl implements ProjectorService {
     @Override
     @Action(name = ActionTypeName.TURNON)
     public void turnOn(Long id) {
-        projectorRepository.changeStatus(id, 'E');
-        projectorStatisticService.addStatistic(getOneById(id));
+        Projector projector = projectorRepository.findOne(id);
+        if (projector.getStatus() != 'E') {
+            projectorRepository.changeStatus(id, 'E');
+            projectorStatisticService.addStatistic(getOneById(id));
+        }
     }
 
     @Override
