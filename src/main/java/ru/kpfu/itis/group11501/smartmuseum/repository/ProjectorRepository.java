@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kpfu.itis.group11501.smartmuseum.model.Projector;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public interface ProjectorRepository  extends JpaRepository<Projector, Long> {
             "where p.id = exp_p.projector.id)")
     List<Projector> findAllFree();
 
+    @Transactional
     @Modifying
     @Query("update Projector set status=:status where id=:id")
     void changeStatus(@Param("id") Long id, @Param("status") Character status);
