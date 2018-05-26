@@ -29,8 +29,11 @@
                 <tr>
                     <th>Название</th>
                     <#--<th>Состояние</th>-->
+
                     <th>Редактирование</th>
+                    <@security.authorize access="hasRole('ADMIN')">
                     <th>Удаление</th>
+                    </@security.authorize>
                 </tr>
                 </thead>
                 <tbody>
@@ -48,18 +51,21 @@
             <#--</label>-->
         <#--</div>-->
     <#--</td>-->
+
     <td>
         <a href="/expositions/${exposition.id}/edit" type="button" class="btn btn-info"><span
                 class="glyphicon glyphicon-pencil"></span>
             Редактировать
         </a>
     </td>
+    <@security.authorize access="hasRole('ADMIN')">
     <td>
         <a href="/expositions/${exposition.id}/delete" class="btn btn-danger" data-toggle="modal"><span
                 class="glyphicon glyphicon-remove"></span>
             Удалить
         </a>
     </td>
+    </@security.authorize>
 </tr>
 </#list>
                 </tbody>
