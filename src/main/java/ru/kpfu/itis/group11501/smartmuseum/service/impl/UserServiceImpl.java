@@ -63,7 +63,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(String login) {
-        return updateIfBlockDate(userRepository.findOneByLogin(login));
+        User user = userRepository.findOneByLogin(login);
+        if (user == null) {
+            return null;
+        }
+        return updateIfBlockDate(user);
     }
 
     @Override

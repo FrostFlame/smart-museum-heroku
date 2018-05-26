@@ -1,6 +1,5 @@
 package ru.kpfu.itis.group11501.smartmuseum.util;
 
-import javafx.geometry.Pos;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.web.multipart.MultipartFile;
 import ru.kpfu.itis.group11501.smartmuseum.model.Position;
