@@ -1,42 +1,34 @@
 package ru.kpfu.itis.group11501.smartmuseum.controller;
 
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.kpfu.itis.group11501.smartmuseum.model.User;
-import ru.kpfu.itis.group11501.smartmuseum.repository.RoleRepository;
+import ru.kpfu.itis.group11501.smartmuseum.model.UserDto;
 import ru.kpfu.itis.group11501.smartmuseum.service.PositionService;
 import ru.kpfu.itis.group11501.smartmuseum.service.RoleService;
 import ru.kpfu.itis.group11501.smartmuseum.service.UserService;
+import ru.kpfu.itis.group11501.smartmuseum.util.Helpers;
 import ru.kpfu.itis.group11501.smartmuseum.util.UserBlockForm;
 
 import javax.validation.Valid;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @SessionAttributes("userBlockForm")
 @RequestMapping(path = "/admin/users")
-public class SearchUsersController {
+public class AdminController {
 
     private UserService userService;
     private RoleService roleService;
     private PositionService positionService;
 
     @Autowired
-    public SearchUsersController(UserService userService, RoleService roleService, PositionService positionService) {
+    public AdminController(UserService userService, RoleService roleService, PositionService positionService) {
         this.userService = userService;
         this.roleService = roleService;
         this.positionService = positionService;
@@ -80,6 +72,53 @@ public class SearchUsersController {
     public String postUnblockUser(@PathVariable Long id){
         userService.unblockUser(id);
         return "redirect:/admin/users";
+    }
+
+    @RequestMapping(path = "/registration", method = RequestMethod.GET)
+    public String registration_get(Model model){
+        UserDto userDto = new UserDto();
+        model.addAttribute("u", userDto);
+        model.addAttribute("positions", positionService.getAllPositions());
+        return "registration";
+    }
+
+    @RequestMapping(path = "/registration", method = RequestMethod.POST)
+    public ModelAndView registerUserAccount
+            (@ModelAttribute("user") @Valid UserDto accountDto,
+             BindingResult result) throws NoSuchFieldException {
+        User registered = new User();
+        AbstractMap.SimpleEntry<User, String> pair;
+        String passwd = "";
+        if (!result.hasErrors()) {
+            pair = createUserAccount(accountDto);
+            registered = pair.getKey();
+            passwd = pair.getValue();
+        }
+        if (registered == null) {
+            result.rejectValue("login", "message.regError");
+        }
+        if (result.hasErrors()) {
+            return new ModelAndView("registration", "user", accountDto);
+        }
+        else {
+            return new ModelAndView("password", "passwd", passwd);
+        }
+    }
+
+    @RequestMapping(path = "/profile/{id}", method = RequestMethod.GET)
+    public String get(@PathVariable(value = "id") Long userId, Model model) {
+        if (userId.equals(Helpers.getCurrentUser().getId())){
+            return "forward:/profile";
+        }
+        User user = userService.getUser(userId);
+        model.addAttribute("u", user);
+        return "private_page";
+    }
+
+    private AbstractMap.SimpleEntry<User, String> createUserAccount(UserDto accountDto) {
+        AbstractMap.SimpleEntry<User, String> registered;
+        registered = userService.registerNewUserAccount(accountDto);
+        return registered;
     }
 
 }
