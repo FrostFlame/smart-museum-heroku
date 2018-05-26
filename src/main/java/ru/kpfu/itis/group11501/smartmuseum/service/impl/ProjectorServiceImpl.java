@@ -39,7 +39,7 @@ public class ProjectorServiceImpl implements ProjectorService {
 
     @Override
     public List<Projector> getAllProjectors() {
-        return projectorRepository.findAll();
+        return projectorRepository.findAllByOrderByNameAsc();
     }
 
     @Override

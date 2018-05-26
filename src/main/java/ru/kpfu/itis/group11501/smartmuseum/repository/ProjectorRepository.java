@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface ProjectorRepository  extends JpaRepository<Projector, Long> {
     @Query("select p from Projector p where NOT EXISTS(select exp_p FROM ExpositionProjector exp_p " +
-            "where p.id = exp_p.projector.id)")
+            "where p.id = exp_p.projector.id) order by p.name asc")
     List<Projector> findAllFree();
 
     @Transactional
@@ -23,4 +23,6 @@ public interface ProjectorRepository  extends JpaRepository<Projector, Long> {
     void changeStatus(@Param("id") Long id, @Param("status") Character status);
 
     Projector findOneByName(String name);
+
+    List<Projector> findAllByOrderByNameAsc();
 }
